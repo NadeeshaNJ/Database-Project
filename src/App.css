@@ -1,0 +1,48 @@
+.App {
+  text-align: center;
+}
+
+.sidebar {
+  width: 250px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  min-height: calc(100vh - 56px);
+  padding: 20px;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+}
+
+.content-wrapper {
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: calc(100vh - 56px);
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.nav-link-sidebar {
+  color: white !important;
+  padding: 12px 15px;
+  margin: 5px 0;
+  border-radius: 8px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.nav-link-sidebar:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px);
+}
+
+.nav-link-sidebar.active {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nav-link-sidebar i {
+  margin-right: 10px;
+  width: 20px;
+}
