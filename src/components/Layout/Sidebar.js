@@ -3,10 +3,12 @@ import { Nav } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   FaTachometerAlt, 
-  FaUsers, 
-  FaCalendarAlt, 
+  FaBuilding,
   FaBed, 
+  FaCalendarCheck,
+  FaUsers, 
   FaConciergeBell, 
+  FaReceipt,
   FaChartBar 
 } from 'react-icons/fa';
 
@@ -15,10 +17,12 @@ const Sidebar = () => {
 
   const menuItems = [
     { path: '/dashboard', icon: FaTachometerAlt, label: 'Dashboard' },
-    { path: '/guests', icon: FaUsers, label: 'Guests' },
-    { path: '/reservations', icon: FaCalendarAlt, label: 'Reservations' },
+    { path: '/hotels', icon: FaBuilding, label: 'Hotel Branches' },
     { path: '/rooms', icon: FaBed, label: 'Rooms' },
+    { path: '/bookings', icon: FaCalendarCheck, label: 'Bookings' },
+    { path: '/guests', icon: FaUsers, label: 'Guests' },
     { path: '/services', icon: FaConciergeBell, label: 'Services' },
+    { path: '/billing', icon: FaReceipt, label: 'Billing' },
     { path: '/reports', icon: FaChartBar, label: 'Reports' }
   ];
 
