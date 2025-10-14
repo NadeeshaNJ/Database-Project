@@ -28,40 +28,59 @@ export const AuthProvider = ({ children }) => {
     // In production, this would call your backend API
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        // Demo credentials
+        // Demo credentials matching ERD user_role enum
         const demoUsers = [
           {
-            id: 1,
+            user_id: 1,
+            username: 'admin',
             email: 'admin@skynest.com',
             password: 'admin123',
             name: 'Admin User',
-            role: 'Administrator',
-            hotel: 'All Branches',
+            role: 'Admin',
+            branch_id: null,
+            branch_name: 'All Branches',
             phone: '+94 77 123 4567',
             avatar: null,
             permissions: ['all']
           },
           {
-            id: 2,
+            user_id: 2,
+            username: 'manager_colombo',
             email: 'manager.colombo@skynest.com',
             password: 'manager123',
             name: 'Anura Perera',
-            role: 'Hotel Manager',
-            hotel: 'SkyNest Colombo',
+            role: 'Manager',
+            branch_id: 1,
+            branch_name: 'SkyNest Colombo',
             phone: '+94 11 234 5678',
             avatar: null,
             permissions: ['manage_rooms', 'manage_bookings', 'view_reports']
           },
           {
-            id: 3,
+            user_id: 3,
+            username: 'receptionist_kandy',
             email: 'receptionist@skynest.com',
             password: 'reception123',
             name: 'Shalini Fernando',
             role: 'Receptionist',
-            hotel: 'SkyNest Kandy',
+            branch_id: 2,
+            branch_name: 'SkyNest Kandy',
             phone: '+94 81 234 5678',
             avatar: null,
             permissions: ['view_rooms', 'manage_bookings', 'view_guests']
+          },
+          {
+            user_id: 4,
+            username: 'accountant',
+            email: 'accountant@skynest.com',
+            password: 'accountant123',
+            name: 'Rajitha Silva',
+            role: 'Accountant',
+            branch_id: 3,
+            branch_name: 'SkyNest Galle',
+            phone: '+94 91 234 5678',
+            avatar: null,
+            permissions: ['view_bookings', 'manage_billing', 'view_reports', 'manage_payments']
           }
         ];
 

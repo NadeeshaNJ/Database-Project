@@ -28,9 +28,10 @@ const Login = () => {
   };
 
   const demoCredentials = [
-    { email: 'admin@skynest.com', password: 'admin123', role: 'Administrator' },
-    { email: 'manager.colombo@skynest.com', password: 'manager123', role: 'Hotel Manager' },
-    { email: 'receptionist@skynest.com', password: 'reception123', role: 'Receptionist' }
+    { email: 'admin@skynest.com', password: 'admin123', role: 'Admin' },
+    { email: 'manager.colombo@skynest.com', password: 'manager123', role: 'Manager' },
+    { email: 'receptionist@skynest.com', password: 'reception123', role: 'Receptionist' },
+    { email: 'accountant@skynest.com', password: 'accountant123', role: 'Accountant' }
   ];
 
   return (

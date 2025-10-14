@@ -35,7 +35,7 @@ const Navbar = () => {
             {user && (
               <>
                 <span className="text-light me-3">
-                  <Badge bg="info" className="me-2">{user.hotel}</Badge>
+                  <Badge bg="info" className="me-2">{user.branch_name || 'All Branches'}</Badge>
                 </span>
                 <NavDropdown 
                   title={

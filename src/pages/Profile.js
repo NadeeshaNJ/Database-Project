@@ -39,9 +39,11 @@ const Profile = () => {
 
   const getRoleBadgeColor = (role) => {
     switch (role) {
-      case 'Administrator': return 'danger';
-      case 'Hotel Manager': return 'primary';
+      case 'Admin': return 'danger';
+      case 'Manager': return 'primary';
       case 'Receptionist': return 'success';
+      case 'Accountant': return 'warning';
+      case 'Customer': return 'info';
       default: return 'secondary';
     }
   };
@@ -84,7 +86,7 @@ const Profile = () => {
                 <ListGroup variant="flush">
                   <ListGroup.Item>
                     <FaHotel className="me-2 text-primary" />
-                    <strong>Hotel:</strong> {user?.hotel}
+                    <strong>Branch:</strong> {user?.branch_name || 'N/A'}
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <FaPhone className="me-2 text-primary" />
@@ -224,7 +226,7 @@ const Profile = () => {
                   </Col>
                   <Col md={6} className="mb-3">
                     <label className="text-muted small">Hotel Branch</label>
-                    <p className="mb-0"><strong>{user?.hotel}</strong></p>
+                    <p className="mb-0"><strong>{user?.branch_name || 'N/A'}</strong></p>
                   </Col>
                   <Col md={6} className="mb-3">
                     <label className="text-muted small">Role</label>
@@ -236,7 +238,7 @@ const Profile = () => {
                   </Col>
                   <Col md={6} className="mb-3">
                     <label className="text-muted small">User ID</label>
-                    <p className="mb-0"><strong>#{user?.id}</strong></p>
+                    <p className="mb-0"><strong>#{user?.user_id}</strong></p>
                   </Col>
                 </Row>
               )}
