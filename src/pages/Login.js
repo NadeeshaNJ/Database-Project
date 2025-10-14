@@ -37,7 +37,7 @@ const Login = () => {
   return (
     <div className="login-page" style={{ 
       minHeight: '100vh', 
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      background: 'linear-gradient(135deg, #48547C 0%, #749DD0 100%)',
       display: 'flex',
       alignItems: 'center',
       padding: '20px'
@@ -49,7 +49,7 @@ const Login = () => {
               <Row className="g-0">
                 {/* Left Side - Branding */}
                 <Col md={6} className="d-none d-md-block" style={{
-                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(135deg, #48547C 0%, #749DD0 100%)',
                   color: 'white',
                   padding: '40px'
                 }}>
@@ -76,7 +76,7 @@ const Login = () => {
                 <Col md={6}>
                   <Card.Body className="p-4 p-md-5">
                     <div className="text-center d-md-none mb-4">
-                      <FaHotel size={50} style={{ color: '#667eea' }} />
+                      <FaHotel size={50} style={{ color: '#749DD0' }} />
                       <h3 className="mt-2">SkyNest Hotels</h3>
                     </div>
 
@@ -126,7 +126,7 @@ const Login = () => {
                           size="lg"
                           disabled={loading}
                           style={{
-                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            background: 'linear-gradient(135deg, #749DD0 0%, #92AAD1 100%)',
                             border: 'none'
                           }}
                         >

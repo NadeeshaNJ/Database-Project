@@ -12,6 +12,10 @@ const Dashboard = () => {
     { title: 'Occupancy Rate', value: '78%', icon: FaChartLine, color: 'primary' }
   ];
 
+  const rowStyle = {
+    backgroundColor: '#AAA59F'
+  };
+
   return (
     <div>
       <h2 className="mb-4">Dashboard</h2>
@@ -57,21 +61,21 @@ const Dashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
+                    <tr style={rowStyle}>
                       <td>John Doe</td>
                       <td>101</td>
                       <td>2025-09-15</td>
                       <td>2025-09-18</td>
                       <td><span className="badge bg-success">Confirmed</span></td>
                     </tr>
-                    <tr>
+                    <tr style={rowStyle}>
                       <td>Jane Smith</td>
                       <td>205</td>
                       <td>2025-09-14</td>
                       <td>2025-09-16</td>
                       <td><span className="badge bg-primary">Checked In</span></td>
                     </tr>
-                    <tr>
+                    <tr style={rowStyle}>
                       <td>Mike Johnson</td>
                       <td>308</td>
                       <td>2025-09-16</td>

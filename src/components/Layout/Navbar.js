@@ -22,12 +22,11 @@ const Navbar = () => {
   };
 
   return (
-    <BootstrapNavbar bg="dark" variant="dark" expand="lg" className="navbar-custom">
+    <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top" className="navbar-custom">
       <Container fluid>
         <BootstrapNavbar.Brand href="/" className="d-flex align-items-center">
           <FaBed className="me-2" />
           <strong>SkyNest Hotels</strong>
-          <span className="ms-2 badge bg-primary">HRGSMS</span>
         </BootstrapNavbar.Brand>
         <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
         <BootstrapNavbar.Collapse id="basic-navbar-nav">

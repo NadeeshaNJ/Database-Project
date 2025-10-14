@@ -4,16 +4,22 @@
 
 .sidebar {
   width: 250px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #41424b ;
   color: white;
   min-height: calc(100vh - 56px);
   padding: 20px;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  box-shadow: 2px 0 10px rgba(51, 52, 59, 0.2);
+  position: fixed;
+  top: 56px;
+  left: 0;
+  overflow-y: auto;
 }
+
 .content-wrapper {
   padding: 20px;
-  background-color: #f8f9fa;
+  background-color: #48547C;
   min-height: calc(100vh - 56px);
+  margin-left: 250px;
 }
 
 .navbar-brand {
@@ -33,12 +39,12 @@
 }
 
 .nav-link-sidebar:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(146, 170, 209, 0.3);
   transform: translateX(5px);
 }
 
 .nav-link-sidebar.active {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(146, 170, 209, 0.4);
 }
 
 .nav-link-sidebar i {
