@@ -6,6 +6,19 @@ Welcome! Your frontend has been successfully integrated with your backend. This 
 
 ## 🚀 Quick Navigation
 
+### 🎯 ONE COMMAND TO SETUP EVERYTHING!
+👉 **[ONE_COMMAND_SETUP.md](./ONE_COMMAND_SETUP.md)** ⭐ START HERE!
+- Run ONE script to set up everything automatically
+- Imports your SQL database
+- Configures backend .env
+- **Just run:** `.\complete-setup.ps1`
+
+### 🔥 BACKEND WON'T START? FIX IT NOW!
+👉 **[BACKEND_FIX_QUICK.md](./BACKEND_FIX_QUICK.md)** - FIX BACKEND DATABASE
+- 3 easy ways to fix database configuration
+- Your backend .env file is wrong - fix it here!
+- Quick setup scripts included
+
 ### For Quick Start
 👉 **[INTEGRATION_COMPLETE.md](./INTEGRATION_COMPLETE.md)** - START HERE!
 - How to run both servers
@@ -89,25 +102,28 @@ Welcome! Your frontend has been successfully integrated with your backend. This 
 ## 📁 All Documentation Files
 
 ### Main Documentation
-1. **[INTEGRATION_COMPLETE.md](./INTEGRATION_COMPLETE.md)** ⭐ Quick Start
-2. **[BACKEND_INTEGRATION_GUIDE.md](./BACKEND_INTEGRATION_GUIDE.md)** 📚 Complete Guide
-3. **[INTEGRATION_SUMMARY.md](./INTEGRATION_SUMMARY.md)** 📊 Summary
-4. **[ARCHITECTURE_DIAGRAM.md](./ARCHITECTURE_DIAGRAM.md)** 🏗️ Diagrams
-5. **[VERIFICATION_CHECKLIST.md](./VERIFICATION_CHECKLIST.md)** ✅ Testing
-6. **[README_INTEGRATION.md](./README_INTEGRATION.md)** 📖 Executive Summary
-7. **[DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)** 📚 This File
+1. **[BACKEND_FIX_QUICK.md](./BACKEND_FIX_QUICK.md)** 🔥 FIX BACKEND NOW
+2. **[BACKEND_DATABASE_SETUP.md](./BACKEND_DATABASE_SETUP.md)** 🗄️ Database Setup Guide
+3. **[INTEGRATION_COMPLETE.md](./INTEGRATION_COMPLETE.md)** ⭐ Quick Start
+4. **[BACKEND_INTEGRATION_GUIDE.md](./BACKEND_INTEGRATION_GUIDE.md)** 📚 Complete Guide
+5. **[INTEGRATION_SUMMARY.md](./INTEGRATION_SUMMARY.md)** 📊 Summary
+6. **[ARCHITECTURE_DIAGRAM.md](./ARCHITECTURE_DIAGRAM.md)** 🏗️ Diagrams
+7. **[VERIFICATION_CHECKLIST.md](./VERIFICATION_CHECKLIST.md)** ✅ Testing
+8. **[README_INTEGRATION.md](./README_INTEGRATION.md)** 📖 Executive Summary
+9. **[DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)** 📚 This File
 
 ### Helper Files
-8. **[start-servers.ps1](./start-servers.ps1)** 🚀 Launcher Script
-9. **[src/components/BackendIntegrationTest.js](./src/components/BackendIntegrationTest.js)** 🧪 Test Component
+10. **[setup-backend-database.ps1](./setup-backend-database.ps1)** 🗄️ Database Setup Script
+11. **[start-servers.ps1](./start-servers.ps1)** 🚀 Launcher Script
+12. **[src/components/BackendIntegrationTest.js](./src/components/BackendIntegrationTest.js)** 🧪 Test Component
 
 ### Configuration Files
-10. **[.env](./.env)** ⚙️ Environment Variables
-11. **[src/services/api.js](./src/services/api.js)** ✨ API Service (Updated)
-12. **[src/services/apiClient.js](./src/services/apiClient.js)** 🔌 HTTP Client (Updated)
+13. **[.env](./.env)** ⚙️ Frontend Environment Variables
+14. **[src/services/api.js](./src/services/api.js)** ✨ API Service (Updated)
+15. **[src/services/apiClient.js](./src/services/apiClient.js)** 🔌 HTTP Client (Updated)
 
 ### Backup Files
-13. **[src/services/api.backup.js](./src/services/api.backup.js)** 💾 Original API Backup
+16. **[src/services/api.backup.js](./src/services/api.backup.js)** 💾 Original API Backup
 
 ---
 
