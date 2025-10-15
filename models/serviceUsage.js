@@ -11,7 +11,7 @@ const ServiceUsage = sequelize.define('ServiceUsage', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'bookings',
+      model: 'booking',
       key: 'booking_id'
     }
   },
@@ -19,9 +19,18 @@ const ServiceUsage = sequelize.define('ServiceUsage', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'services',
+      model: 'service',
       key: 'service_id'
     }
+  },
+  quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    defaultValue: 1
+  },
+  total_price: {
+    type: DataTypes.DECIMAL(10, 2),
+    allowNull: false
   },
   used_on: {
     type: DataTypes.DATE,
@@ -29,8 +38,9 @@ const ServiceUsage = sequelize.define('ServiceUsage', {
     defaultValue: DataTypes.NOW
   }
 }, {
-  tableName: 'service_usages',
-  timestamps: true
+  tableName: 'service_usage',
+  timestamps: false,
+  underscored: true
 });
 
 module.exports = ServiceUsage;

@@ -952,9 +952,9 @@ const createBooking = asyncHandler(async (req, res) => {
         ]
     };
     queries.push(createBookingQuery);
-/*
+
     // 2. Handle Payment Details (if payment details provided) status-done
-     if (true) {
+     if (advance_payment) {
         const createPaymentQuery = {
             text: `
                 INSERT INTO payment (
@@ -967,14 +967,14 @@ const createBooking = asyncHandler(async (req, res) => {
             `,
             params: [
                 guest_id, // Used for subquery selection
-                need_payment,
+                advance_payment,
                 preferred_payment_method,
                 payment_details
             ]
         };
         queries.push(createPaymentQuery);
     }
-   */ 
+    
     // 3️⃣ Update Room Availability
     // const updateRoomQuery = {
     //     text: `
@@ -1791,93 +1791,282 @@ const getBookingDetails = asyncHandler(async (req, res) => {
     }
 });
 
+// const checkIn = asyncHandler(async (req, res) => {
+//     const { id: bookingId } = req.params; 
+
+//     // 1. Define Queries for Transaction
+//     const queries = [];
+
+//     // Query to get the current booking status and room_id
+//     const checkStatusQuery = `
+//         SELECT status, room_id, check_in_date 
+//         FROM public.booking 
+//         WHERE booking_id = $1
+//     `;
+//     const checkResult = await executeQuery(checkStatusQuery, [bookingId]);
+
+//     if (checkResult.rows.length === 0) {
+//         return res.status(404).json({ success: false, error: 'Booking not found.' });
+//     }
+
+//     const { status, room_id, check_in_date } = checkResult.rows[0];
+//     const today = new Date().toISOString().slice(0, 10); // Current date in YYYY-MM-DD format
+
+//     // Prevent checking in if the booking is already checked out or cancelled
+//     if (status === 'Checked-Out' || status === 'Cancelled') {
+//         return res.status(400).json({ 
+//             success: false, 
+//             error: `Booking ${bookingId} is already ${status} and cannot be checked in.` 
+//         });
+//     }
+
+//     // Optional: Add logic for early check-in warning if today < check_in_date
+//     if (today < check_in_date.toISOString().slice(0, 10) && status === 'Booked') {
+//         console.warn(`Attempting early check-in for Booking ID ${bookingId}`);
+//         // You might decide to return an error, apply a fee, or proceed with a warning.
+//     }
+    
+//     // 2. Booking Status Update
+//     const updateBookingQuery = {
+//         text: `
+//             UPDATE public.booking
+//             SET status = 'Checked-In', 
+//                 actual_check_in = NOW(), -- Assumes you have an actual_check_in column
+//                 updated_at = NOW() 
+//             WHERE booking_id = $1
+//             RETURNING booking_id, room_id
+//         `,
+//         params: [bookingId]
+//     };
+//     queries.push(updateBookingQuery);
+    
+//     // 3. Room Status Update (Change room status to 'Occupied')
+//     const updateRoomQuery = {
+//         text: `
+//             UPDATE public.room
+//             SET status = 'Occupied'
+//             WHERE room_id = $1
+//         `,
+//         params: [room_id]
+//     };
+//     queries.push(updateRoomQuery);
+
+//     try {
+//         await executeTransaction(queries);
+
+//         res.status(200).json({
+//             success: true,
+//             message: `✅ Booking ID ${bookingId} successfully checked in. Room ${room_id} is now Occupied.`,
+//             booking_id: bookingId,
+//             new_status: 'Checked-In'
+//         });
+//     } catch (error) {
+//         console.error('Check-In Transaction Error:', error);
+//         res.status(500).json({
+//             success: false,
+//             error: 'Internal server error during check-in transaction.'
+//         });
+//     }
+// });
+
 const checkIn = asyncHandler(async (req, res) => {
-    const { id: bookingId } = req.params; 
+    const { id: bookingId } = req.params;
 
-    // 1. Define Queries for Transaction
-    const queries = [];
-
-    // Query to get the current booking status and room_id
-    const checkStatusQuery = `
-        SELECT status, room_id, check_in_date 
-        FROM public.booking 
-        WHERE booking_id = $1
-    `;
-    const checkResult = await executeQuery(checkStatusQuery, [bookingId]);
-
-    if (checkResult.rows.length === 0) {
-        return res.status(404).json({ success: false, error: 'Booking not found.' });
+    if (!bookingId) {
+        return res.status(400).json({ success: false, error: 'Booking ID is required.' });
     }
-
-    const { status, room_id, check_in_date } = checkResult.rows[0];
-    const today = new Date().toISOString().slice(0, 10); // Current date in YYYY-MM-DD format
-
-    // Prevent checking in if the booking is already checked out or cancelled
-    if (status === 'Checked-Out' || status === 'Cancelled') {
-        return res.status(400).json({ 
-            success: false, 
-            error: `Booking ${bookingId} is already ${status} and cannot be checked in.` 
-        });
-    }
-
-    // Optional: Add logic for early check-in warning if today < check_in_date
-    if (today < check_in_date.toISOString().slice(0, 10) && status === 'Booked') {
-        console.warn(`Attempting early check-in for Booking ID ${bookingId}`);
-        // You might decide to return an error, apply a fee, or proceed with a warning.
-    }
-    
-    // 2. Booking Status Update
-    const updateBookingQuery = {
-        text: `
-            UPDATE public.booking
-            SET status = 'Checked-In', 
-                actual_check_in = NOW(), -- Assumes you have an actual_check_in column
-                updated_at = NOW() 
-            WHERE booking_id = $1
-            RETURNING booking_id, room_id
-        `,
-        params: [bookingId]
-    };
-    queries.push(updateBookingQuery);
-    
-    // 3. Room Status Update (Change room status to 'Occupied')
-    const updateRoomQuery = {
-        text: `
-            UPDATE public.room
-            SET status = 'Occupied'
-            WHERE room_id = $1
-        `,
-        params: [room_id]
-    };
-    queries.push(updateRoomQuery);
 
     try {
-        await executeTransaction(queries);
+        // 1. Get current booking info
+        const checkResult = await executeQuery(
+            `SELECT status, room_id, check_in_date 
+             FROM public.booking 
+             WHERE booking_id = $1`,
+            [bookingId]
+        );
+
+        if (!checkResult.rows.length) {
+            return res.status(404).json({ success: false, error: 'Booking not found.' });
+        }
+
+        const { status, room_id, check_in_date } = checkResult.rows[0];
+        const today = new Date().toISOString().slice(0, 10);
+
+        // 2. Prevent invalid check-ins
+        if (status === 'Checked-Out' || status === 'Cancelled') {
+            return res.status(400).json({
+                success: false,
+                error: `Booking ${bookingId} is already ${status} and cannot be checked in.`
+            });
+        }
+
+        // 3. Optional: early check-in warning
+        if (status === 'Booked' && today < check_in_date.toISOString().slice(0, 10)) {
+            console.warn(`⚠️ Early check-in attempt for Booking ID ${bookingId}.`);
+            // You can choose to reject early check-ins or allow with warning
+        }
+
+        // 4. Prepare transaction queries
+        const queries = [
+            {
+                text: `
+                    UPDATE public.booking
+                    SET status = 'Checked-In',
+                        check_in_date = NOW()
+                    WHERE booking_id = $1
+                    RETURNING booking_id, room_id, status
+                `,
+                params: [bookingId]
+            },
+            {
+                text: `
+                    UPDATE public.room
+                    SET status = 'Occupied'
+                    WHERE room_id = $1
+                    RETURNING room_id, status
+                `,
+                params: [room_id]
+            }
+        ];
+
+        // 5. Execute transaction
+        const transactionResult = await executeTransaction(queries);
 
         res.status(200).json({
             success: true,
             message: `✅ Booking ID ${bookingId} successfully checked in. Room ${room_id} is now Occupied.`,
-            booking_id: bookingId,
-            new_status: 'Checked-In'
+            booking: transactionResult[0].rows[0],
+            room: transactionResult[1].rows[0]
         });
+
     } catch (error) {
         console.error('Check-In Transaction Error:', error);
         res.status(500).json({
             success: false,
-            error: 'Internal server error during check-in transaction.'
+            error: `Internal server error during check-in: ${error.message}`
         });
     }
 });
 
-const updateBookingStatus = asyncHandler(async (req, res) => { /* ... existing logic ... */ });
+const checkOut = asyncHandler(async (req, res) => {
+    const { id: bookingId } = req.params;
+
+    if (!bookingId) {
+        return res.status(400).json({ success: false, error: 'Booking ID is required.' });
+    }
+
+    try {
+        // 1. Get current status, room_id, balance, and dates for invoice
+        const checkFactsQuery = `
+            SELECT 
+                b.status, 
+                b.room_id, 
+                b.check_in_date,
+                b.check_out_date,
+                fn_net_balance($1) AS net_balance -- Financial function check
+            FROM public.booking b 
+            WHERE b.booking_id = $1
+        `;
+        const checkResult = await executeQuery(checkFactsQuery, [bookingId]);
+
+        if (!checkResult.rows.length) {
+            return res.status(404).json({ success: false, error: 'Booking not found.' });
+        }
+
+        const { 
+            status, 
+            room_id, 
+            net_balance, 
+            check_in_date, 
+            check_out_date 
+        } = checkResult.rows[0];
+
+        // 2. Financial Check: Prevent checkout if balance is due (> $0.00)
+        if (parseFloat(net_balance) > 0) {
+            return res.status(400).json({
+                success: false,
+                error: `❌ Cannot check out. Outstanding balance of ${net_balance} is due.`
+            });
+        }
+
+        // 3. Status Check: Must be 'Checked-In' to check out
+        if (status !== 'Checked-In') {
+            return res.status(400).json({
+                success: false,
+                error: `Booking ${bookingId} is in status '${status}' and must be 'Checked-In' to proceed.`
+            });
+        }
+
+        // 4. Prepare transaction queries
+        const queries = [
+            // A. Update Booking Status
+            {
+                text: `
+                    UPDATE public.booking
+                    SET status = 'Checked-Out', 
+                        check_out_date = NOW() -- Assumes this column exists
+                    WHERE booking_id = $1
+                    RETURNING booking_id, room_id, status
+                `,
+                params: [bookingId]
+            },
+            // B. Update Room Status
+            {
+                text: `
+                    UPDATE public.room
+                    SET status = 'Available' -- Change room status back to Available
+                    WHERE room_id = $1
+                    RETURNING room_id, status
+                `,
+                params: [room_id]
+            },
+            // C. Create Invoice Record
+            {
+                text: `
+                    INSERT INTO public.invoice (
+                        booking_id, period_start, period_end, issued_at
+                    )
+                    VALUES ($1, $2, $3, NOW())
+                    RETURNING invoice_id
+                `,
+                params: [
+                    bookingId, 
+                    check_in_date.toISOString().slice(0, 10),
+                    check_out_date.toISOString().slice(0, 10)
+                ]
+            }
+        ];
+
+        // 5. Execute transaction
+        const transactionResult = await executeTransaction(queries);
+        const invoiceId = transactionResult[2].rows[0].invoice_id; // Get ID from the third result
+
+        res.status(200).json({
+            success: true,
+            message: `✅ Booking ${bookingId} checked out. Invoice ${invoiceId} created.`,
+            booking: transactionResult[0].rows[0],
+            room: transactionResult[1].rows[0],
+            invoice_id: invoiceId
+        });
+
+    } catch (error) {
+        console.error('Check-Out Transaction Error:', error);
+        res.status(500).json({
+            success: false,
+            error: `Internal server error during check-out: ${error.message}`
+        });
+    }
+});
+
 
 module.exports = {
     getAllPrebookings,
     getAllBookings,
     getBookingDetails,
     checkIn,
+    checkOut,
     createPreBooking, 
     createBooking,
-    updateBookingStatus,
+    //updateBookingStatus,
     cancelcreatedBooking
 };

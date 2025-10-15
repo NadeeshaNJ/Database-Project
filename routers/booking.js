@@ -167,12 +167,12 @@ router.get('/:id', [
 // Check-in guest
 router.post('/:id/checkin', [
   commonValidations.id
-], authenticateToken, authorizeRoles(['Admin', 'Receptionist','Manager','Accountant']), asyncHandler(bookingController.checkIn));
+], authenticateToken, authorizeRoles('Admin', 'Receptionist','Manager','Accountant'), asyncHandler(bookingController.checkIn));
 
 // Check-out guest
 router.post('/:id/checkout', [
   commonValidations.id
-], authenticateToken, authorizeRoles(['Admin', 'Receptionist','Manager','Accountant']), asyncHandler(bookingController.checkOut));
+], authenticateToken, authorizeRoles('Admin', 'Receptionist','Manager','Accountant'), asyncHandler(bookingController.checkOut));
 
 // Cancel booking
 router.post('/:id/cancel', [

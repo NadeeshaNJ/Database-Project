@@ -57,33 +57,69 @@ const authenticateToken = async (req, res, next) => {
  */
 // In middleware/auth.js
 
+// const authorizeRoles = (...roles) => {
+//   return (req, res, next) => {
+    
+//     // 1. Check 1: Ensure the user object is attached and has a role property.
+//     // We must return a clear error if the role is truly missing from the token.
+//     if (!req.user || req.user.role === undefined || req.user.role === null) {
+//         return res.status(403).json({ 
+//             success: false,
+//             error: 'Access denied. User role not defined in token.' // More specific message
+//         });
+//     }
+
+//     // 2. Perform Case-Insensitive Comparison
+//     // Ensure the role is treated as a string before calling toLowerCase().
+//     const userRole = String(req.user.role).toLowerCase(); 
+//     const allowedRoles = roles.map(role => String(role).toLowerCase()); // Also convert allowed roles to strings
+
+//     if (!allowedRoles.includes(userRole)) { 
+//       return res.status(403).json({ 
+//         success: false,
+//         error: 'Access denied. Insufficient permissions.' 
+//       });
+//     }
+
+//     next();
+//   };
+// };
+
 const authorizeRoles = (...roles) => {
   return (req, res, next) => {
-    
-    // 1. Check 1: Ensure the user object is attached and has a role property.
-    // We must return a clear error if the role is truly missing from the token.
-    if (!req.user || req.user.role === undefined || req.user.role === null) {
-        return res.status(403).json({ 
-            success: false,
-            error: 'Access denied. User role not defined in token.' // More specific message
-        });
+    // 1. Ensure req.user and req.user.role exist
+    if (!req.user || !req.user.role) {
+      return res.status(403).json({
+        success: false,
+        error: 'Access denied. User role not defined in token.'
+      });
     }
 
-    // 2. Perform Case-Insensitive Comparison
-    // Ensure the role is treated as a string before calling toLowerCase().
-    const userRole = String(req.user.role).toLowerCase(); 
-    const allowedRoles = roles.map(role => String(role).toLowerCase()); // Also convert allowed roles to strings
+    // 2. Normalize user role: trim spaces and lowercase
+    const userRole = String(req.user.role).trim().toLowerCase();
 
-    if (!allowedRoles.includes(userRole)) { 
-      return res.status(403).json({ 
+    // 3. Normalize allowed roles
+    const allowedRoles = roles.map(role => String(role).trim().toLowerCase());
+
+    // 4. Debug: log roles (remove or comment out in production)
+    console.log(`DEBUG: userRole="${userRole}", allowedRoles=[${allowedRoles.join(', ')}]`);
+
+    // 5. Check if the user's role exists in allowedRoles
+    if (!allowedRoles.includes(userRole)) {
+      return res.status(403).json({
         success: false,
-        error: 'Access denied. Insufficient permissions.' 
+        error: `Access denied. User role "${req.user.role}" insufficient.`
       });
     }
 
     next();
   };
 };
+
+module.exports = { authorizeRoles };
+
+
+
 
 /**
  * Optionally authenticates a token if one is present, but allows the request to continue if not.

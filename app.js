@@ -90,6 +90,7 @@ const roomRoutes = require('./routers/rooms');
 const bookingRoutes = require('./routers/booking');
 const guestRoutes = require('./routers/guests');
 const paymentRoutes = require('./routers/payments');
+const serviceUsageRoutes = require('./routers/serviceUsage');
 
 const app = express();
 
@@ -130,6 +131,7 @@ app.use('/api/rooms', jsonParser, urlencodedParser, roomRoutes);
 app.use('/api/bookings', jsonParser, urlencodedParser, bookingRoutes);
 app.use('/api/guests', jsonParser, urlencodedParser, guestRoutes);
 app.use('/api/payments', jsonParser, urlencodedParser, paymentRoutes);
+app.use('/api/service-usage', jsonParser, urlencodedParser, serviceUsageRoutes);
 
 // Error handling middleware
 app.use((error, req, res, next) => {
