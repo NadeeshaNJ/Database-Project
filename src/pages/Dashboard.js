@@ -18,14 +18,15 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h2 className="mb-4">Dashboard</h2>
+      <h2 className="mb-4" style={{ color: '#FFFFFF' }}>Dashboard</h2>
       
       <Row>
         {stats.map((stat, index) => {
           const IconComponent = stat.icon;
           return (
             <Col md={4} lg={2} key={index} className="mb-4">
-              <Card className="card-custom h-100">
+              
+              <Card className="card-custom h-100" style={{ backgroundColor: '#FFFFFF', border: '2px solid #749DD0' }}>
                 <Card.Body className="text-center">
                   <IconComponent 
                     size={40} 
