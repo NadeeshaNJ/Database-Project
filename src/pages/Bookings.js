@@ -2,12 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Table, Badge, Modal, Form, Alert } from 'react-bootstrap';
 import { FaCalendarCheck, FaPlus, FaEdit, FaEye, FaSearch, FaFilter } from 'react-icons/fa';
 
+const API_URL = 'http://localhost:5000/api/bookings'; // ✅ adjust if your prefix differs
+
+
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [modalType, setModalType] = useState('add');
   const [filterStatus, setFilterStatus] = useState('All');
+  const [loading, setLoading] = useState(true);
+
 
   // Sample bookings data for SkyNest Hotels
   const sampleBookings = [
@@ -114,8 +119,48 @@ const Bookings = () => {
   ];
 
   useEffect(() => {
-    setBookings(sampleBookings);
+    const fetchBookings = async () => {
+      try {
+        const res = await fetch(`${API_URL}/booking/all`, {
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (!res.ok) throw new Error('Backend not responding');
+        const data = await res.json();
+
+        // adjust shape if your backend returns {success, bookings:[]}
+        setBookings(data.bookings || []);
+      } catch (err) {
+        console.warn('⚠️ Using sample data because backend not reachable:', err.message);
+        setBookings(sampleBookings); // fallback
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBookings();
   }, []);
+  const handleCreateBooking = async (newBookingData) => {
+  try {
+    const res = await fetch(`${API_URL}/confirmed`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        // If you use auth token later:
+        // 'Authorization': `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify(newBookingData)
+    });
+
+    if (!res.ok) throw new Error('Failed to create booking');
+    const data = await res.json();
+
+    setBookings(prev => [...prev, data.booking]); // add to UI
+    alert('✅ Booking created successfully!');
+  } catch (err) {
+    alert('❌ ' + err.message);
+  }
+};
 
   const handleShowModal = (type, booking = null) => {
     setModalType(type);
@@ -180,6 +225,17 @@ const Bookings = () => {
               onClick={() => handleShowModal('add')}
               className="d-flex align-items-center"
             >
+            <Button variant="primary" onClick={() => handleCreateBooking({
+              room_id: 1,
+              check_in_date: '2025-11-01',
+              check_out_date: '2025-11-03',
+              booked_rate: 20000,
+              advance_payment: 5000,
+              preferred_payment_method: 'Cash'
+            })}>
+              Create Booking
+            </Button>
+
               <FaPlus className="me-2" />
               New Booking
             </Button>
