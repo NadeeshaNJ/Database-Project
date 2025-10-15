@@ -173,31 +173,22 @@ export const reservationAPI = {
   getAllReservations: (params) => bookingAPI.getAllBookings(params),
   getReservationById: (id) => bookingAPI.getBookingById(id),
   createReservation: (data) => bookingAPI.createBooking(data),
+  updateReservation: (id, data) => bookingAPI.updateBooking(id, data),
   deleteReservation: (id) => bookingAPI.cancelBooking(id),
   getReservationsByStatus: (status) => bookingAPI.getAllBookings({ status }),
   checkIn: (id) => bookingAPI.checkIn(id),
   checkOut: (id) => bookingAPI.checkOut(id)
 };
 
-// Service API functions
+// Service API (if needed for future implementation)
 export const serviceAPI = {
-  // Get all services
   getAllServices: () => apiClient.get('/services'),
-  
-  // Get service by ID
   getServiceById: (id) => apiClient.get(`/services/${id}`),
-  
-  // Create new service request
   createService: (serviceData) => apiClient.post('/services', serviceData),
-  
-  // Update service
   updateService: (id, serviceData) => apiClient.put(`/services/${id}`, serviceData),
-  
-  // Delete service
   deleteService: (id) => apiClient.delete(`/services/${id}`)
 };
 
-// Default export for convenience
 export default {
   auth: authAPI,
   guest: guestAPI,
