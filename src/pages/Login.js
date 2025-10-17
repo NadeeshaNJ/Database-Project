@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState(''); // email or username
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -18,7 +18,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await login(email, password);
+      await login(identifier, password);
       navigate('/');
     } catch (err) {
       setError(err.message || 'Failed to login');
@@ -26,7 +26,6 @@ const Login = () => {
       setLoading(false);
     }
   };
-
   const demoCredentials = [
     { email: 'admin@skynest.com', password: 'admin123', role: 'Admin' },
     { email: 'manager.colombo@skynest.com', password: 'manager123', role: 'Manager' },
@@ -92,13 +91,13 @@ const Login = () => {
                       <Form.Group className="mb-3">
                         <Form.Label>
                           <FaEnvelope className="me-2" />
-                          Email Address
+                          Email or Username
                         </Form.Label>
                         <Form.Control
-                          type="email"
-                          placeholder="Enter email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
+                          type="text"
+                          placeholder="Enter email or username"
+                          value={identifier}
+                          onChange={(e) => setIdentifier(e.target.value)}
                           required
                           size="lg"
                         />
@@ -163,7 +162,7 @@ const Login = () => {
                             variant="outline-primary"
                             className="ms-2"
                             onClick={() => {
-                              setEmail(cred.email);
+                              setIdentifier(cred.email);
                               setPassword(cred.password);
                             }}
                           >

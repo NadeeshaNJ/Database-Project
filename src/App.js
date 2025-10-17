@@ -6,6 +6,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Navbar from './components/Layout/Navbar';
 import Sidebar from './components/Layout/Sidebar';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Dashboard from './pages/Dashboard';
@@ -26,6 +27,7 @@ function App() {
           <Routes>
             {/* Public Route */}
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             
             {/* Protected Routes */}
             <Route path="/*" element={

@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Table, Badge, Modal, Form } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Table, Badge, Modal, Form, Spinner, Alert } from 'react-bootstrap';
 import { FaBed, FaPlus, FaEdit, FaEye, FaWifi, FaTv, FaSnowflake, FaCoffee, FaSwimmingPool } from 'react-icons/fa';
+import { apiUrl } from '../utils/api';
 
 const Rooms = () => {
   const [rooms, setRooms] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [modalType, setModalType] = useState('add');
@@ -11,165 +14,58 @@ const Rooms = () => {
   const [filterStatus, setFilterStatus] = useState('All');
   const [filterType, setFilterType] = useState('All');
 
-  // Sample rooms data for SkyNest Hotels
-  const sampleRooms = [
-    // SkyNest Colombo
-    {
-      id: 1,
-      roomNumber: '101',
-      hotelBranch: 'SkyNest Colombo',
-      roomType: 'Single',
-      floor: 1,
-      capacity: 1,
-      dailyRate: 8000,
-      status: 'Available',
-      amenities: ['WiFi', 'AC', 'TV', 'Mini Bar', 'Safe'],
-      description: 'Cozy single room with city view',
-      bedType: 'Single',
-      size: 25, // sq meters
-      view: 'City View'
-    },
-    {
-      id: 2,
-      roomNumber: '102',
-      hotelBranch: 'SkyNest Colombo',
-      roomType: 'Single',
-      floor: 1,
-      capacity: 1,
-      dailyRate: 8000,
-      status: 'Occupied',
-      amenities: ['WiFi', 'AC', 'TV', 'Mini Bar', 'Safe'],
-      description: 'Cozy single room with city view',
-      bedType: 'Single',
-      size: 25,
-      view: 'City View'
-    },
-    {
-      id: 3,
-      roomNumber: '201',
-      hotelBranch: 'SkyNest Colombo',
-      roomType: 'Double',
-      floor: 2,
-      capacity: 2,
-      dailyRate: 12000,
-      status: 'Available',
-      amenities: ['WiFi', 'AC', 'TV', 'Mini Bar', 'Safe', 'Balcony'],
-      description: 'Comfortable double room with ocean view',
-      bedType: 'Queen',
-      size: 35,
-      view: 'Ocean View'
-    },
-    {
-      id: 4,
-      roomNumber: '301',
-      hotelBranch: 'SkyNest Colombo',
-      roomType: 'Suite',
-      floor: 3,
-      capacity: 4,
-      dailyRate: 20000,
-      status: 'Available',
-      amenities: ['WiFi', 'AC', 'TV', 'Mini Bar', 'Safe', 'Balcony', 'Living Area', 'Kitchenette'],
-      description: 'Luxurious suite with panoramic ocean view',
-      bedType: 'King + Sofa Bed',
-      size: 65,
-      view: 'Ocean View'
-    },
-    // SkyNest Kandy
-    {
-      id: 5,
-      roomNumber: '101',
-      hotelBranch: 'SkyNest Kandy',
-      roomType: 'Single',
-      floor: 1,
-      capacity: 1,
-      dailyRate: 7000,
-      status: 'Available',
-      amenities: ['WiFi', 'AC', 'TV', 'Safe'],
-      description: 'Peaceful single room with garden view',
-      bedType: 'Single',
-      size: 22,
-      view: 'Garden View'
-    },
-    {
-      id: 6,
-      roomNumber: '205',
-      hotelBranch: 'SkyNest Kandy',
-      roomType: 'Double',
-      floor: 2,
-      capacity: 2,
-      dailyRate: 10000,
-      status: 'Occupied',
-      amenities: ['WiFi', 'AC', 'TV', 'Mini Bar', 'Safe', 'Balcony'],
-      description: 'Spacious double room with mountain view',
-      bedType: 'Queen',
-      size: 32,
-      view: 'Mountain View'
-    },
-    {
-      id: 7,
-      roomNumber: '308',
-      hotelBranch: 'SkyNest Kandy',
-      roomType: 'Suite',
-      floor: 3,
-      capacity: 4,
-      dailyRate: 18000,
-      status: 'Maintenance',
-      amenities: ['WiFi', 'AC', 'TV', 'Mini Bar', 'Safe', 'Balcony', 'Living Area'],
-      description: 'Executive suite with panoramic mountain view',
-      bedType: 'King + Sofa Bed',
-      size: 60,
-      view: 'Mountain View'
-    },
-    // SkyNest Galle
-    {
-      id: 8,
-      roomNumber: '102',
-      hotelBranch: 'SkyNest Galle',
-      roomType: 'Single',
-      floor: 1,
-      capacity: 1,
-      dailyRate: 7500,
-      status: 'Available',
-      amenities: ['WiFi', 'AC', 'TV', 'Safe'],
-      description: 'Charming single room near the historic fort',
-      bedType: 'Single',
-      size: 24,
-      view: 'Fort View'
-    },
-    {
-      id: 9,
-      roomNumber: '201',
-      hotelBranch: 'SkyNest Galle',
-      roomType: 'Double',
-      floor: 2,
-      capacity: 2,
-      dailyRate: 11000,
-      status: 'Available',
-      amenities: ['WiFi', 'AC', 'TV', 'Mini Bar', 'Safe', 'Beach Access'],
-      description: 'Beautiful double room with beach access',
-      bedType: 'Queen',
-      size: 30,
-      view: 'Beach View'
-    },
-    {
-      id: 10,
-      roomNumber: '305',
-      hotelBranch: 'SkyNest Galle',
-      roomType: 'Suite',
-      floor: 3,
-      capacity: 4,
-      dailyRate: 19000,
-      status: 'Available',
-      amenities: ['WiFi', 'AC', 'TV', 'Mini Bar', 'Safe', 'Balcony', 'Living Area', 'Beach Access'],
-      description: 'Premium beachfront suite with private balcony',
-      bedType: 'King + Sofa Bed',
-      size: 70,
-      view: 'Beach View'
-    }
-  ];
-
+  // Fetch rooms from backend
   useEffect(() => {
-    setRooms(sampleRooms);
+    const fetchRooms = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        
+        const response = await fetch(apiUrl('/api/rooms'));
+        const data = await response.json();
+        
+        if (data.success && data.data && data.data.rooms) {
+          // Transform backend data to match frontend format
+          const transformedRooms = data.data.rooms.map(room => ({
+            id: room.room_id,
+            roomNumber: room.room_number,
+            roomType: room.room_type_name,
+            capacity: room.capacity,
+            dailyRate: parseFloat(room.daily_rate),
+            status: room.status,
+            isAvailable: room.is_available,
+            // Parse amenities from database (comma-separated string to array)
+            amenities: room.amenities ? room.amenities.split(',').map(a => a.trim()) : [],
+            // Use actual branch name from database
+            hotelBranch: room.branch_name ? `SkyNest ${room.branch_name}` : 'SkyNest Hotels',
+            branchCode: room.branch_code,
+            floor: Math.floor(parseInt(room.room_number) / 100),
+            description: `${room.room_type_name} room with ${room.capacity} guest${room.capacity > 1 ? 's' : ''} capacity`,
+            bedType: room.room_type_name === 'Standard Single' ? 'Single' : 
+                     room.room_type_name === 'Standard Double' ? 'Queen' : 
+                     room.room_type_name === 'Deluxe King' ? 'King' :
+                     room.room_type_name === 'Suite' ? 'King + Sofa Bed' : 'Standard',
+            size: room.room_type_name === 'Standard Single' ? 25 : 
+                  room.room_type_name === 'Standard Double' ? 35 : 
+                  room.room_type_name === 'Deluxe King' ? 50 :
+                  room.room_type_name === 'Suite' ? 70 : 30,
+            view: room.amenities && room.amenities.includes('Sea View') ? 'Sea View' :
+                  room.amenities && room.amenities.includes('Balcony') ? 'City View' : 'Standard View'
+          }));
+          
+          setRooms(transformedRooms);
+        } else {
+          setError(data.error || 'Failed to fetch rooms');
+        }
+      } catch (err) {
+        console.error('Error fetching rooms:', err);
+        setError('Failed to connect to server. Please ensure the backend is running.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRooms();
   }, []);
 
   const handleShowModal = (type, room = null) => {
@@ -246,6 +142,24 @@ const Rooms = () => {
 
   return (
     <Container fluid className="py-4">
+      {loading && (
+        <div className="text-center py-5">
+          <Spinner animation="border" role="status" variant="primary">
+            <span className="visually-hidden">Loading rooms...</span>
+          </Spinner>
+          <p className="mt-3 text-muted">Loading rooms...</p>
+        </div>
+      )}
+
+      {error && (
+        <Alert variant="danger" dismissible onClose={() => setError('')}>
+          <Alert.Heading>Error Loading Rooms</Alert.Heading>
+          <p>{error}</p>
+        </Alert>
+      )}
+
+      {!loading && !error && (
+        <>
       <Row className="mb-4">
         <Col>
           <div className="d-flex justify-content-between align-items-center">
@@ -644,6 +558,8 @@ const Rooms = () => {
           )}
         </Modal.Footer>
       </Modal>
+        </>
+      )}
     </Container>
   );
 };

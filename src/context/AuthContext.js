@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
+import { apiUrl } from '../utils/api';
 
 const AuthContext = createContext(null);
 
@@ -24,86 +25,99 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
   
-const login = async (email, password) => {
-        const demoUsers = [
-          {
-            user_id: 1,
-            username: 'admin',
-            email: 'admin@skynest.com',
-            password: 'admin123',
-            name: 'Admin User',
-            role: 'Admin',
-            branch_id: null,
-            branch_name: 'All Branches',
-            phone: '+94 77 123 4567',
-            avatar: null,
-            permissions: ['all']
-          },
-          {
-            user_id: 2,
-            username: 'manager_colombo',
-            email: 'manager.colombo@skynest.com',
-            password: 'manager123',
-            name: 'Anura Perera',
-            role: 'Manager',
-            branch_id: 1,
-            branch_name: 'SkyNest Colombo',
-            phone: '+94 11 234 5678',
-            avatar: null,
-            permissions: ['manage_rooms', 'manage_bookings', 'view_reports']
-          },
-          {
-            user_id: 3,
-            username: 'receptionist_kandy',
-            email: 'receptionist@skynest.com',
-            password: 'reception123',
-            name: 'Shalini Fernando',
-            role: 'Receptionist',
-            branch_id: 2,
-            branch_name: 'SkyNest Kandy',
-            phone: '+94 81 234 5678',
-            avatar: null,
-            permissions: ['view_rooms', 'manage_bookings', 'view_guests']
-          },
-          {
-            user_id: 4,
-            username: 'accountant',
-            email: 'accountant@skynest.com',
-            password: 'accountant123',
-            name: 'Rajitha Silva',
-            role: 'Accountant',
-            branch_id: 3,
-            branch_name: 'SkyNest Galle',
-            phone: '+94 91 234 5678',
-            avatar: null,
-            permissions: ['view_bookings', 'manage_billing', 'view_reports', 'manage_payments']
-          }
-        ];
+  const login = async (email, password) => {
+    const demoUsers = [
+      {
+        user_id: 1,
+        username: 'admin',
+        email: 'admin@skynest.com',
+        password: 'admin123',
+        name: 'Admin User',
+        role: 'Admin',
+        branch_id: null,
+        branch_name: 'All Branches',
+        phone: '+94 77 123 4567',
+        avatar: null,
+        permissions: ['all']
+      },
+      {
+        user_id: 2,
+        username: 'manager_colombo',
+        email: 'manager.colombo@skynest.com',
+        password: 'manager123',
+        name: 'Anura Perera',
+        role: 'Manager',
+        branch_id: 1,
+        branch_name: 'SkyNest Colombo',
+        phone: '+94 11 234 5678',
+        avatar: null,
+        permissions: ['manage_rooms', 'manage_bookings', 'view_reports']
+      },
+      {
+        user_id: 3,
+        username: 'receptionist_kandy',
+        email: 'receptionist@skynest.com',
+        password: 'reception123',
+        name: 'Shalini Fernando',
+        role: 'Receptionist',
+        branch_id: 2,
+        branch_name: 'SkyNest Kandy',
+        phone: '+94 81 234 5678',
+        avatar: null,
+        permissions: ['view_rooms', 'manage_bookings', 'view_guests']
+      },
+      {
+        user_id: 4,
+        username: 'accountant',
+        email: 'accountant@skynest.com',
+        password: 'accountant123',
+        name: 'Rajitha Silva',
+        role: 'Accountant',
+        branch_id: 3,
+        branch_name: 'SkyNest Galle',
+        phone: '+94 91 234 5678',
+        avatar: null,
+        permissions: ['view_bookings', 'manage_billing', 'view_reports', 'manage_payments']
+      }
+    ];
 
-  try {
-    // call your backend API
-    const response = await fetch('http://localhost:5000/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ identifier: email, password }) // matches backend code that checks username/email
-    });
+    try {
+      // call backend API - backend expects `username` (can be email) and `password`
+      const response = await fetch(apiUrl('/api/auth/login'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: email, password })
+      });
 
-    const data = await response.json();
+      const result = await response.json();
 
-    if (response.ok) {
-      const data = await response.json();
-      const decodedUser = jwtDecode(data.token);
-      const fullUser = { ...decodedUser, ...data.user, token: data.token };
-      setUser(fullUser);
-      localStorage.setItem('skyNestUser', JSON.stringify(fullUser));
-      return fullUser;
-    } else {
-      // Backend unreachable or invalid credentials? Fall back to demo mode
-      console.warn('⚠️ Backend login failed — using demo mode');
-      const foundUser = demoUsers.find(
-        u => u.email === email && u.password === password
-      );
-      if (!foundUser) throw new Error('Invalid demo credentials');
+      if (response.ok && result && result.success) {
+        const token = result.data?.token;
+        const serverUser = result.data?.user || {};
+        // decode token to get payload claims if needed
+        let decoded = {};
+        try { decoded = jwtDecode(token); } catch (e) { /* ignore decode errors */ }
+
+        const fullUser = { ...decoded, ...serverUser, token };
+        setUser(fullUser);
+        localStorage.setItem('skyNestUser', JSON.stringify(fullUser));
+        return fullUser;
+      }
+
+      // Backend returned non-OK or success=false -> throw the actual error
+      console.error('⚠️ Backend login failed:', result);
+      throw new Error(result?.error || 'Invalid credentials');
+    } catch (error) {
+      // If it's a network error, try demo mode, otherwise throw the error
+      if (error.message && !error.message.includes('fetch')) {
+        // This is a login error from backend, not network issue
+        throw error;
+      }
+      
+      // Network error -> fallback to demo users
+      console.warn('⚠️ Backend not reachable — using demo mode', error?.message || error);
+      const foundUser = demoUsers.find(u => (u.email === email || u.username === email) && u.password === password);
+      if (!foundUser) throw new Error('Backend unreachable and no matching demo credentials');
 
       const userWithoutPassword = { ...foundUser };
       delete userWithoutPassword.password;
@@ -111,40 +125,7 @@ const login = async (email, password) => {
       localStorage.setItem('skyNestUser', JSON.stringify(userWithoutPassword));
       return userWithoutPassword;
     }
-  } catch (error) {
-    console.warn('⚠️ Backend not reachable — using demo mode');
-    const foundUser = demoUsers.find(
-      u => u.email === email && u.password === password
-    );
-    if (!foundUser) throw new Error('Invalid demo credentials');
-
-    const userWithoutPassword = { ...foundUser };
-    delete userWithoutPassword.password;
-    setUser(userWithoutPassword);
-    localStorage.setItem('skyNestUser', JSON.stringify(userWithoutPassword));
-    return userWithoutPassword;
-  }
-};
-
-  //   return new Promise((resolve, reject) => {
-  //     setTimeout(() => {
-  //       // Demo credentials matching ERD user_role enum
-  
-  //       const foundUser = demoUsers.find(
-  //         u => u.email === email && u.password === password
-  //       );
-
-  //       if (foundUser) {
-  //         const { password, ...userWithoutPassword } = foundUser;
-  //         setUser(userWithoutPassword);
-  //         localStorage.setItem('skyNestUser', JSON.stringify(userWithoutPassword));
-  //         resolve(userWithoutPassword);
-  //       } else {
-  //         reject(new Error('Invalid email or password'));
-  //       }
-  //     }, 1000);
-  //   });
-  // };
+  };
 
   const logout = () => {
     setUser(null);
