@@ -27,12 +27,6 @@ jobs:
           echo "Installing frontend dependencies..."
           npm ci
       
-      - name: ✅ Validate React entry point
-        run: |
-          echo "Checking src/index.js syntax..."
-          node -c src/index.js
-          echo "✅ Entry point is valid"
-      
       - name: 🏗️ Build React application
         run: |
           echo "Building production bundle..."
