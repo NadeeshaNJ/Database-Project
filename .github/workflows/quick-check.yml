@@ -25,12 +25,6 @@ jobs:
           echo "Installing frontend dependencies..."
           npm install
       
-      - name: Check Frontend Syntax
-        run: |
-          echo "Checking for syntax errors..."
-          node -c src/index.js
-          echo "✅ No syntax errors found!"
-      
       - name: Build Frontend
         run: |
           echo "Building React application..."
