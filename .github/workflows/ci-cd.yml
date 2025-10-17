@@ -126,7 +126,7 @@ jobs:
       
       - name: 🔐 Check for sensitive data
         run: |
-          echo "� Scanning for potential security issues..."
+          echo "🔐 Scanning for potential security issues..."
           echo "----------------------------------------"
           
           # Check for hardcoded passwords
