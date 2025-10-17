@@ -93,6 +93,8 @@ const paymentRoutes = require('./routers/payments');
 const serviceUsageRoutes = require('./routers/serviceUsage');
 const servicesRoutes = require('./routers/services');
 const branchRoutes = require('./routers/branches');
+const billingRoutes = require('./routers/billing');
+const reportsRoutes = require('./routers/reports');
 
 const app = express();
 
@@ -133,6 +135,8 @@ app.use('/api/payments', jsonParser, urlencodedParser, paymentRoutes);
 app.use('/api/service-usage', jsonParser, urlencodedParser, serviceUsageRoutes);
 app.use('/api/services', servicesRoutes);
 app.use('/api/branches', branchRoutes);
+app.use('/api/billing', billingRoutes);
+app.use('/api/reports', reportsRoutes);
 
 // Error handling middleware
 app.use((error, req, res, next) => {
