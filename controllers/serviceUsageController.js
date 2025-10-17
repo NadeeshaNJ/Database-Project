@@ -909,6 +909,7 @@ const getAllServiceUsages = asyncHandler(async (req, res) => {
         room_number,
         start_date,
         end_date,
+        branch_id,
         page = 1,
         limit = 10
     } = req.query;
@@ -942,6 +943,11 @@ const getAllServiceUsages = asyncHandler(async (req, res) => {
     if (start_date && end_date) {
         whereClause += ` AND su.used_on BETWEEN $${++filterParamIndex} AND $${++filterParamIndex}`;
         filterParams.push(start_date, end_date);
+    }
+
+    if (branch_id) {
+        whereClause += ` AND r.branch_id = $${++filterParamIndex}`;
+        filterParams.push(branch_id);
     }
 
     const query = `

@@ -13,6 +13,7 @@ const getAllGuests = asyncHandler(async (req, res) => {
         nationality, // Using 'nationality' to match schema, derived from 'country' query param
         email,
         phone,
+        branch_id,
         page = 1,
         limit = 10,
         sort_by = 'full_name', // Defaulting to full_name
@@ -55,6 +56,17 @@ const getAllGuests = asyncHandler(async (req, res) => {
         paramCount++;
         whereConditions.push(`g.phone ILIKE $${paramCount}`);
         params.push(`%${phone}%`);
+    }
+
+    // Branch filter - Filter guests who have bookings in specific branch
+    if (branch_id) {
+        paramCount++;
+        whereConditions.push(`EXISTS (
+            SELECT 1 FROM booking b 
+            JOIN room r ON b.room_id = r.room_id 
+            WHERE b.guest_id = g.guest_id AND r.branch_id = $${paramCount}
+        )`);
+        params.push(branch_id);
     }
     
     // Store params for count query (before adding limit/offset)

@@ -10,6 +10,7 @@ const getAllPayments = asyncHandler(async (req, res) => {
         method,
         start_date,
         end_date,
+        branch_id,
         page = 1,
         limit = 100
     } = req.query;
@@ -59,6 +60,11 @@ const getAllPayments = asyncHandler(async (req, res) => {
     if (start_date && end_date) {
         query += ` AND p.paid_at BETWEEN $${++paramIndex} AND $${++paramIndex}`;
         params.push(start_date, end_date);
+    }
+
+    if (branch_id) {
+        query += ` AND r.branch_id = $${++paramIndex}`;
+        params.push(branch_id);
     }
 
     query += ` ORDER BY p.paid_at DESC`;
@@ -161,6 +167,7 @@ const getPaymentAdjustments = asyncHandler(async (req, res) => {
         type,
         start_date,
         end_date,
+        branch_id,
         page = 1,
         limit = 100
     } = req.query;
@@ -207,6 +214,11 @@ const getPaymentAdjustments = asyncHandler(async (req, res) => {
     if (start_date && end_date) {
         query += ` AND pa.created_at BETWEEN $${++paramIndex} AND $${++paramIndex}`;
         params.push(start_date, end_date);
+    }
+
+    if (branch_id) {
+        query += ` AND r.branch_id = $${++paramIndex}`;
+        params.push(branch_id);
     }
 
     query += ` ORDER BY pa.created_at DESC`;

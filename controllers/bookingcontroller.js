@@ -12,6 +12,7 @@ const getAllBookings = asyncHandler(async (req, res) => {
         check_in_end,
         guest_name,
         room_number,
+        branch_id,
         page = 1,
         limit = 100
     } = req.query;
@@ -80,6 +81,12 @@ const getAllBookings = asyncHandler(async (req, res) => {
     if (room_number) {
         query += ` AND r.room_number = $${++paramIndex}`;
         params.push(room_number);
+    }
+
+    // Branch filter
+    if (branch_id) {
+        query += ` AND r.branch_id = $${++paramIndex}`;
+        params.push(branch_id);
     }
 
     query += ` ORDER BY b.created_at DESC LIMIT $${++paramIndex} OFFSET $${++paramIndex}`;

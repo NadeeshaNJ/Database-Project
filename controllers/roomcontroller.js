@@ -15,6 +15,7 @@ const getAllRooms = asyncHandler(async (req, res) => {
         max_price,
         capacity,
         status,
+        branch_id,
         page = 1,
         limit = 100
     } = req.query;
@@ -77,6 +78,12 @@ const getAllRooms = asyncHandler(async (req, res) => {
     if (status) {
         query += ` AND r.status = $${++paramIndex}`;
         params.push(status);
+    }
+
+    // Branch filter
+    if (branch_id) {
+        query += ` AND r.branch_id = $${++paramIndex}`;
+        params.push(branch_id);
     }
 
     // Price range filter
