@@ -1,48 +1,76 @@
-import React, { useState } from 'react';
-import { Row, Col, Card, Button, Modal, Form, Table, InputGroup } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Card, Button, Modal, Form, Table, InputGroup, Spinner, Alert } from 'react-bootstrap';
 import { FaPlus, FaEdit, FaTrash, FaSearch, FaCalendarAlt } from 'react-icons/fa';
+import { apiUrl } from '../utils/api';
+import { useBranch } from '../context/BranchContext';
 
 const Reservations = () => {
+  const { selectedBranchId } = useBranch();
   const [showModal, setShowModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedReservation, setSelectedReservation] = useState(null);
+  const [reservations, setReservations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    total: 0,
+    confirmed: 0,
+    pending: 0,
+    checkins_today: 0
+  });
+  const [error, setError] = useState('');
 
-  // Sample reservation data
-  const [reservations, setReservations] = useState([
-    {
-      id: 1,
-      guestName: 'John Doe',
-      roomNumber: '101',
-      roomType: 'Single',
-      checkIn: '2025-09-15',
-      checkOut: '2025-09-18',
-      nights: 3,
-      totalAmount: '$450',
-      status: 'Confirmed'
-    },
-    {
-      id: 2,
-      guestName: 'Jane Smith',
-      roomNumber: '205',
-      roomType: 'Double',
-      checkIn: '2025-09-14',
-      checkOut: '2025-09-16',
-      nights: 2,
-      totalAmount: '$320',
-      status: 'Checked In'
-    },
-    {
-      id: 3,
-      guestName: 'Mike Johnson',
-      roomNumber: '308',
-      roomType: 'Suite',
-      checkIn: '2025-09-16',
-      checkOut: '2025-09-20',
-      nights: 4,
-      totalAmount: '$800',
-      status: 'Pending'
+  useEffect(() => {
+    fetchReservations();
+    fetchStats();
+  }, [selectedBranchId]);
+
+  const fetchReservations = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      let url = '/api/bookings?limit=1000';
+      if (selectedBranchId !== 'All') {
+        url += `&branch_id=${selectedBranchId}`;
+      }
+      const response = await fetch(apiUrl(url));
+      const data = await response.json();
+      
+      if (data.success && data.data && data.data.bookings) {
+        setReservations(data.data.bookings);
+      }
+    } catch (err) {
+      console.error('Error fetching reservations:', err);
+      setError('Failed to load reservations');
+    } finally {
+      setLoading(false);
     }
-  ]);
+  };
+
+  const fetchStats = async () => {
+    try {
+      let url = '/api/reports/dashboard-summary';
+      if (selectedBranchId !== 'All') {
+        url += `?branch_id=${selectedBranchId}`;
+      }
+      const response = await fetch(apiUrl(url));
+      const data = await response.json();
+      
+      if (data.success && data.data) {
+        // Calculate stats from reservations
+        let confirmedCount = reservations.filter(r => r.status === 'Confirmed').length;
+        let pendingCount = reservations.filter(r => r.status === 'Pending').length;
+        
+        setStats({
+          total: reservations.length,
+          confirmed: confirmedCount,
+          pending: pendingCount,
+          checkins_today: data.data.today?.today_checkins || 0
+        });
+      }
+    } catch (err) {
+      console.error('Error fetching stats:', err);
+    }
+  };
 
   const handleShowModal = (reservation = null) => {
     setSelectedReservation(reservation);
@@ -55,24 +83,56 @@ const Reservations = () => {
   };
 
   const filteredReservations = reservations.filter(reservation =>
-    reservation.guestName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    reservation.roomNumber.includes(searchTerm) ||
-    reservation.roomType.toLowerCase().includes(searchTerm.toLowerCase())
+    (reservation.guest_name && reservation.guest_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (reservation.room_number && reservation.room_number.includes(searchTerm)) ||
+    (reservation.room_type && reservation.room_type.toLowerCase().includes(searchTerm.toLowerCase()))
   );
+
+  const calculateNights = (checkIn, checkOut) => {
+    const start = new Date(checkIn);
+    const end = new Date(checkOut);
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
 
   const getStatusBadge = (status) => {
     const statusClasses = {
       'Confirmed': 'bg-success',
-      'Checked In': 'bg-primary',
-      'Checked Out': 'bg-secondary',
+      'Checked-In': 'bg-primary',
+      'Checked-Out': 'bg-secondary',
       'Pending': 'bg-warning',
-      'Cancelled': 'bg-danger'
+      'Cancelled': 'bg-danger',
+      'Booked': 'bg-success'
     };
-    return <span className={`badge ${statusClasses[status]}`}>{status}</span>;
+    return <span className={`badge ${statusClasses[status] || 'bg-secondary'}`}>{status}</span>;
   };
+
+  // Update stats when reservations change
+  useEffect(() => {
+    if (reservations.length > 0) {
+      const confirmed = reservations.filter(r => r.status === 'Confirmed' || r.status === 'Booked').length;
+      const pending = reservations.filter(r => r.status === 'Pending').length;
+      const today = new Date().toISOString().split('T')[0];
+      const checkinsToday = reservations.filter(r => r.check_in_date === today).length;
+      
+      setStats({
+        total: reservations.length,
+        confirmed: confirmed,
+        pending: pending,
+        checkins_today: checkinsToday
+      });
+    }
+  }, [reservations]);
 
   return (
     <div>
+      {error && (
+        <Alert variant="danger" dismissible onClose={() => setError('')}>
+          {error}
+        </Alert>
+      )}
+
       <Row className="mb-4">
         <Col>
           <h2>Reservation Management</h2>
@@ -93,7 +153,7 @@ const Reservations = () => {
         <Col md={3}>
           <Card className="card-custom text-center">
             <Card.Body>
-              <h4 className="text-primary">24</h4>
+              <h4 className="text-primary">{stats.total}</h4>
               <p className="mb-0">Total Reservations</p>
             </Card.Body>
           </Card>
@@ -101,7 +161,7 @@ const Reservations = () => {
         <Col md={3}>
           <Card className="card-custom text-center">
             <Card.Body>
-              <h4 className="text-success">18</h4>
+              <h4 className="text-success">{stats.confirmed}</h4>
               <p className="mb-0">Confirmed</p>
             </Card.Body>
           </Card>
@@ -109,7 +169,7 @@ const Reservations = () => {
         <Col md={3}>
           <Card className="card-custom text-center">
             <Card.Body>
-              <h4 className="text-warning">4</h4>
+              <h4 className="text-warning">{stats.pending}</h4>
               <p className="mb-0">Pending</p>
             </Card.Body>
           </Card>
@@ -117,7 +177,7 @@ const Reservations = () => {
         <Col md={3}>
           <Card className="card-custom text-center">
             <Card.Body>
-              <h4 className="text-info">2</h4>
+              <h4 className="text-info">{stats.checkins_today}</h4>
               <p className="mb-0">Check-ins Today</p>
             </Card.Body>
           </Card>
@@ -147,10 +207,17 @@ const Reservations = () => {
           </Row>
         </Card.Header>
         <Card.Body className="p-0">
+          {loading ? (
+            <div className="text-center py-5">
+              <Spinner animation="border" />
+              <p className="mt-3">Loading reservations...</p>
+            </div>
+          ) : (
           <div className="table-container">
             <Table responsive hover className="mb-0">
               <thead className="table-light">
                 <tr>
+                  <th>Booking ID</th>
                   <th>Guest Name</th>
                   <th>Room</th>
                   <th>Room Type</th>
@@ -163,34 +230,42 @@ const Reservations = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredReservations.map((reservation) => (
-                  <tr key={reservation.id}>
-                    <td>{reservation.guestName}</td>
-                    <td>{reservation.roomNumber}</td>
-                    <td>{reservation.roomType}</td>
-                    <td>{reservation.checkIn}</td>
-                    <td>{reservation.checkOut}</td>
-                    <td>{reservation.nights}</td>
-                    <td>{reservation.totalAmount}</td>
-                    <td>{getStatusBadge(reservation.status)}</td>
-                    <td>
-                      <Button
-                        variant="outline-primary"
-                        size="sm"
-                        className="me-2"
-                        onClick={() => handleShowModal(reservation)}
-                      >
-                        <FaEdit />
-                      </Button>
-                      <Button variant="outline-danger" size="sm">
-                        <FaTrash />
-                      </Button>
-                    </td>
+                {filteredReservations.length > 0 ? (
+                  filteredReservations.map((reservation) => (
+                    <tr key={reservation.booking_id}>
+                      <td>#{reservation.booking_id}</td>
+                      <td>{reservation.guest_name}</td>
+                      <td>{reservation.room_number}</td>
+                      <td>{reservation.room_type}</td>
+                      <td>{new Date(reservation.check_in_date).toLocaleDateString()}</td>
+                      <td>{new Date(reservation.check_out_date).toLocaleDateString()}</td>
+                      <td>{calculateNights(reservation.check_in_date, reservation.check_out_date)}</td>
+                      <td>Rs {parseFloat(reservation.room_estimate || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                      <td>{getStatusBadge(reservation.status)}</td>
+                      <td>
+                        <Button
+                          variant="outline-primary"
+                          size="sm"
+                          className="me-2"
+                          onClick={() => handleShowModal(reservation)}
+                        >
+                          <FaEdit />
+                        </Button>
+                        <Button variant="outline-danger" size="sm">
+                          <FaTrash />
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="10" className="text-center">No reservations found</td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </Table>
           </div>
+          )}
         </Card.Body>
       </Card>
 
@@ -207,23 +282,21 @@ const Reservations = () => {
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Guest Name</Form.Label>
-                  <Form.Select defaultValue={selectedReservation?.guestName || ''}>
-                    <option value="">Select Guest</option>
-                    <option value="John Doe">John Doe</option>
-                    <option value="Jane Smith">Jane Smith</option>
-                    <option value="Mike Johnson">Mike Johnson</option>
-                  </Form.Select>
+                  <Form.Control
+                    type="text"
+                    defaultValue={selectedReservation?.guest_name || ''}
+                    placeholder="Enter guest name"
+                  />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Room Number</Form.Label>
-                  <Form.Select defaultValue={selectedReservation?.roomNumber || ''}>
-                    <option value="">Select Room</option>
-                    <option value="101">101 - Single</option>
-                    <option value="205">205 - Double</option>
-                    <option value="308">308 - Suite</option>
-                  </Form.Select>
+                  <Form.Control
+                    type="text"
+                    defaultValue={selectedReservation?.room_number || ''}
+                    placeholder="Enter room number"
+                  />
                 </Form.Group>
               </Col>
             </Row>
@@ -233,7 +306,7 @@ const Reservations = () => {
                   <Form.Label>Check-in Date</Form.Label>
                   <Form.Control
                     type="date"
-                    defaultValue={selectedReservation?.checkIn || ''}
+                    defaultValue={selectedReservation?.check_in_date ? new Date(selectedReservation.check_in_date).toISOString().split('T')[0] : ''}
                   />
                 </Form.Group>
               </Col>
@@ -242,7 +315,7 @@ const Reservations = () => {
                   <Form.Label>Check-out Date</Form.Label>
                   <Form.Control
                     type="date"
-                    defaultValue={selectedReservation?.checkOut || ''}
+                    defaultValue={selectedReservation?.check_out_date ? new Date(selectedReservation.check_out_date).toISOString().split('T')[0] : ''}
                   />
                 </Form.Group>
               </Col>
@@ -254,19 +327,20 @@ const Reservations = () => {
                   <Form.Select defaultValue={selectedReservation?.status || ''}>
                     <option value="Pending">Pending</option>
                     <option value="Confirmed">Confirmed</option>
-                    <option value="Checked In">Checked In</option>
-                    <option value="Checked Out">Checked Out</option>
+                    <option value="Booked">Booked</option>
+                    <option value="Checked-In">Checked In</option>
+                    <option value="Checked-Out">Checked Out</option>
                     <option value="Cancelled">Cancelled</option>
                   </Form.Select>
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Total Amount</Form.Label>
+                  <Form.Label>Total Amount (Rs)</Form.Label>
                   <Form.Control
-                    type="text"
+                    type="number"
                     placeholder="Enter total amount"
-                    defaultValue={selectedReservation?.totalAmount || ''}
+                    defaultValue={selectedReservation?.room_estimate || ''}
                   />
                 </Form.Group>
               </Col>

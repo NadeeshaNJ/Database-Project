@@ -4,9 +4,12 @@ import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AuthProvider } from './context/AuthContext';
+import { BranchProvider } from './context/BranchContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <AuthProvider>
-    <App />
+    <BranchProvider>
+      <App />
+    </BranchProvider>
   </AuthProvider>
 );

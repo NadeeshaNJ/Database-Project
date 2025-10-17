@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Table, Badge, Modal, Spinner, Tabs, Tab, ListGroup } from 'react-bootstrap';
+import { Row, Col, Card, Table, Badge, Modal, Spinner, Tabs, Tab, ListGroup, Form } from 'react-bootstrap';
 import { FaReceipt, FaEye, FaMoneyBillWave, FaCreditCard } from 'react-icons/fa';
 import { apiUrl } from '../utils/api';
+import { useBranch } from '../context/BranchContext';
 
 const Billing = () => {
+  const { selectedBranchId } = useBranch();
   const [activeTab, setActiveTab] = useState('payments');
   const [loading, setLoading] = useState(true);
   const [payments, setPayments] = useState([]);
@@ -14,12 +16,16 @@ const Billing = () => {
   useEffect(() => {
     fetchPayments();
     fetchAdjustments();
-  }, []);
+  }, [selectedBranchId]);
 
   const fetchPayments = async () => {
     try {
       setLoading(true);
-      const response = await fetch(apiUrl('/api/billing/payments?limit=1000'));
+      let url = '/api/billing/payments?limit=1000';
+      if (selectedBranchId !== 'All') {
+        url += `&branch_id=${selectedBranchId}`;
+      }
+      const response = await fetch(apiUrl(url));
       const data = await response.json();
       if (data.success && data.data && data.data.payments) {
         setPayments(data.data.payments);
@@ -33,7 +39,11 @@ const Billing = () => {
 
   const fetchAdjustments = async () => {
     try {
-      const response = await fetch(apiUrl('/api/billing/adjustments?limit=1000'));
+      let url = '/api/billing/adjustments?limit=1000';
+      if (selectedBranchId !== 'All') {
+        url += `&branch_id=${selectedBranchId}`;
+      }
+      const response = await fetch(apiUrl(url));
       const data = await response.json();
       if (data.success && data.data && data.data.adjustments) {
         setAdjustments(data.data.adjustments);

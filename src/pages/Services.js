@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Table, Badge, Tabs, Tab, Spinner } from 'react-bootstrap';
+import { Row, Col, Card, Table, Badge, Tabs, Tab, Spinner, Form } from 'react-bootstrap';
 import { apiUrl } from '../utils/api';
+import { useBranch } from '../context/BranchContext';
 
 const Services = () => {
+  const { selectedBranchId } = useBranch();
   const [activeTab, setActiveTab] = useState('catalog');
   
   // Service Catalog state
@@ -21,7 +23,7 @@ const Services = () => {
   // Fetch service usage from backend
   useEffect(() => {
     fetchServiceUsage();
-  }, []);
+  }, [selectedBranchId]);
 
   const fetchServiceCatalog = async () => {
     try {
@@ -42,7 +44,11 @@ const Services = () => {
   const fetchServiceUsage = async () => {
     try {
       setLoadingUsage(true);
-      const response = await fetch(apiUrl('/api/service-usage?limit=1000'));
+      let url = '/api/service-usage?limit=1000';
+      if (selectedBranchId !== 'All') {
+        url += `&branch_id=${selectedBranchId}`;
+      }
+      const response = await fetch(apiUrl(url));
       const data = await response.json();
       
       if (data.success && data.data && data.data.serviceUsages) {

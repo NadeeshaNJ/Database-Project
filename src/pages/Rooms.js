@@ -2,27 +2,29 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Table, Badge, Modal, Form, Spinner, Alert } from 'react-bootstrap';
 import { FaBed, FaPlus, FaEdit, FaEye, FaWifi, FaTv, FaSnowflake, FaCoffee, FaSwimmingPool } from 'react-icons/fa';
 import { apiUrl } from '../utils/api';
+import { useBranch } from '../context/BranchContext';
 
 const Rooms = () => {
+  const { selectedBranchId } = useBranch();
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [modalType, setModalType] = useState('add');
-  const [filterHotel, setFilterHotel] = useState('All');
   const [filterStatus, setFilterStatus] = useState('All');
   const [filterType, setFilterType] = useState('All');
 
-  // Fetch rooms from backend
+  // Fetch rooms from backend whenever branch changes
   useEffect(() => {
     const fetchRooms = async () => {
       try {
         setLoading(true);
         setError('');
         
-        // Request all rooms with a high limit (or implement pagination later)
-        const response = await fetch(apiUrl('/api/rooms?limit=1000'));
+        // Add branch filter to API call
+        const branchParam = selectedBranchId !== 'All' ? `&branch_id=${selectedBranchId}` : '';
+        const response = await fetch(apiUrl(`/api/rooms?limit=1000${branchParam}`));
         const data = await response.json();
         
         if (data.success && data.data && data.data.rooms) {
@@ -67,7 +69,7 @@ const Rooms = () => {
     };
 
     fetchRooms();
-  }, []);
+  }, [selectedBranchId]); // Re-fetch when global branch filter changes
 
   const handleShowModal = (type, room = null) => {
     setModalType(type);
@@ -122,11 +124,8 @@ const Rooms = () => {
     }
   };
 
-  // Filter rooms
+  // Filter rooms (client-side filtering for status and type)
   let filteredRooms = rooms;
-  if (filterHotel !== 'All') {
-    filteredRooms = filteredRooms.filter(room => room.hotelBranch === filterHotel);
-  }
   if (filterStatus !== 'All') {
     filteredRooms = filteredRooms.filter(room => room.status === filterStatus);
   }
@@ -219,17 +218,6 @@ const Rooms = () => {
 
       {/* Filters */}
       <Row className="mb-4">
-        <Col md={3}>
-          <Form.Group>
-            <Form.Label>Filter by Hotel</Form.Label>
-            <Form.Select value={filterHotel} onChange={(e) => setFilterHotel(e.target.value)}>
-              <option value="All">All Hotels</option>
-              <option value="SkyNest Colombo">SkyNest Colombo</option>
-              <option value="SkyNest Kandy">SkyNest Kandy</option>
-              <option value="SkyNest Galle">SkyNest Galle</option>
-            </Form.Select>
-          </Form.Group>
-        </Col>
         <Col md={3}>
           <Form.Group>
             <Form.Label>Filter by Status</Form.Label>

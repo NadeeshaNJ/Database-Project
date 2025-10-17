@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Button, Modal, Form, Table, InputGroup, Spinner, Alert } from 'react-bootstrap';
 import { FaPlus, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
+import { useBranch } from '../context/BranchContext';
 
 // ✅ set your backend API base URL
 const API_URL = 'http://localhost:5000/api/guests';
 
 const Guests = () => {
+  const { selectedBranchId } = useBranch();
   const [guests, setGuests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -44,7 +46,14 @@ const Guests = () => {
     const fetchGuests = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`${API_URL}/all?limit=1000`, {
+        
+        // Build URL with branch filter
+        let url = `${API_URL}/all?limit=1000`;
+        if (selectedBranchId !== 'All') {
+          url += `&branch_id=${selectedBranchId}`;
+        }
+        
+        const res = await fetch(url, {
           headers: {
             'Content-Type': 'application/json',
           }
@@ -80,7 +89,7 @@ const Guests = () => {
     };
 
     fetchGuests();
-  }, []);
+  }, [selectedBranchId]); // Re-fetch when global branch filter changes
 
   // ✅ Search filter (works locally or with backend)
   const filteredGuests = guests.filter((guest) =>
@@ -126,11 +135,9 @@ const Guests = () => {
 
       <Card>
         <Card.Header>
-          <Row className="align-items-center">
-            <Col>
-              <h5 className="mb-0">Guest List</h5>
-            </Col>
-            <Col xs="auto">
+          <Row className="align-items-center mb-3">
+            <Col md={12}>
+              <Form.Label>Search</Form.Label>
               <InputGroup>
                 <InputGroup.Text><FaSearch /></InputGroup.Text>
                 <Form.Control
@@ -140,6 +147,11 @@ const Guests = () => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
               </InputGroup>
+            </Col>
+          </Row>
+          <Row className="align-items-center">
+            <Col>
+              <h5 className="mb-0">Guest List</h5>
             </Col>
           </Row>
         </Card.Header>

@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Form, Spinner, Table, Badge } from 'react-bootstrap';
 import { FaChartBar, FaDollarSign, FaUsers, FaBed, FaCalendarAlt } from 'react-icons/fa';
 import { apiUrl } from '../utils/api';
+import { useBranch } from '../context/BranchContext';
 
 const Reports = () => {
+  const { selectedBranchId } = useBranch();
   const [reportType, setReportType] = useState('revenue');
   const [loading, setLoading] = useState(false);
   const [startDate, setStartDate] = useState('');
@@ -18,17 +20,21 @@ const Reports = () => {
 
   useEffect(() => {
     fetchDashboardSummary();
-  }, []);
+  }, [selectedBranchId]);
 
   useEffect(() => {
     if (reportType) {
       fetchReport();
     }
-  }, [reportType]);
+  }, [reportType, selectedBranchId]);
 
   const fetchDashboardSummary = async () => {
     try {
-      const response = await fetch(apiUrl('/api/reports/dashboard-summary'));
+      let url = '/api/reports/dashboard-summary';
+      if (selectedBranchId !== 'All') {
+        url += `?branch_id=${selectedBranchId}`;
+      }
+      const response = await fetch(apiUrl(url));
       const data = await response.json();
       if (data.success) {
         setDashboardData(data.data);
@@ -45,6 +51,7 @@ const Reports = () => {
       const params = new URLSearchParams();
       if (startDate) params.append('start_date', startDate);
       if (endDate) params.append('end_date', endDate);
+      if (selectedBranchId !== 'All') params.append('branch_id', selectedBranchId);
 
       switch (reportType) {
         case 'revenue':
@@ -172,7 +179,7 @@ const Reports = () => {
         <Card.Header><h5 className="mb-0"><FaChartBar className="me-2" />Generate Report</h5></Card.Header>
         <Card.Body>
           <Row>
-            <Col md={3}>
+            <Col md={2}>
               <Form.Group className="mb-3">
                 <Form.Label>Report Type</Form.Label>
                 <Form.Select value={reportType} onChange={(e) => setReportType(e.target.value)}>
@@ -197,7 +204,7 @@ const Reports = () => {
               </Col>
             )}
 
-            <Col md={3}>
+            <Col md={2}>
               <Form.Group className="mb-3">
                 <Form.Label>Start Date</Form.Label>
                 <Form.Control 
@@ -208,7 +215,7 @@ const Reports = () => {
               </Form.Group>
             </Col>
 
-            <Col md={3}>
+            <Col md={2}>
               <Form.Group className="mb-3">
                 <Form.Label>End Date</Form.Label>
                 <Form.Control 

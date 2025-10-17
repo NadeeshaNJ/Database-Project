@@ -1,15 +1,112 @@
-import React from 'react';
-import { Row, Col, Card } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Card, Spinner } from 'react-bootstrap';
 import { FaUsers, FaCalendarAlt, FaBed, FaConciergeBell, FaDollarSign, FaChartLine } from 'react-icons/fa';
+import { apiUrl } from '../utils/api';
+import { useBranch } from '../context/BranchContext';
 
 const Dashboard = () => {
+  const { selectedBranchId } = useBranch();
+  const [loading, setLoading] = useState(true);
+  const [dashboardData, setDashboardData] = useState(null);
+  const [recentBookings, setRecentBookings] = useState([]);
+
+  useEffect(() => {
+    fetchDashboardData();
+    fetchRecentBookings();
+  }, [selectedBranchId]);
+
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      let url = '/api/reports/dashboard-summary';
+      if (selectedBranchId !== 'All') {
+        url += `?branch_id=${selectedBranchId}`;
+      }
+      const response = await fetch(apiUrl(url));
+      const data = await response.json();
+      if (data.success) {
+        setDashboardData(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchRecentBookings = async () => {
+    try {
+      let url = '/api/bookings?limit=5&sort=created_at&order=desc';
+      if (selectedBranchId !== 'All') {
+        url += `&branch_id=${selectedBranchId}`;
+      }
+      const response = await fetch(apiUrl(url));
+      const data = await response.json();
+      if (data.success && data.data && data.data.bookings) {
+        setRecentBookings(data.data.bookings);
+      }
+    } catch (error) {
+      console.error('Error fetching recent bookings:', error);
+    }
+  };
+
+  const getStatusBadge = (status) => {
+    const statusColors = {
+      'Confirmed': 'success',
+      'Checked-in': 'primary',
+      'Checked-out': 'secondary',
+      'Cancelled': 'danger',
+      'Pending': 'warning'
+    };
+    return statusColors[status] || 'secondary';
+  };
+
+  if (loading || !dashboardData) {
+    return (
+      <div className="text-center py-5">
+        <Spinner animation="border" />
+        <p className="mt-3">Loading dashboard...</p>
+      </div>
+    );
+  }
+
   const stats = [
-    { title: 'Total Guests', value: '248', icon: FaUsers, color: 'primary' },
-    { title: 'Active Reservations', value: '42', icon: FaCalendarAlt, color: 'success' },
-    { title: 'Available Rooms', value: '18', icon: FaBed, color: 'info' },
-    { title: 'Services Requested', value: '15', icon: FaConciergeBell, color: 'warning' },
-    { title: 'Monthly Revenue', value: '$24,580', icon: FaDollarSign, color: 'success' },
-    { title: 'Occupancy Rate', value: '78%', icon: FaChartLine, color: 'primary' }
+    { 
+      title: 'Current Guests', 
+      value: dashboardData.today?.current_guests || '0', 
+      icon: FaUsers, 
+      color: 'primary' 
+    },
+    { 
+      title: "Today's Check-ins", 
+      value: dashboardData.today?.today_checkins || '0', 
+      icon: FaCalendarAlt, 
+      color: 'success' 
+    },
+    { 
+      title: 'Available Rooms', 
+      value: `${dashboardData.rooms?.available_rooms || '0'}/${dashboardData.rooms?.total_rooms || '0'}`, 
+      icon: FaBed, 
+      color: 'info' 
+    },
+    { 
+      title: "Today's Check-outs", 
+      value: dashboardData.today?.today_checkouts || '0', 
+      icon: FaConciergeBell, 
+      color: 'warning' 
+    },
+    { 
+      title: 'Monthly Revenue', 
+      value: `Rs ${parseFloat(dashboardData.monthly?.monthly_revenue || 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}`, 
+      icon: FaDollarSign, 
+      color: 'success' 
+    },
+    { 
+      title: 'Monthly Bookings', 
+      value: dashboardData.monthly?.monthly_bookings || '0', 
+      icon: FaChartLine, 
+      color: 'primary' 
+    }
   ];
 
   const rowStyle = {
@@ -62,27 +159,25 @@ const Dashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr style={rowStyle}>
-                      <td>John Doe</td>
-                      <td>101</td>
-                      <td>2025-09-15</td>
-                      <td>2025-09-18</td>
-                      <td><span className="badge bg-success">Confirmed</span></td>
-                    </tr>
-                    <tr style={rowStyle}>
-                      <td>Jane Smith</td>
-                      <td>205</td>
-                      <td>2025-09-14</td>
-                      <td>2025-09-16</td>
-                      <td><span className="badge bg-primary">Checked In</span></td>
-                    </tr>
-                    <tr style={rowStyle}>
-                      <td>Mike Johnson</td>
-                      <td>308</td>
-                      <td>2025-09-16</td>
-                      <td>2025-09-20</td>
-                      <td><span className="badge bg-warning">Pending</span></td>
-                    </tr>
+                    {recentBookings.length > 0 ? (
+                      recentBookings.map((booking) => (
+                        <tr key={booking.booking_id} style={rowStyle}>
+                          <td>{booking.guest_name}</td>
+                          <td>{booking.room_number}</td>
+                          <td>{new Date(booking.check_in_date).toLocaleDateString()}</td>
+                          <td>{new Date(booking.check_out_date).toLocaleDateString()}</td>
+                          <td>
+                            <span className={`badge bg-${getStatusBadge(booking.status)}`}>
+                              {booking.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="5" className="text-center">No recent reservations</td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>

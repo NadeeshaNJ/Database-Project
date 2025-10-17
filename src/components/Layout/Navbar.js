@@ -1,11 +1,13 @@
 import React from 'react';
-import { Navbar as BootstrapNavbar, Nav, Container, NavDropdown, Badge } from 'react-bootstrap';
-import { FaBed, FaUser, FaCog, FaSignOutAlt } from 'react-icons/fa';
+import { Navbar as BootstrapNavbar, Nav, Container, NavDropdown, Badge, Form } from 'react-bootstrap';
+import { FaBed, FaUser, FaCog, FaSignOutAlt, FaBuilding, FaMapMarkerAlt } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
+import { useBranch } from '../../context/BranchContext';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const { selectedBranchId, setSelectedBranchId, branches } = useBranch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -33,9 +35,28 @@ const Navbar = () => {
           <Nav className="ms-auto align-items-center">
             {user && (
               <>
-                <span className="text-light me-3">
-                  <Badge bg="info" className="me-2">{user.branch_name || 'All Branches'}</Badge>
-                </span>
+                {/* Global Branch Selector */}
+                <div className="me-3">
+                  <Form.Select 
+                    value={selectedBranchId} 
+                    onChange={(e) => setSelectedBranchId(e.target.value)}
+                    style={{ 
+                      width: '200px', 
+                      backgroundColor: '#495057', 
+                      color: 'white', 
+                      border: '1px solid #6c757d',
+                      fontSize: '14px'
+                    }}
+                  >
+                    <option value="All">🏢 All Branches</option>
+                    {branches.map(branch => (
+                      <option key={branch.branch_id} value={branch.branch_id}>
+                        📍 {branch.branch_name}
+                      </option>
+                    ))}
+                  </Form.Select>
+                </div>
+                
                 <NavDropdown 
                   title={
                     <span className="text-light">

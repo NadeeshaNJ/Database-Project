@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Table, Badge, Modal, Form, Alert, Spinner } from 'react-bootstrap';
 import { FaCalendarCheck, FaPlus, FaEdit, FaEye, FaSearch, FaFilter } from 'react-icons/fa';
 import { apiUrl } from '../utils/api';
+import { useBranch } from '../context/BranchContext';
 
 const Bookings = () => {
+  const { selectedBranchId } = useBranch();
   const [bookings, setBookings] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
@@ -15,18 +17,23 @@ const Bookings = () => {
   // Fetch bookings from backend
   useEffect(() => {
     fetchBookings();
-  }, [filterStatus]);
+  }, [filterStatus, selectedBranchId]);
 
   const fetchBookings = async () => {
     try {
       setLoading(true);
       setError('');
       
-      const url = filterStatus === 'All' 
-        ? apiUrl('/api/bookings?limit=1000')
-        : apiUrl(`/api/bookings?status=${filterStatus}&limit=1000`);
+      // Build URL with filters
+      let url = '/api/bookings?limit=1000';
+      if (filterStatus !== 'All') {
+        url += `&status=${filterStatus}`;
+      }
+      if (selectedBranchId !== 'All') {
+        url += `&branch_id=${selectedBranchId}`;
+      }
       
-      const response = await fetch(url);
+      const response = await fetch(apiUrl(url));
       const data = await response.json();
       
       if (data.success && data.data && data.data.bookings) {
