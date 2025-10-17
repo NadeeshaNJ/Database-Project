@@ -21,7 +21,8 @@ const Rooms = () => {
         setLoading(true);
         setError('');
         
-        const response = await fetch(apiUrl('/api/rooms'));
+        // Request all rooms with a high limit (or implement pagination later)
+        const response = await fetch(apiUrl('/api/rooms?limit=1000'));
         const data = await response.json();
         
         if (data.success && data.data && data.data.rooms) {

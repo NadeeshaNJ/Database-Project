@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Table, Badge, Modal, Form, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Table, Badge, Modal, Form, Alert, Spinner } from 'react-bootstrap';
 import { FaCalendarCheck, FaPlus, FaEdit, FaEye, FaSearch, FaFilter } from 'react-icons/fa';
-
-const API_URL = 'http://localhost:5000/api/bookings'; // ✅ adjust if your prefix differs
-
+import { apiUrl } from '../utils/api';
 
 const Bookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -12,134 +10,65 @@ const Bookings = () => {
   const [modalType, setModalType] = useState('add');
   const [filterStatus, setFilterStatus] = useState('All');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-
-  // Sample bookings data for SkyNest Hotels
-  const sampleBookings = [
-    {
-      id: 'BK001',
-      guestName: 'John Smith',
-      guestEmail: 'john.smith@email.com',
-      guestPhone: '+1-555-0123',
-      hotelBranch: 'SkyNest Colombo',
-      roomNumber: '301',
-      roomType: 'Suite',
-      checkInDate: '2024-01-15',
-      checkOutDate: '2024-01-18',
-      nights: 3,
-      adults: 2,
-      children: 1,
-      status: 'Confirmed',
-      paymentMethod: 'Credit Card',
-      totalAmount: 45000,
-      paidAmount: 45000,
-      bookingDate: '2024-01-10',
-      specialRequests: 'Late check-in, sea view preferred'
-    },
-    {
-      id: 'BK002',
-      guestName: 'Sarah Johnson',
-      guestEmail: 'sarah.j@email.com',
-      guestPhone: '+1-555-0124',
-      hotelBranch: 'SkyNest Kandy',
-      roomNumber: '205',
-      roomType: 'Double',
-      checkInDate: '2024-01-20',
-      checkOutDate: '2024-01-23',
-      nights: 3,
-      adults: 2,
-      children: 0,
-      status: 'Checked-In',
-      paymentMethod: 'Cash',
-      totalAmount: 27000,
-      paidAmount: 27000,
-      bookingDate: '2024-01-12',
-      specialRequests: 'Ground floor room'
-    },
-    {
-      id: 'BK003',
-      guestName: 'Michael Brown',
-      guestEmail: 'mike.brown@email.com',
-      guestPhone: '+1-555-0125',
-      hotelBranch: 'SkyNest Galle',
-      roomNumber: '102',
-      roomType: 'Single',
-      checkInDate: '2024-01-25',
-      checkOutDate: '2024-01-27',
-      nights: 2,
-      adults: 1,
-      children: 0,
-      status: 'Pending Payment',
-      paymentMethod: 'Bank Transfer',
-      totalAmount: 16000,
-      paidAmount: 8000,
-      bookingDate: '2024-01-14',
-      specialRequests: 'Early check-in'
-    },
-    {
-      id: 'BK004',
-      guestName: 'Emily Davis',
-      guestEmail: 'emily.davis@email.com',
-      guestPhone: '+1-555-0126',
-      hotelBranch: 'SkyNest Colombo',
-      roomNumber: '415',
-      roomType: 'Double',
-      checkInDate: '2024-01-12',
-      checkOutDate: '2024-01-15',
-      nights: 3,
-      adults: 2,
-      children: 2,
-      status: 'Checked-Out',
-      paymentMethod: 'Credit Card',
-      totalAmount: 33000,
-      paidAmount: 33000,
-      bookingDate: '2024-01-08',
-      specialRequests: 'Extra bed for children'
-    },
-    {
-      id: 'BK005',
-      guestName: 'David Wilson',
-      guestEmail: 'david.wilson@email.com',
-      guestPhone: '+1-555-0127',
-      hotelBranch: 'SkyNest Kandy',
-      roomNumber: '308',
-      roomType: 'Suite',
-      checkInDate: '2024-02-01',
-      checkOutDate: '2024-02-05',
-      nights: 4,
-      adults: 2,
-      children: 0,
-      status: 'Confirmed',
-      paymentMethod: 'Credit Card',
-      totalAmount: 60000,
-      paidAmount: 30000,
-      bookingDate: '2024-01-16',
-      specialRequests: 'Honeymoon package'
-    }
-  ];
-
+  // Fetch bookings from backend
   useEffect(() => {
-    const fetchBookings = async () => {
-      try {
-        const res = await fetch(`${API_URL}/booking/all`, {
-          headers: { 'Content-Type': 'application/json' }
-        });
-
-        if (!res.ok) throw new Error('Backend not responding');
-        const data = await res.json();
-
-        // adjust shape if your backend returns {success, bookings:[]}
-        setBookings(data.bookings || []);
-      } catch (err) {
-        console.warn('⚠️ Using sample data because backend not reachable:', err.message);
-        setBookings(sampleBookings); // fallback
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchBookings();
-  }, []);
+  }, [filterStatus]);
+
+  const fetchBookings = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      
+      const url = filterStatus === 'All' 
+        ? apiUrl('/api/bookings?limit=1000')
+        : apiUrl(`/api/bookings?status=${filterStatus}&limit=1000`);
+      
+      const response = await fetch(url);
+      const data = await response.json();
+      
+      if (data.success && data.data && data.data.bookings) {
+        // Transform backend data to match frontend format
+        const transformedBookings = data.data.bookings.map(booking => ({
+          id: `BK${String(booking.booking_id).padStart(3, '0')}`,
+          bookingId: booking.booking_id,
+          guestName: booking.guest_name,
+          guestEmail: booking.guest_email,
+          guestPhone: booking.guest_phone,
+          hotelBranch: `SkyNest ${booking.branch_name}`,
+          roomNumber: booking.room_number,
+          roomType: booking.room_type,
+          checkInDate: booking.check_in_date?.split('T')[0],
+          checkOutDate: booking.check_out_date?.split('T')[0],
+          nights: parseInt(booking.nights) || 0,
+          status: booking.status,
+          paymentMethod: booking.preferred_payment_method || 'N/A',
+          totalAmount: parseFloat(booking.room_estimate) || 0,
+          paidAmount: parseFloat(booking.advance_payment) || 0,
+          discount: parseFloat(booking.discount_amount) || 0,
+          lateFee: parseFloat(booking.late_fee_amount) || 0,
+          bookedRate: parseFloat(booking.booked_rate) || 0,
+          taxRate: parseFloat(booking.tax_rate_percent) || 0,
+          bookingDate: booking.created_at?.split('T')[0],
+          adults: 2, // Default values since not in database
+          children: 0,
+          specialRequests: ''
+        }));
+        
+        setBookings(transformedBookings);
+      } else {
+        setError(data.error || 'Failed to fetch bookings');
+      }
+    } catch (err) {
+      console.error('Error fetching bookings:', err);
+      setError('Failed to connect to server. Please ensure the backend is running.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleCreateBooking = async (newBookingData) => {
   try {
     const res = await fetch(`${API_URL}/confirmed`, {

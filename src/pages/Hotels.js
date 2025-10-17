@@ -1,61 +1,57 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Table, Badge, Modal, Form } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Table, Badge, Modal, Form, Spinner, Alert } from 'react-bootstrap';
 import { FaBuilding, FaMapMarkerAlt, FaPhone, FaPlus, FaEdit, FaEye } from 'react-icons/fa';
+import { apiUrl } from '../utils/api';
 
 const Hotels = () => {
   const [hotels, setHotels] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [modalType, setModalType] = useState('add'); // 'add', 'edit', 'view'
 
-  // Sample data for SkyNest Hotels branches
-  const sampleHotels = [
-    {
-      id: 1,
-      name: 'SkyNest Colombo',
-      location: 'Colombo',
-      address: '123 Galle Road, Colombo 03, Sri Lanka',
-      phone: '+94-11-2345678',
-      email: 'colombo@skynest.lk',
-      manager: 'Rajesh Fernando',
-      totalRooms: 45,
-      availableRooms: 32,
-      status: 'Active',
-      amenities: ['WiFi', 'Pool', 'Gym', 'Spa', 'Restaurant', 'Bar'],
-      description: 'Premier business hotel in the heart of Colombo with ocean views'
-    },
-    {
-      id: 2,
-      name: 'SkyNest Kandy',
-      location: 'Kandy',
-      address: '456 Peradeniya Road, Kandy, Sri Lanka',
-      phone: '+94-81-2345678',
-      email: 'kandy@skynest.lk',
-      manager: 'Priya Jayawardena',
-      totalRooms: 35,
-      availableRooms: 28,
-      status: 'Active',
-      amenities: ['WiFi', 'Pool', 'Gym', 'Restaurant', 'Garden'],
-      description: 'Serene mountain retreat overlooking the Temple of the Tooth'
-    },
-    {
-      id: 3,
-      name: 'SkyNest Galle',
-      location: 'Galle',
-      address: '789 Fort Road, Galle, Sri Lanka',
-      phone: '+94-91-2345678',
-      email: 'galle@skynest.lk',
-      manager: 'Kumara Silva',
-      totalRooms: 28,
-      availableRooms: 21,
-      status: 'Active',
-      amenities: ['WiFi', 'Beach Access', 'Pool', 'Restaurant', 'Water Sports'],
-      description: 'Historic coastal hotel near Galle Fort with pristine beach access'
-    }
-  ];
-
+  // Fetch branches from backend
   useEffect(() => {
-    setHotels(sampleHotels);
+    const fetchBranches = async () => {
+      try {
+        setLoading(true);
+        setError('');
+        
+        const response = await fetch(apiUrl('/api/branches'));
+        const data = await response.json();
+        
+        if (data.success && data.data && data.data.branches) {
+          // Transform backend data to match frontend format
+          const transformedBranches = data.data.branches.map(branch => ({
+            id: branch.branch_id,
+            name: `SkyNest ${branch.branch_name}`,
+            location: branch.branch_name,
+            address: branch.address,
+            phone: branch.contact_number,
+            email: `${branch.branch_code.toLowerCase()}@skynest.lk`,
+            manager: branch.manager_name,
+            branchCode: branch.branch_code,
+            totalRooms: parseInt(branch.total_rooms) || 0,
+            availableRooms: parseInt(branch.available_rooms) || 0,
+            status: 'Active',
+            amenities: ['WiFi', 'Pool', 'Gym', 'Restaurant'],
+            description: `${branch.branch_name} branch of SkyNest Hotels`
+          }));
+          
+          setHotels(transformedBranches);
+        } else {
+          setError(data.error || 'Failed to fetch branches');
+        }
+      } catch (err) {
+        console.error('Error fetching branches:', err);
+        setError('Failed to connect to server. Please ensure the backend is running.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBranches();
   }, []);
 
   const handleShowModal = (type, hotel = null) => {
@@ -82,6 +78,24 @@ const Hotels = () => {
 
   return (
     <Container fluid className="py-4">
+      {loading && (
+        <div className="text-center py-5">
+          <Spinner animation="border" role="status" variant="primary">
+            <span className="visually-hidden">Loading branches...</span>
+          </Spinner>
+          <p className="mt-3 text-muted">Loading hotel branches...</p>
+        </div>
+      )}
+
+      {error && (
+        <Alert variant="danger" dismissible onClose={() => setError('')}>
+          <Alert.Heading>Error Loading Branches</Alert.Heading>
+          <p>{error}</p>
+        </Alert>
+      )}
+
+      {!loading && !error && (
+        <>
       <Row className="mb-4">
         <Col>
           <div className="d-flex justify-content-between align-items-center">
@@ -396,6 +410,8 @@ const Hotels = () => {
           )}
         </Modal.Footer>
       </Modal>
+        </>
+      )}
     </Container>
   );
 };

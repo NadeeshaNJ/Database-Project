@@ -39,21 +39,37 @@ const Guests = () => {
     }
   ];
 
-  // ✅ Fetch guests from backend or fall back to demo data
+  // ✅ Fetch guests from backend
   useEffect(() => {
     const fetchGuests = async () => {
       try {
         setLoading(true);
-        const res = await fetch(`${API_URL}/all`, {
+        const res = await fetch(`${API_URL}/all?limit=1000`, {
           headers: {
             'Content-Type': 'application/json',
-            // 'Authorization': `Bearer ${localStorage.getItem('skyNestUserToken')}` (optional later)
           }
         });
 
         if (!res.ok) throw new Error('Backend unavailable');
-        const data = await res.json();
-        setGuests(data.guests || []); // expect { guests: [...] }
+        const response = await res.json();
+        
+        // Transform database data to match UI format
+        const transformedGuests = response.data.guests.map(guest => ({
+          id: guest.guest_id,
+          firstName: guest.full_name ? guest.full_name.split(' ')[0] : '',
+          lastName: guest.full_name ? guest.full_name.split(' ').slice(1).join(' ') : '',
+          email: guest.email || 'N/A',
+          phone: guest.phone || 'N/A',
+          nationality: guest.nationality || 'N/A',
+          idNumber: guest.nic || 'N/A',
+          checkInDate: guest.last_check_in || 'N/A',
+          status: guest.current_booking_id ? 'Checked In' : 
+                  (guest.total_bookings > 0 ? 'Checked Out' : 'No Bookings'),
+          totalBookings: guest.total_bookings || 0
+        }));
+        
+        setGuests(transformedGuests);
+        setError(null);
       } catch (err) {
         console.warn('⚠️ Backend not connected, using demo data');
         setGuests(demoGuests);
