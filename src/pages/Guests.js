@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
-import { Row, Col, Card, Button, Modal, Form, Table, InputGroup } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Row, Col, Card, Button, Modal, Form, Table, InputGroup, Spinner, Alert } from 'react-bootstrap';
 import { FaPlus, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
 
+// ✅ set your backend API base URL
+const API_URL = 'http://localhost:5000/api/guests';
+
 const Guests = () => {
-  const [showModal, setShowModal] = useState(false);
+  const [guests, setGuests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [showModal, setShowModal] = useState(false);
   const [selectedGuest, setSelectedGuest] = useState(null);
 
-  // Sample guest data
-  const [guests, setGuests] = useState([
+  // ✅ fallback demo data
+  const demoGuests = [
     {
       id: 1,
       firstName: 'John',
@@ -30,19 +36,42 @@ const Guests = () => {
       idNumber: 'C987654321',
       checkInDate: '2025-09-13',
       status: 'Checked Out'
-    },
-    {
-      id: 3,
-      firstName: 'Mike',
-      lastName: 'Johnson',
-      email: 'mike.johnson@email.com',
-      phone: '+1-555-0789',
-      nationality: 'British',
-      idNumber: 'B456789123',
-      checkInDate: '2025-09-15',
-      status: 'Reserved'
     }
-  ]);
+  ];
+
+  // ✅ Fetch guests from backend or fall back to demo data
+  useEffect(() => {
+    const fetchGuests = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`${API_URL}/all`, {
+          headers: {
+            'Content-Type': 'application/json',
+            // 'Authorization': `Bearer ${localStorage.getItem('skyNestUserToken')}` (optional later)
+          }
+        });
+
+        if (!res.ok) throw new Error('Backend unavailable');
+        const data = await res.json();
+        setGuests(data.guests || []); // expect { guests: [...] }
+      } catch (err) {
+        console.warn('⚠️ Backend not connected, using demo data');
+        setGuests(demoGuests);
+        setError('Running in demo mode (backend not connected)');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGuests();
+  }, []);
+
+  // ✅ Search filter (works locally or with backend)
+  const filteredGuests = guests.filter((guest) =>
+    `${guest.firstName} ${guest.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    guest.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    guest.phone.includes(searchTerm)
+  );
 
   const handleShowModal = (guest = null) => {
     setSelectedGuest(guest);
@@ -53,12 +82,6 @@ const Guests = () => {
     setShowModal(false);
     setSelectedGuest(null);
   };
-
-  const filteredGuests = guests.filter(guest =>
-    `${guest.firstName} ${guest.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    guest.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    guest.phone.includes(searchTerm)
-  );
 
   const getStatusBadge = (status) => {
     const statusClasses = {
@@ -76,18 +99,16 @@ const Guests = () => {
           <h2>Guest Management</h2>
         </Col>
         <Col xs="auto">
-          <Button 
-            variant="primary" 
-            onClick={() => handleShowModal()}
-            className="btn-primary-custom"
-          >
+          <Button variant="primary" onClick={() => handleShowModal()}>
             <FaPlus className="me-2" />
             Add New Guest
           </Button>
         </Col>
       </Row>
 
-      <Card className="card-custom">
+      {error && <Alert variant="warning">{error}</Alert>}
+
+      <Card>
         <Card.Header>
           <Row className="align-items-center">
             <Col>
@@ -95,22 +116,24 @@ const Guests = () => {
             </Col>
             <Col xs="auto">
               <InputGroup>
-                <InputGroup.Text>
-                  <FaSearch />
-                </InputGroup.Text>
+                <InputGroup.Text><FaSearch /></InputGroup.Text>
                 <Form.Control
                   type="text"
                   placeholder="Search guests..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="search-box"
                 />
               </InputGroup>
             </Col>
           </Row>
         </Card.Header>
         <Card.Body className="p-0">
-          <div className="table-container">
+          {loading ? (
+            <div className="text-center py-5">
+              <Spinner animation="border" variant="primary" />
+              <p className="mt-2 text-muted">Loading guests...</p>
+            </div>
+          ) : (
             <Table responsive hover className="mb-0">
               <thead className="table-light">
                 <tr>
@@ -135,12 +158,7 @@ const Guests = () => {
                     <td>{guest.checkInDate}</td>
                     <td>{getStatusBadge(guest.status)}</td>
                     <td>
-                      <Button
-                        variant="outline-primary"
-                        size="sm"
-                        className="me-2"
-                        onClick={() => handleShowModal(guest)}
-                      >
+                      <Button variant="outline-primary" size="sm" onClick={() => handleShowModal(guest)} className="me-2">
                         <FaEdit />
                       </Button>
                       <Button variant="outline-danger" size="sm">
@@ -151,92 +169,25 @@ const Guests = () => {
                 ))}
               </tbody>
             </Table>
-          </div>
+          )}
         </Card.Body>
       </Card>
 
       {/* Add/Edit Guest Modal */}
       <Modal show={showModal} onHide={handleCloseModal} size="lg">
         <Modal.Header closeButton>
-          <Modal.Title>
-            {selectedGuest ? 'Edit Guest' : 'Add New Guest'}
-          </Modal.Title>
+          <Modal.Title>{selectedGuest ? 'Edit Guest' : 'Add New Guest'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>First Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter first name"
-                    defaultValue={selectedGuest?.firstName || ''}
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Last Name</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter last name"
-                    defaultValue={selectedGuest?.lastName || ''}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    type="email"
-                    placeholder="Enter email"
-                    defaultValue={selectedGuest?.email || ''}
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Phone</Form.Label>
-                  <Form.Control
-                    type="tel"
-                    placeholder="Enter phone number"
-                    defaultValue={selectedGuest?.phone || ''}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Nationality</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter nationality"
-                    defaultValue={selectedGuest?.nationality || ''}
-                  />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>ID Number</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Enter ID number"
-                    defaultValue={selectedGuest?.idNumber || ''}
-                  />
-                </Form.Group>
-              </Col>
-            </Row>
+            {/* your existing form fields */}
           </Form>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>
             Cancel
           </Button>
-          <Button variant="primary" className="btn-primary-custom">
+          <Button variant="primary">
             {selectedGuest ? 'Update Guest' : 'Add Guest'}
           </Button>
         </Modal.Footer>

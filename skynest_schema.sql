@@ -2,8 +2,6 @@
 -- PostgreSQL database dump
 --
 
-\restrict DP1rxBdRWDSruhnnJ251IdPsyVMNYcKxPlWT6wVFC4BQDOMwAAnff9cOzVJUEzG
-
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
 
@@ -31,9 +29,7 @@ CREATE DATABASE skynest WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVI
 
 ALTER DATABASE skynest OWNER TO postgres;
 
-\unrestrict DP1rxBdRWDSruhnnJ251IdPsyVMNYcKxPlWT6wVFC4BQDOMwAAnff9cOzVJUEzG
-\connect skynest
-\restrict DP1rxBdRWDSruhnnJ251IdPsyVMNYcKxPlWT6wVFC4BQDOMwAAnff9cOzVJUEzG
+
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -8482,5 +8478,4 @@ ALTER TABLE ONLY public.payment_adjustment
 -- PostgreSQL database dump complete
 --
 
-\unrestrict DP1rxBdRWDSruhnnJ251IdPsyVMNYcKxPlWT6wVFC4BQDOMwAAnff9cOzVJUEzG
 
