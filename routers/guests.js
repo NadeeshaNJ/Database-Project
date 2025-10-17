@@ -1,32 +1,31 @@
 const express = require('express');
 const { body, param, query, validationResult } = require('express-validator');
 const { authenticateToken, authorizeRoles } = require('../middleware/auth');
+const { optionalAuth } = require('../middleware/auth');
 const { guestValidations, commonValidations } = require('../middleware/validation');
 const { asyncHandler } = require('../middleware/errorHandler');
 const guestController = require('../controllers/guestController');
 
 const router = express.Router();
 
-// Get all guests
+// Get all guests - public for frontend viewing
 router.get('/all', [
   query('search').optional().trim(),
-  query('country').optional().trim(),
+  query('nationality').optional().trim(),
   query('page').optional().isInt({ min: 1 }),
-  query('limit').optional().isInt({ min: 1, max: 100 }),
-  query('sort_by').optional().isIn('first_name', 'last_name', 'email', 'created_at'),
-  query('order').optional().isIn(['asc', 'desc'])
-], authenticateToken, asyncHandler(guestController.getAllGuests));
+  query('limit').optional().isInt({ min: 1, max: 1000 })
+], optionalAuth, asyncHandler(guestController.getAllGuests));
 
+// Search guests
 router.get('/search', [
   query('query').notEmpty().trim().withMessage('Search query string is required.'),
   query('field').optional().isIn('all', 'name', 'nic', 'email', 'phone').withMessage('Invalid search field.')
-], authenticateToken, authorizeRoles('Admin', 'Manager', 'Receptionist', 'Accountant'), asyncHandler(guestController.searchGuests));
+], optionalAuth, asyncHandler(guestController.searchGuests));
 
-
-// Get guest by ID
+// Get guest by ID - public for frontend viewing
 router.get('/:id', [
   commonValidations.id
-], authenticateToken, asyncHandler(guestController.getGuestById));
+], optionalAuth, asyncHandler(guestController.getGuestById));
 
 // Create new guest
 router.post('/createnew', [

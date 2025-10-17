@@ -1,70 +1,23 @@
-// const express = require('express');
-// const router = express.Router();
-// const { authenticateToken } = require('../middleware/auth');
-// const { authorize } = require('../middleware/authorize'); // ❌ INCORRECT IMPORT NAME AND FILE
-
-// We assume authorizeRoles is available, likely exported from '../middleware/auth.js'
-// Let's modify the imports to reflect the correct function name:
-
 const express = require('express');
+const { query } = require('express-validator');
+const { asyncHandler } = require('../middleware/errorHandler');
+const serviceUsageController = require('../controllers/serviceUsageControllerNew');
+const { optionalAuth } = require('../middleware/auth');
+
 const router = express.Router();
-// FIX: Import the correct authorization function (authorizeRoles)
-const { authenticateToken, authorizeRoles } = require('../middleware/auth'); 
-// Ensure your auth.js exports authorizeRoles
-
-const {
-    getAllServiceUsages,
-    getServiceUsagesByBooking,
-    createServiceUsage,
-    deleteMostRecentServiceUsage,
-    getServiceUsageSummary
-} = require('../controllers/serviceUsageController');
-
-
-// --- Routes (Using the correct authorizeRoles function) ---
 
 // Get all service usages with filters
-router.get('/all', 
-    authenticateToken, 
-    // FIX: Use the correct function name
-    authorizeRoles('Admin', 'Manager', 'Receptionist', 'Accountant'), 
-    getAllServiceUsages
-);
-
-// Get service usage summary (for reports)
-router.get('/summary', 
-    authenticateToken, 
-    // FIX: Use the correct function name
-    authorizeRoles('Admin', 'Manager', 'Accountant'),
-    getServiceUsageSummary
-);
+router.get('/', [
+    query('booking_id').optional().isInt({ min: 1 }),
+    query('service_id').optional().isInt({ min: 1 }),
+    query('guest_name').optional().trim(),
+    query('start_date').optional().isDate(),
+    query('end_date').optional().isDate(),
+    query('page').optional().isInt({ min: 1 }),
+    query('limit').optional().isInt({ min: 1, max: 1000 })
+], optionalAuth, asyncHandler(serviceUsageController.getAllServiceUsages));
 
 // Get service usages by booking ID
-router.get('/booking/:bookingId', 
-    authenticateToken, 
-    // FIX: Use the correct function name
-    authorizeRoles('Admin', 'Manager', 'Receptionist', 'Accountant'),
-    getServiceUsagesByBooking
-);
-
-
-
-// Create new service usage
-router.post('/newservicerequest', 
-    authenticateToken, 
-    // FIX: Use the correct function name
-    authorizeRoles('Manager','Receptionist','Admin'),
-    createServiceUsage
-);
-
-
-
-// Delete service usage
-router.delete('/delete/:id/service/:serviceId', 
-    authenticateToken, 
-    // FIX: Use the correct function name (assuming deleteMostRecentServiceUsage is the name)
-    authorizeRoles('Admin', 'Manager'),
-    deleteMostRecentServiceUsage
-);
+router.get('/booking/:bookingId', optionalAuth, asyncHandler(serviceUsageController.getServiceUsagesByBooking));
 
 module.exports = router;

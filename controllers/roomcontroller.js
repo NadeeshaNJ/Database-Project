@@ -16,7 +16,7 @@ const getAllRooms = asyncHandler(async (req, res) => {
         capacity,
         status,
         page = 1,
-        limit = 10
+        limit = 100
     } = req.query;
 
     const offset = (page - 1) * limit;
