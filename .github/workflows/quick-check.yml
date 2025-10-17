@@ -1,0 +1,39 @@
+name: Quick CI Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  quick-check:
+    name: Quick Validation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install Frontend Dependencies
+        run: |
+          echo "Installing frontend dependencies..."
+          npm install
+      
+      - name: Build Frontend
+        run: |
+          echo "Building React application..."
+          npm run build
+        env:
+          CI: false
+      
+      - name: Success Message
+        run: |
+          echo "🎉 Build completed successfully!"
+          echo "✅ Frontend: OK"
+          echo "✅ Build: OK"

@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Database-Project/static/css/main.cff44650.css",
+    "main.js": "/Database-Project/static/js/main.45d0ad6e.js",
+    "index.html": "/Database-Project/index.html",
+    "main.cff44650.css.map": "/Database-Project/static/css/main.cff44650.css.map",
+    "main.45d0ad6e.js.map": "/Database-Project/static/js/main.45d0ad6e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cff44650.css",
+    "static/js/main.45d0ad6e.js"
+  ]
+}
