@@ -2,13 +2,16 @@
   "name": "hotel-management-frontend",
   "version": "1.0.0",
   "description": "Hotel Reservation and Guest Services Management System Frontend",
+  "homepage": "https://nadeeshanj.github.io/Database-Project",
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "dev": "react-scripts start"
+    "dev": "react-scripts start",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "keywords": [
     "react",
@@ -33,7 +36,8 @@
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0"
+    "@types/react-dom": "^18.0.0",
+    "gh-pages": "^6.3.0"
   },
   "browserslist": {
     "production": [
