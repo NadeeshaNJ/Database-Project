@@ -3,12 +3,22 @@ import { Row, Col, Card, Spinner } from 'react-bootstrap';
 import { FaUsers, FaCalendarAlt, FaBed, FaConciergeBell, FaDollarSign, FaChartLine } from 'react-icons/fa';
 import { apiUrl } from '../utils/api';
 import { useBranch } from '../context/BranchContext';
+import AddGuestModal from '../components/Modals/AddGuestModal';
+import NewReservationModal from '../components/Modals/NewReservationModal';
+import RoomStatusModal from '../components/Modals/RoomStatusModal';
+import ServiceRequestModal from '../components/Modals/ServiceRequestModal';
 
 const Dashboard = () => {
   const { selectedBranchId } = useBranch();
   const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState(null);
   const [recentBookings, setRecentBookings] = useState([]);
+  
+  // Modal states
+  const [showAddGuestModal, setShowAddGuestModal] = useState(false);
+  const [showNewReservationModal, setShowNewReservationModal] = useState(false);
+  const [showRoomStatusModal, setShowRoomStatusModal] = useState(false);
+  const [showServiceRequestModal, setShowServiceRequestModal] = useState(false);
 
   useEffect(() => {
     fetchDashboardData();
@@ -48,6 +58,12 @@ const Dashboard = () => {
     } catch (error) {
       console.error('Error fetching recent bookings:', error);
     }
+  };
+
+  const handleModalSuccess = () => {
+    // Refresh dashboard data after successful action
+    fetchDashboardData();
+    fetchRecentBookings();
   };
 
   const getStatusBadge = (status) => {
@@ -192,19 +208,31 @@ const Dashboard = () => {
             </Card.Header>
             <Card.Body>
               <div className="d-grid gap-2">
-                <button className="btn btn-primary-custom">
+                <button 
+                  className="btn btn-primary-custom"
+                  onClick={() => setShowAddGuestModal(true)}
+                >
                   <FaUsers className="me-2" />
                   Add New Guest
                 </button>
-                <button className="btn btn-success">
+                <button 
+                  className="btn btn-success"
+                  onClick={() => setShowNewReservationModal(true)}
+                >
                   <FaCalendarAlt className="me-2" />
                   New Reservation
                 </button>
-                <button className="btn btn-info">
+                <button 
+                  className="btn btn-info"
+                  onClick={() => setShowRoomStatusModal(true)}
+                >
                   <FaBed className="me-2" />
                   Room Status
                 </button>
-                <button className="btn btn-warning">
+                <button 
+                  className="btn btn-warning"
+                  onClick={() => setShowServiceRequestModal(true)}
+                >
                   <FaConciergeBell className="me-2" />
                   Service Request
                 </button>
@@ -213,6 +241,27 @@ const Dashboard = () => {
           </Card>
         </Col>
       </Row>
+
+      {/* Modals */}
+      <AddGuestModal 
+        show={showAddGuestModal} 
+        onHide={() => setShowAddGuestModal(false)}
+        onSuccess={handleModalSuccess}
+      />
+      <NewReservationModal 
+        show={showNewReservationModal} 
+        onHide={() => setShowNewReservationModal(false)}
+        onSuccess={handleModalSuccess}
+      />
+      <RoomStatusModal 
+        show={showRoomStatusModal} 
+        onHide={() => setShowRoomStatusModal(false)}
+      />
+      <ServiceRequestModal 
+        show={showServiceRequestModal} 
+        onHide={() => setShowServiceRequestModal(false)}
+        onSuccess={handleModalSuccess}
+      />
     </div>
   );
 };
