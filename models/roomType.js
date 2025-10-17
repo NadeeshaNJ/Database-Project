@@ -27,8 +27,11 @@ const RoomType = sequelize.define('RoomType', {
     }
   }
 }, {
-  tableName: 'room_types',
-  timestamps: true
+  tableName: 'room_type',
+  schema: 'public',
+  timestamps: false,
+  underscored: true,
+  freezeTableName: true
 });
 
 module.exports = RoomType;

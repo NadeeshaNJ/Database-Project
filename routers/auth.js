@@ -35,14 +35,14 @@ router.post('/login', [
     const { username, password } = req.body;
 
     const user = await User.findOne({ 
-      where: { 
-        [Op.or]: [
-          { username: username.toLowerCase() },
-          //{ email: username.toLowerCase() }
-        ]
-        // is_active: true
-      } 
-    });
+  where: { 
+    [Op.or]: [
+      { username: username.toLowerCase() },
+      { email: username.toLowerCase() }
+    ]
+  } 
+});
+
 
     if (!user) {
       return res.status(401).json({

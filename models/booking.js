@@ -57,8 +57,11 @@ const Booking = sequelize.define('Booking', {
     defaultValue: DataTypes.NOW
   }
 }, {
-  tableName: 'bookings',
-  timestamps: true
+  tableName: 'booking',
+  schema: 'public',
+  timestamps: false,
+  underscored: true,
+  freezeTableName: true
 });
 
 module.exports = Booking;

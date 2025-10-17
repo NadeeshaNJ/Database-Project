@@ -30,8 +30,11 @@ const Room = sequelize.define('Room', {
     defaultValue: ROOM_STATUS.AVAILABLE
   }
 }, {
-  tableName: 'rooms',
-  timestamps: true
+  tableName: 'room',
+  schema: 'public',
+  timestamps: false,
+  underscored: true,
+  freezeTableName: true
 });
 
 module.exports = Room;

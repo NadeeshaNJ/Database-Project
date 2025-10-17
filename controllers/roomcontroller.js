@@ -28,20 +28,25 @@ const getAllRooms = asyncHandler(async (req, res) => {
             r.room_id,
             r.room_number,
             r.status,
+            r.branch_id,
+            b.branch_name,
+            b.branch_code,
             rt.room_type_id,
             rt.name as room_type_name,
             rt.capacity,
             rt.daily_rate,
+            rt.amenities,
             CASE 
-                WHEN b.booking_id IS NULL THEN true 
+                WHEN bk.room_id IS NULL THEN true 
                 ELSE false 
             END as is_available
-        FROM rooms r
-        JOIN room_types rt ON r.room_type_id = rt.room_type_id
+        FROM room r
+        JOIN room_type rt ON r.room_type_id = rt.room_type_id
+        JOIN branch b ON r.branch_id = b.branch_id
         LEFT JOIN (
             SELECT DISTINCT room_id
-            FROM bookings
-            WHERE status NOT IN ('Cancelled', 'Checked_Out')
+            FROM booking
+            WHERE status NOT IN ('Cancelled', 'Checked-Out')
             ${check_in && check_out ? `
                 AND (
                     (check_in_date <= $${++paramIndex} AND check_out_date >= $${++paramIndex})
@@ -49,7 +54,7 @@ const getAllRooms = asyncHandler(async (req, res) => {
                     OR (check_in_date >= $${++paramIndex} AND check_out_date <= $${++paramIndex})
                 )
             ` : ''}
-        ) b ON r.room_id = b.room_id
+        ) bk ON r.room_id = bk.room_id
         WHERE 1=1
     `;
 
@@ -136,10 +141,14 @@ const getRoomById = asyncHandler(async (req, res) => {
             r.room_id,
             r.room_number,
             r.status,
+            r.branch_id,
+            br.branch_name,
+            br.branch_code,
             rt.room_type_id,
             rt.name as room_type_name,
             rt.capacity,
             rt.daily_rate,
+            rt.amenities,
             CASE 
                 WHEN b.booking_id IS NULL THEN true 
                 ELSE false 
@@ -152,10 +161,11 @@ const getRoomById = asyncHandler(async (req, res) => {
                     'status', b.status
                 )
             ) FILTER (WHERE b.booking_id IS NOT NULL), '[]') as bookings
-        FROM rooms r
-        JOIN room_types rt ON r.room_type_id = rt.room_type_id
-        LEFT JOIN bookings b ON r.room_id = b.room_id
-            AND b.status NOT IN ('Cancelled', 'Checked_Out')
+        FROM room r
+        JOIN room_type rt ON r.room_type_id = rt.room_type_id
+        JOIN branch br ON r.branch_id = br.branch_id
+        LEFT JOIN booking b ON r.room_id = b.room_id
+            AND b.status NOT IN ('Cancelled', 'Checked-Out')
             ${check_in && check_out ? `
                 AND (
                     (b.check_in_date <= $2 AND b.check_out_date >= $3)
@@ -164,7 +174,7 @@ const getRoomById = asyncHandler(async (req, res) => {
                 )
             ` : ''}
         WHERE r.room_id = $1
-        GROUP BY r.room_id, rt.room_type_id
+        GROUP BY r.room_id, r.room_number, r.status, r.branch_id, br.branch_name, br.branch_code, rt.room_type_id, rt.name, rt.capacity, rt.daily_rate, rt.amenities
     `;
 
     const params = [roomId];
@@ -198,13 +208,12 @@ const createRoom = asyncHandler(async (req, res) => {
     const { room_number, room_type_id, status = ROOM_STATUS.AVAILABLE } = req.body;
 
     const query = `
-        INSERT INTO rooms (
+        INSERT INTO room (
             room_number,
             room_type_id,
-            status,
-            created_at
+            status
         )
-        VALUES ($1, $2, $3, NOW())
+        VALUES ($1, $2, $3)
         RETURNING *
     `;
 
@@ -238,12 +247,11 @@ const updateRoom = asyncHandler(async (req, res) => {
     const { room_number, room_type_id, status } = req.body;
 
     const query = `
-        UPDATE rooms
+        UPDATE room
         SET 
             room_number = COALESCE($1, room_number),
             room_type_id = COALESCE($2, room_type_id),
-            status = COALESCE($3, status),
-            updated_at = NOW()
+            status = COALESCE($3, status)
         WHERE room_id = $4
         RETURNING *
     `;
@@ -288,9 +296,9 @@ const deleteRoom = asyncHandler(async (req, res) => {
     const bookingsCheck = await executeQuery(`
         SELECT EXISTS(
             SELECT 1 
-            FROM bookings 
+            FROM booking 
             WHERE room_id = $1 
-            AND status NOT IN ('Cancelled', 'Checked_Out')
+            AND status NOT IN ('Cancelled', 'Checked-Out')
         )
     `, [roomId]);
 
@@ -302,7 +310,7 @@ const deleteRoom = asyncHandler(async (req, res) => {
     }
 
     const result = await executeQuery(
-        'DELETE FROM rooms WHERE room_id = $1 RETURNING *',
+        'DELETE FROM room WHERE room_id = $1 RETURNING *',
         [roomId]
     );
 

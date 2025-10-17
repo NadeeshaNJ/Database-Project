@@ -14,8 +14,8 @@ const PREBOOKING_METHOD = {
 
 const BOOKING_STATUS = {
     BOOKED: 'Booked',
-    CHECKED_IN: 'Checked_In',
-    CHECKED_OUT: 'Checked_Out',
+    CHECKED_IN: 'Checked-In',
+    CHECKED_OUT: 'Checked-Out',
     CANCELLED: 'Cancelled'
 };
 
