@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Form, Button, Alert, Spinner, Badge } from 'react-bootstrap';
-import { FaCalendarAlt, FaUsers, FaBed, FaMapMarkerAlt, FaCheckCircle, FaInfoCircle } from 'react-icons/fa';
+import { Container, Row, Col, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
+import { FaCalendarAlt, FaUsers, FaBed, FaMapMarkerAlt, FaCheckCircle, FaInfoCircle, FaDoorOpen } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import { apiUrl } from '../utils/api';
 import './CustomerPortal.css';
@@ -13,15 +13,14 @@ const CustomerPortal = () => {
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
 
-  // Form state
+  // Form state - Customer selects room type, backend auto-assigns room
   const [formData, setFormData] = useState({
     branch_id: '',
-    room_type_id: '',
-    check_in_date: '',
-    check_out_date: '',
-    num_adults: 1,
-    num_children: 0,
-    special_requests: ''
+    room_type_id: '', // Customer selects type, backend finds available room
+    capacity: 2,
+    expected_check_in: '',
+    expected_check_out: '',
+    prebooking_method: 'Online'
   });
 
   useEffect(() => {
@@ -41,7 +40,6 @@ const CustomerPortal = () => {
         const result = await response.json();
         console.log('Branches API Response:', result);
         
-        // Backend returns: {success: true, data: {branches: [...], total: X}}
         if (result.success && result.data && Array.isArray(result.data.branches)) {
           setBranches(result.data.branches);
         } else if (Array.isArray(result)) {
@@ -71,7 +69,6 @@ const CustomerPortal = () => {
         const result = await response.json();
         console.log('Room Types API Response:', result);
         
-        // Backend returns: {success: true, data: [...]}
         if (result.success && Array.isArray(result.data)) {
           setRoomTypes(result.data);
         } else if (Array.isArray(result)) {
@@ -101,13 +98,13 @@ const CustomerPortal = () => {
     setMessage({ type: '', text: '' });
 
     // Validation
-    if (!formData.branch_id || !formData.room_type_id || !formData.check_in_date || !formData.check_out_date) {
+    if (!formData.branch_id || !formData.room_type_id || !formData.expected_check_in || !formData.expected_check_out || !formData.capacity) {
       setMessage({ type: 'danger', text: 'Please fill in all required fields.' });
       setSubmitting(false);
       return;
     }
 
-    if (new Date(formData.check_out_date) <= new Date(formData.check_in_date)) {
+    if (new Date(formData.expected_check_out) <= new Date(formData.expected_check_in)) {
       setMessage({ type: 'danger', text: 'Check-out date must be after check-in date.' });
       setSubmitting(false);
       return;
@@ -116,18 +113,18 @@ const CustomerPortal = () => {
     try {
       const token = user?.token || JSON.parse(localStorage.getItem('skyNestUser'))?.token;
       
-      // Create pre-booking
+      // Create pre-booking - backend will auto-assign room and mark it unavailable
       const preBookingData = {
         guest_id: user?.user_id || user?.id,
         branch_id: parseInt(formData.branch_id),
         room_type_id: parseInt(formData.room_type_id),
-        check_in_date: formData.check_in_date,
-        check_out_date: formData.check_out_date,
-        num_adults: parseInt(formData.num_adults),
-        num_children: parseInt(formData.num_children),
-        special_requests: formData.special_requests || null,
-        status: 'Pending'
+        capacity: parseInt(formData.capacity),
+        prebooking_method: 'Online',
+        expected_check_in: formData.expected_check_in,
+        expected_check_out: formData.expected_check_out
       };
+
+      console.log('Submitting pre-booking:', preBookingData);
 
       const response = await fetch(apiUrl('/api/bookings/pre-booking'), {
         method: 'POST',
@@ -139,22 +136,22 @@ const CustomerPortal = () => {
       });
 
       const result = await response.json();
+      console.log('Pre-booking response:', result);
 
-      if (response.ok) {
+      if (response.ok && result.success) {
         setMessage({ 
           type: 'success', 
-          text: '🎉 Pre-booking request submitted successfully! Our team will contact you shortly to confirm your reservation.' 
+          text: `🎉 ${result.message || 'Pre-booking confirmed!'} Your reservation has been secured.` 
         });
         
         // Reset form
         setFormData({
           branch_id: '',
           room_type_id: '',
-          check_in_date: '',
-          check_out_date: '',
-          num_adults: 1,
-          num_children: 0,
-          special_requests: ''
+          capacity: 2,
+          expected_check_in: '',
+          expected_check_out: '',
+          prebooking_method: 'Online'
         });
       } else {
         setMessage({ 
@@ -199,7 +196,7 @@ const CustomerPortal = () => {
                   Welcome to SkyNest Hotels, {user?.name || user?.username}!
                 </h1>
                 <p className="lead mb-4">
-                  Book your perfect stay with us. Choose from our luxurious rooms across three stunning locations.
+                  Book your perfect stay with us. Choose your preferred room type and we'll automatically reserve the best available room for you.
                 </p>
               </div>
             </Col>
@@ -214,7 +211,7 @@ const CustomerPortal = () => {
             {/* Info Alert */}
             <Alert variant="info" className="mb-4">
               <FaInfoCircle className="me-2" />
-              This is a <strong>pre-booking request</strong>. Our team will review your request and contact you to confirm availability and finalize your reservation.
+              <strong>Instant Confirmation!</strong> Select your preferred room type, and our system will automatically find and reserve the best available room for your dates. Your room will be marked as unavailable for others immediately.
             </Alert>
 
             {/* Message Alert */}
@@ -238,7 +235,7 @@ const CustomerPortal = () => {
                       <Form.Group>
                         <Form.Label>
                           <FaMapMarkerAlt className="me-2" />
-                          Select Branch *
+                          Select Location *
                         </Form.Label>
                         <Form.Select
                           name="branch_id"
@@ -249,7 +246,7 @@ const CustomerPortal = () => {
                           <option value="">Choose a location...</option>
                           {branches.map(branch => (
                             <option key={branch.branch_id} value={branch.branch_id}>
-                              {branch.branch_name} - {branch.location}
+                              {branch.branch_name}
                             </option>
                           ))}
                         </Form.Select>
@@ -261,7 +258,7 @@ const CustomerPortal = () => {
                       <Form.Group>
                         <Form.Label>
                           <FaBed className="me-2" />
-                          Room Type *
+                          Select Room Type *
                         </Form.Label>
                         <Form.Select
                           name="room_type_id"
@@ -272,10 +269,14 @@ const CustomerPortal = () => {
                           <option value="">Choose room type...</option>
                           {roomTypes.map(type => (
                             <option key={type.room_type_id} value={type.room_type_id}>
-                              {type.type_name} - Rs {parseFloat(type.daily_rate).toLocaleString()}/night
+                              {type.type_name} - Rs {parseFloat(type.daily_rate).toLocaleString()}/night 
+                              {type.available_rooms > 0 && ` (${type.available_rooms} available)`}
                             </option>
                           ))}
                         </Form.Select>
+                        <Form.Text className="text-muted">
+                          We'll automatically assign the best available room of this type
+                        </Form.Text>
                       </Form.Group>
                     </Col>
 
@@ -285,8 +286,8 @@ const CustomerPortal = () => {
                         <Form.Label>Check-in Date *</Form.Label>
                         <Form.Control
                           type="date"
-                          name="check_in_date"
-                          value={formData.check_in_date}
+                          name="expected_check_in"
+                          value={formData.expected_check_in}
                           onChange={handleInputChange}
                           min={today}
                           required
@@ -300,65 +301,45 @@ const CustomerPortal = () => {
                         <Form.Label>Check-out Date *</Form.Label>
                         <Form.Control
                           type="date"
-                          name="check_out_date"
-                          value={formData.check_out_date}
+                          name="expected_check_out"
+                          value={formData.expected_check_out}
                           onChange={handleInputChange}
-                          min={formData.check_in_date || today}
+                          min={formData.expected_check_in || today}
                           required
                         />
                       </Form.Group>
                     </Col>
 
-                    {/* Number of Adults */}
-                    <Col md={6} className="mb-3">
+                    {/* Number of Guests (Capacity) */}
+                    <Col md={12} className="mb-3">
                       <Form.Group>
                         <Form.Label>
                           <FaUsers className="me-2" />
-                          Number of Adults *
+                          Number of Guests *
                         </Form.Label>
                         <Form.Control
                           type="number"
-                          name="num_adults"
-                          value={formData.num_adults}
+                          name="capacity"
+                          value={formData.capacity}
                           onChange={handleInputChange}
                           min="1"
                           max="10"
                           required
                         />
+                        <Form.Text className="text-muted">
+                          Total guests (adults + children)
+                        </Form.Text>
                       </Form.Group>
                     </Col>
 
-                    {/* Number of Children */}
-                    <Col md={6} className="mb-3">
-                      <Form.Group>
-                        <Form.Label>
-                          <FaUsers className="me-2" />
-                          Number of Children
-                        </Form.Label>
-                        <Form.Control
-                          type="number"
-                          name="num_children"
-                          value={formData.num_children}
-                          onChange={handleInputChange}
-                          min="0"
-                          max="10"
-                        />
-                      </Form.Group>
-                    </Col>
-
-                    {/* Special Requests */}
+                    {/* Info Note */}
                     <Col xs={12} className="mb-4">
-                      <Form.Group>
-                        <Form.Label>Special Requests</Form.Label>
-                        <Form.Control
-                          as="textarea"
-                          rows={3}
-                          name="special_requests"
-                          value={formData.special_requests}
-                          onChange={handleInputChange}
-                          placeholder="Any special requirements? (e.g., early check-in, high floor, etc.)"
-                        />
-                      </Form.Group>
+                      <Alert variant="light" className="mb-0">
+                        <FaDoorOpen className="me-2" />
+                        <small>
+                          <strong>How it works:</strong> Once you submit this form, we will find the best available room of your selected type and automatically reserve it for your dates
+                        </small>
+                      </Alert>
                     </Col>
 
                     {/* Submit Button */}
@@ -373,12 +354,12 @@ const CustomerPortal = () => {
                         {submitting ? (
                           <>
                             <Spinner animation="border" size="sm" className="me-2" />
-                            Submitting...
+                            Processing...
                           </>
                         ) : (
                           <>
                             <FaCheckCircle className="me-2" />
-                            Submit Pre-Booking Request
+                            Reserve Room Now
                           </>
                         )}
                       </Button>
@@ -394,22 +375,22 @@ const CustomerPortal = () => {
                 <div className="feature-icon mb-3">
                   <FaCheckCircle size={40} className="text-success" />
                 </div>
-                <h5>Easy Booking</h5>
-                <p className="text-muted">Simple and quick booking process</p>
+                <h5>Instant Confirmation</h5>
+                <p className="text-muted">Automatic room assignment and confirmation</p>
               </Col>
               <Col md={4} className="text-center mb-4 mb-md-0">
                 <div className="feature-icon mb-3">
                   <FaBed size={40} className="text-primary" />
                 </div>
-                <h5>Luxury Rooms</h5>
-                <p className="text-muted">Comfortable and well-equipped rooms</p>
+                <h5>Best Available Room</h5>
+                <p className="text-muted">We select the perfect room for you</p>
               </Col>
               <Col md={4} className="text-center">
                 <div className="feature-icon mb-3">
                   <FaMapMarkerAlt size={40} className="text-info" />
                 </div>
                 <h5>Prime Locations</h5>
-                <p className="text-muted">Three beautiful locations to choose from</p>
+                <p className="text-muted">Three beautiful branches to choose from</p>
               </Col>
             </Row>
           </Col>
