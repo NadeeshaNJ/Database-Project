@@ -60,26 +60,45 @@ const CustomerPortal = () => {
   const fetchRoomTypes = async () => {
     try {
       const token = user?.token || JSON.parse(localStorage.getItem('skyNestUser'))?.token;
+      console.log('🔍 Fetching room types with token:', token ? 'Present' : 'Missing');
+      
       const response = await fetch(apiUrl('/api/rooms/types/summary'), {
         headers: {
           'Authorization': `Bearer ${token}`
         }
       });
+      
+      console.log('📡 Room Types Response Status:', response.status);
+      
       if (response.ok) {
         const result = await response.json();
-        console.log('Room Types API Response:', result);
+        console.log('✅ Room Types API Response:', result);
+        console.log('📊 Result structure:', {
+          hasSuccess: 'success' in result,
+          successValue: result.success,
+          hasData: 'data' in result,
+          dataIsArray: Array.isArray(result.data),
+          dataLength: result.data?.length,
+          firstItem: result.data?.[0]
+        });
         
         if (result.success && Array.isArray(result.data)) {
+          console.log('✅ Setting room types:', result.data);
           setRoomTypes(result.data);
         } else if (Array.isArray(result)) {
+          console.log('✅ Setting room types (direct array):', result);
           setRoomTypes(result);
         } else {
-          console.error('Unexpected room types data format:', result);
+          console.error('❌ Unexpected room types data format:', result);
           setRoomTypes([]);
         }
+      } else {
+        console.error('❌ Room types fetch failed with status:', response.status);
+        const errorText = await response.text();
+        console.error('Error response:', errorText);
       }
     } catch (error) {
-      console.error('Error fetching room types:', error);
+      console.error('❌ Error fetching room types:', error);
       setRoomTypes([]);
     }
   };
@@ -261,8 +280,13 @@ const CustomerPortal = () => {
                           value={formData.room_type_id}
                           onChange={handleInputChange}
                           required
+                          disabled={loading || roomTypes.length === 0}
                         >
-                          <option value="">Choose room type...</option>
+                          <option value="">
+                            {loading ? 'Loading room types...' : 
+                             roomTypes.length === 0 ? 'No room types available' : 
+                             'Choose room type...'}
+                          </option>
                           {roomTypes.map(type => (
                             <option key={type.room_type_id} value={type.room_type_id}>
                               {type.type_name} - Rs {parseFloat(type.daily_rate).toLocaleString()}/night 
@@ -271,7 +295,11 @@ const CustomerPortal = () => {
                           ))}
                         </Form.Select>
                         <Form.Text className="text-muted">
-                          We'll automatically assign the best available room of this type
+                          {roomTypes.length === 0 && !loading ? (
+                            <span className="text-danger">⚠️ Unable to load room types. Please refresh the page.</span>
+                          ) : (
+                            "We'll automatically assign the best available room of this type"
+                          )}
                         </Form.Text>
                       </Form.Group>
                     </Col>
