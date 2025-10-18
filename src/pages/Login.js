@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
-import { FaHotel, FaEnvelope, FaLock, FaSignInAlt } from 'react-icons/fa';
+import { FaHotel, FaUser, FaLock, FaSignInAlt } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const [identifier, setIdentifier] = useState(''); // email or username
+  const [identifier, setIdentifier] = useState(''); // username only
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,10 +27,10 @@ const Login = () => {
     }
   };
   const demoCredentials = [
-    { email: 'admin@skynest.com', password: 'admin123', role: 'Admin' },
-    { email: 'manager.colombo@skynest.com', password: 'manager123', role: 'Manager' },
-    { email: 'receptionist@skynest.com', password: 'reception123', role: 'Receptionist' },
-    { email: 'accountant@skynest.com', password: 'accountant123', role: 'Accountant' }
+    { username: 'admin', password: 'password123', role: 'Admin' },
+    { username: 'manager_colombo', password: 'password123', role: 'Manager - Colombo' },
+    { username: 'recept_colombo', password: 'password123', role: 'Receptionist - Colombo' },
+    { username: 'accountant_colombo', password: 'password123', role: 'Accountant - Colombo' }
   ];
 
   return (
@@ -90,12 +90,12 @@ const Login = () => {
                     <Form onSubmit={handleSubmit}>
                       <Form.Group className="mb-3">
                         <Form.Label>
-                          <FaEnvelope className="me-2" />
-                          Email or Username
+                          <FaUser className="me-2" />
+                          Username
                         </Form.Label>
                         <Form.Control
                           type="text"
-                          placeholder="Enter email or username"
+                          placeholder="Enter username"
                           value={identifier}
                           onChange={(e) => setIdentifier(e.target.value)}
                           required
@@ -155,14 +155,14 @@ const Login = () => {
                       {demoCredentials.map((cred, index) => (
                         <div key={index} className="small mb-2 p-2 bg-light rounded">
                           <strong>{cred.role}:</strong><br />
-                          <code className="text-primary">{cred.email}</code><br />
+                          <code className="text-primary">{cred.username}</code><br />
                           <code className="text-secondary">{cred.password}</code>
                           <Button
                             size="sm"
                             variant="outline-primary"
                             className="ms-2"
                             onClick={() => {
-                              setIdentifier(cred.email);
+                              setIdentifier(cred.username);
                               setPassword(cred.password);
                             }}
                           >

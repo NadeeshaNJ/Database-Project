@@ -27,7 +27,7 @@ const AddGuestModal = ({ show, onHide, onSuccess }) => {
     setError('');
 
     try {
-      const response = await fetch(apiUrl('/api/guests'), {
+      const response = await fetch(apiUrl('/api/guests/createnew'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
