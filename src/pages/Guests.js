@@ -3,8 +3,9 @@ import { Row, Col, Card, Button, Modal, Form, Table, InputGroup, Spinner, Alert 
 import { FaPlus, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
 import { useBranch } from '../context/BranchContext';
 
-// ✅ set your backend API base URL
-const API_URL = 'https://skynest-backend-api.onrender.com/api/guests';
+// ✅ Use environment-aware API URL
+const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:5000';
+const API_URL = `${API_BASE}/api/guests`;
 
 const Guests = () => {
   const { selectedBranchId } = useBranch();
