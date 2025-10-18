@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, Button, Alert, Spinner, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { FaCalendarAlt, FaUsers, FaBed, FaMapMarkerAlt, FaCheckCircle, FaInfoCircle, FaDoorOpen } from 'react-icons/fa';
 import { useAuth } from '../context/AuthContext';
 import { apiUrl } from '../utils/api';
@@ -274,6 +274,36 @@ const CustomerPortal = () => {
                         <Form.Label>
                           <FaBed className="me-2" />
                           Select Room Type *
+                          <OverlayTrigger
+                            placement="top"
+                            delay={{ show: 250, hide: 400 }}
+                            overlay={
+                              <Tooltip id="tooltip-room-type-info">
+                                <div className="text-start">
+                                  <strong>About Room Types:</strong><br/>
+                                  <small>
+                                  <strong>Standard Single:</strong> Perfect for solo travelers or couples. 
+                                  Includes WiFi, TV, and air conditioning.<br/>
+                                  
+                                  <strong>Standard Double:</strong> Ideal for small families. 
+                                  Spacious room with modern amenities.<br/>
+                                  
+                                  <strong>Deluxe King:</strong> Luxury accommodation with premium features. 
+                                  King-size bed, mini bar, and premium toiletries.<br/>
+                                  
+                                  <strong>Suite:</strong> Our most luxurious option with separate living area, 
+                                  ocean view, and exclusive services.<br/>
+                                  
+                                  <em>We'll automatically assign you the best available room of your selected type.</em>
+                                  </small>
+                                </div>
+                              </Tooltip>
+                            }
+                          >
+                            <span className="ms-2">
+                              <FaInfoCircle className="text-info" style={{ cursor: 'pointer', fontSize: '1em' }} />
+                            </span>
+                          </OverlayTrigger>
                         </Form.Label>
                         <Form.Select
                           name="room_type_id"
@@ -289,8 +319,7 @@ const CustomerPortal = () => {
                           </option>
                           {roomTypes.map(type => (
                             <option key={type.room_type_id} value={type.room_type_id}>
-                              {type.type_name} - Rs {parseFloat(type.daily_rate).toLocaleString()}/night 
-                              {type.available_rooms > 0 && ` (${type.available_rooms} available)`}
+                              {type.type_name} - Rs {parseFloat(type.daily_rate).toLocaleString()}/night
                             </option>
                           ))}
                         </Form.Select>

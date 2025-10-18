@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
-  const { selectedBranchId, setSelectedBranchId, branches } = useBranch();
+  const { selectedBranchId, setSelectedBranchId, branches, isLocked } = useBranch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -23,6 +23,13 @@ const Navbar = () => {
     navigate('/settings');
   };
 
+  // Get branch name for display
+  const getCurrentBranchName = () => {
+    if (selectedBranchId === 'All') return 'All Branches';
+    const branch = branches.find(b => b.branch_id === selectedBranchId);
+    return branch ? branch.branch_name : 'Unknown Branch';
+  };
+
   return (
     <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top" className="navbar-custom">
       <Container fluid>
@@ -35,26 +42,42 @@ const Navbar = () => {
           <Nav className="ms-auto align-items-center">
             {user && (
               <>
-                {/* Global Branch Selector */}
+                {/* Global Branch Selector - Disabled for non-admin users */}
                 <div className="me-3">
-                  <Form.Select 
-                    value={selectedBranchId} 
-                    onChange={(e) => setSelectedBranchId(e.target.value)}
-                    style={{ 
-                      width: '200px', 
-                      backgroundColor: '#495057', 
-                      color: 'white', 
-                      border: '1px solid #6c757d',
-                      fontSize: '14px'
-                    }}
-                  >
-                    <option value="All">🏢 All Branches</option>
-                    {branches.map(branch => (
-                      <option key={branch.branch_id} value={branch.branch_id}>
-                        📍 {branch.branch_name}
-                      </option>
-                    ))}
-                  </Form.Select>
+                  {isLocked ? (
+                    /* Locked to specific branch - show as badge */
+                    <Badge 
+                      bg="primary" 
+                      className="px-3 py-2"
+                      style={{ fontSize: '14px' }}
+                    >
+                      <FaMapMarkerAlt className="me-2" />
+                      {getCurrentBranchName()}
+                    </Badge>
+                  ) : (
+                    /* Admin - show dropdown */
+                    <Form.Select 
+                      value={selectedBranchId} 
+                      onChange={(e) => setSelectedBranchId(e.target.value)}
+                      disabled={isLocked}
+                      style={{ 
+                        width: '200px', 
+                        backgroundColor: '#495057', 
+                        color: 'white', 
+                        border: '1px solid #6c757d',
+                        fontSize: '14px',
+                        cursor: isLocked ? 'not-allowed' : 'pointer'
+                      }}
+                      title={isLocked ? `You can only access ${getCurrentBranchName()}` : 'Select branch'}
+                    >
+                      <option value="All">🏢 All Branches</option>
+                      {branches.map(branch => (
+                        <option key={branch.branch_id} value={branch.branch_id}>
+                          📍 {branch.branch_name}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  )}
                 </div>
                 
                 <NavDropdown 

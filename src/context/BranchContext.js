@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import { useAuth } from './AuthContext';
 import { apiUrl } from '../utils/api';
 
 const BranchContext = createContext();
@@ -12,9 +13,24 @@ export const useBranch = () => {
 };
 
 export const BranchProvider = ({ children }) => {
+  const { user } = useAuth();
   const [selectedBranchId, setSelectedBranchId] = useState('All');
   const [branches, setBranches] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Initialize branch based on user role
+  useEffect(() => {
+    if (user) {
+      // If user is not Admin and has a branch_id, lock them to their branch
+      if (user.role !== 'Admin' && user.branch_id) {
+        console.log(`🔒 User ${user.name} locked to branch ${user.branch_id}`);
+        setSelectedBranchId(user.branch_id);
+      } else if (user.role === 'Admin') {
+        console.log('👑 Admin user - can access all branches');
+        setSelectedBranchId('All');
+      }
+    }
+  }, [user]);
 
   // Fetch branches on mount
   useEffect(() => {
@@ -39,12 +55,22 @@ export const BranchProvider = ({ children }) => {
     fetchBranches();
   }, []);
 
+  // Prevent non-admin users from changing branch
+  const handleSetSelectedBranchId = (branchId) => {
+    if (user && user.role !== 'Admin' && user.branch_id) {
+      console.warn('⚠️ Non-admin users cannot change branch');
+      return; // Silently ignore attempt to change branch
+    }
+    setSelectedBranchId(branchId);
+  };
+
   const value = {
     selectedBranchId,
-    setSelectedBranchId,
+    setSelectedBranchId: handleSetSelectedBranchId,
     branches,
     loading,
-    selectedBranch: Array.isArray(branches) ? branches.find(b => b.branch_id === selectedBranchId) || null : null
+    selectedBranch: Array.isArray(branches) ? branches.find(b => b.branch_id === selectedBranchId) || null : null,
+    isLocked: user && user.role !== 'Admin' && user.branch_id ? true : false
   };
 
   return (
