@@ -118,8 +118,8 @@ const Dashboard = () => {
       color: 'info' 
     },
     { 
-      title: "Today's Check-outs", 
-      value: dashboardData.today?.today_checkouts || '0', 
+      title: "Today's Check-ins", 
+      value: dashboardData.today?.today_checkins || '0', 
       icon: FaConciergeBell, 
       color: 'warning' 
     },

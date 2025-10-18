@@ -21,13 +21,23 @@ export const BranchProvider = ({ children }) => {
   // Initialize branch based on user role
   useEffect(() => {
     if (user) {
+      console.log('🔍 BranchContext - User object:', user);
+      console.log('🔍 BranchContext - User role:', user.role);
+      console.log('🔍 BranchContext - User branch_id:', user.branch_id);
+      
       // If user is not Admin and has a branch_id, lock them to their branch
       if (user.role !== 'Admin' && user.branch_id) {
-        console.log(`🔒 User ${user.name} locked to branch ${user.branch_id}`);
+        console.log(`🔒 User ${user.name || user.username} locked to branch ${user.branch_id}`);
         setSelectedBranchId(user.branch_id);
       } else if (user.role === 'Admin') {
         console.log('👑 Admin user - can access all branches');
         setSelectedBranchId('All');
+      } else {
+        console.warn('⚠️ Non-admin user but no branch_id found!', {
+          role: user.role,
+          branch_id: user.branch_id,
+          user: user
+        });
       }
     }
   }, [user]);

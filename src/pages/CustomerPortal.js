@@ -280,7 +280,6 @@ const CustomerPortal = () => {
                             overlay={
                               <Tooltip id="tooltip-room-type-info">
                                 <div className="text-start">
-                                  <strong>About Room Types:</strong><br/>
                                   <small>
                                   <strong>Standard Single:</strong> Perfect for solo travelers or couples. 
                                   Includes WiFi, TV, and air conditioning.<br/>
@@ -293,8 +292,6 @@ const CustomerPortal = () => {
                                   
                                   <strong>Suite:</strong> Our most luxurious option with separate living area, 
                                   ocean view, and exclusive services.<br/>
-                                  
-                                  <em>We'll automatically assign you the best available room of your selected type.</em>
                                   </small>
                                 </div>
                               </Tooltip>
