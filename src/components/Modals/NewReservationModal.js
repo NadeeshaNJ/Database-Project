@@ -87,10 +87,22 @@ const NewReservationModal = ({ show, onHide, onSuccess }) => {
     }
 
     try {
+      // Get auth token from localStorage
+      const storedUser = localStorage.getItem('skyNestUser');
+      const user = storedUser ? JSON.parse(storedUser) : null;
+      const token = user?.token;
+
+      if (!token) {
+        setError('Authentication required. Please login again.');
+        setLoading(false);
+        return;
+      }
+
       const response = await fetch(apiUrl('/api/bookings'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(formData)
       });

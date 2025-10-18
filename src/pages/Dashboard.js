@@ -3,6 +3,7 @@ import { Row, Col, Card, Spinner } from 'react-bootstrap';
 import { FaUsers, FaCalendarAlt, FaBed, FaConciergeBell, FaDollarSign, FaChartLine } from 'react-icons/fa';
 import { apiUrl } from '../utils/api';
 import { useBranch } from '../context/BranchContext';
+import { useAuth } from '../context/AuthContext';
 import AddGuestModal from '../components/Modals/AddGuestModal';
 import NewReservationModal from '../components/Modals/NewReservationModal';
 import RoomStatusModal from '../components/Modals/RoomStatusModal';
@@ -10,6 +11,7 @@ import ServiceRequestModal from '../components/Modals/ServiceRequestModal';
 
 const Dashboard = () => {
   const { selectedBranchId } = useBranch();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [dashboardData, setDashboardData] = useState(null);
   const [recentBookings, setRecentBookings] = useState([]);
@@ -208,34 +210,49 @@ const Dashboard = () => {
             </Card.Header>
             <Card.Body>
               <div className="d-grid gap-2">
-                <button 
-                  className="btn btn-primary-custom"
-                  onClick={() => setShowAddGuestModal(true)}
-                >
-                  <FaUsers className="me-2" />
-                  Add New Guest
-                </button>
-                <button 
-                  className="btn btn-success"
-                  onClick={() => setShowNewReservationModal(true)}
-                >
-                  <FaCalendarAlt className="me-2" />
-                  New Reservation
-                </button>
-                <button 
-                  className="btn btn-info"
-                  onClick={() => setShowRoomStatusModal(true)}
-                >
-                  <FaBed className="me-2" />
-                  Room Status
-                </button>
-                <button 
-                  className="btn btn-warning"
-                  onClick={() => setShowServiceRequestModal(true)}
-                >
-                  <FaConciergeBell className="me-2" />
-                  Service Request
-                </button>
+                {/* Only Admin, Manager, and Receptionist can add guests */}
+                {user && ['Admin', 'Manager', 'Receptionist'].includes(user.role) && (
+                  <button 
+                    className="btn btn-primary-custom"
+                    onClick={() => setShowAddGuestModal(true)}
+                  >
+                    <FaUsers className="me-2" />
+                    Add New Guest
+                  </button>
+                )}
+                
+                {/* Everyone except Accountant can create reservations */}
+                {user && user.role !== 'Accountant' && (
+                  <button 
+                    className="btn btn-success"
+                    onClick={() => setShowNewReservationModal(true)}
+                  >
+                    <FaCalendarAlt className="me-2" />
+                    New Reservation
+                  </button>
+                )}
+                
+                {/* Only Admin, Manager, and Receptionist can view room status */}
+                {user && ['Admin', 'Manager', 'Receptionist'].includes(user.role) && (
+                  <button 
+                    className="btn btn-info"
+                    onClick={() => setShowRoomStatusModal(true)}
+                  >
+                    <FaBed className="me-2" />
+                    Room Status
+                  </button>
+                )}
+                
+                {/* Only Admin, Manager, and Receptionist can create service requests */}
+                {user && ['Admin', 'Manager', 'Receptionist'].includes(user.role) && (
+                  <button 
+                    className="btn btn-warning"
+                    onClick={() => setShowServiceRequestModal(true)}
+                  >
+                    <FaConciergeBell className="me-2" />
+                    Service Request
+                  </button>
+                )}
               </div>
             </Card.Body>
           </Card>
