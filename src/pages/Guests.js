@@ -4,7 +4,7 @@ import { FaPlus, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
 import { useBranch } from '../context/BranchContext';
 
 // ✅ set your backend API base URL
-const API_URL = 'http://localhost:5000/api/guests';
+const API_URL = 'https://skynest-backend-api.onrender.com/api/guests';
 
 const Guests = () => {
   const { selectedBranchId } = useBranch();
