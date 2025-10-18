@@ -98,7 +98,17 @@ export const AuthProvider = ({ children }) => {
         let decoded = {};
         try { decoded = jwtDecode(token); } catch (e) { /* ignore decode errors */ }
 
+        // Merge decoded token and server user data
+        // Server user data takes priority to ensure correct role
         const fullUser = { ...decoded, ...serverUser, token };
+        
+        // Debug logging
+        console.log('🔍 Login Debug:');
+        console.log('- Server User:', serverUser);
+        console.log('- Decoded Token:', decoded);
+        console.log('- Full User Object:', fullUser);
+        console.log('- Final Role:', fullUser.role);
+        
         setUser(fullUser);
         localStorage.setItem('skyNestUser', JSON.stringify(fullUser));
         return fullUser;

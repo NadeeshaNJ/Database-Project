@@ -53,41 +53,62 @@ const Reports = () => {
       if (endDate) params.append('end_date', endDate);
       if (selectedBranchId !== 'All') params.append('branch_id', selectedBranchId);
 
+      console.log('📊 Generating report:', {
+        type: reportType,
+        startDate,
+        endDate,
+        branchId: selectedBranchId,
+        groupBy
+      });
+
       switch (reportType) {
         case 'revenue':
           params.append('group_by', groupBy);
           url = `/api/reports/revenue?${params}`;
+          console.log('📍 Fetching revenue report:', apiUrl(url));
           const revResponse = await fetch(apiUrl(url));
           const revData = await revResponse.json();
+          console.log('✅ Revenue Report Response:', revData);
           if (revData.success) setRevenueReport(revData.data);
+          else console.error('❌ Revenue Report Error:', revData);
           break;
 
         case 'occupancy':
           url = `/api/reports/occupancy?${params}`;
+          console.log('📍 Fetching occupancy report:', apiUrl(url));
           const occResponse = await fetch(apiUrl(url));
           const occData = await occResponse.json();
+          console.log('✅ Occupancy Report Response:', occData);
           if (occData.success) setOccupancyReport(occData.data);
+          else console.error('❌ Occupancy Report Error:', occData);
           break;
 
         case 'service':
           url = `/api/reports/service-usage?${params}`;
+          console.log('📍 Fetching service usage report:', apiUrl(url));
           const svcResponse = await fetch(apiUrl(url));
           const svcData = await svcResponse.json();
+          console.log('✅ Service Usage Report Response:', svcData);
           if (svcData.success) setServiceReport(svcData.data);
+          else console.error('❌ Service Usage Report Error:', svcData);
           break;
 
         case 'payment':
           url = `/api/reports/payment-methods?${params}`;
+          console.log('📍 Fetching payment methods report:', apiUrl(url));
           const payResponse = await fetch(apiUrl(url));
           const payData = await payResponse.json();
+          console.log('✅ Payment Methods Report Response:', payData);
           if (payData.success) setPaymentMethodReport(payData.data);
+          else console.error('❌ Payment Methods Report Error:', payData);
           break;
 
         default:
           break;
       }
     } catch (error) {
-      console.error('Error fetching report:', error);
+      console.error('❌ Error fetching report:', error);
+      alert('Failed to generate report. Check console for details.');
     } finally {
       setLoading(false);
     }
@@ -250,34 +271,40 @@ const Reports = () => {
                 <p className="mb-0 text-muted">Total Revenue: Rs {revenueReport.summary.totalRevenue} | Bookings: {revenueReport.summary.totalBookings} | Transactions: {revenueReport.summary.totalTransactions}</p>
               </Card.Header>
               <Card.Body>
-                <Table responsive hover>
-                  <thead className="table-light">
-                    <tr>
-                      <th>Period</th>
-                      <th>Total Bookings</th>
-                      <th>Transactions</th>
-                      <th>Total Revenue (Rs)</th>
-                      <th>Avg Transaction (Rs)</th>
-                      <th>Card (Rs)</th>
-                      <th>Cash (Rs)</th>
-                      <th>Online (Rs)</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {revenueReport.report.map((row, idx) => (
-                      <tr key={idx}>
-                        <td>{new Date(row.period).toLocaleDateString()}</td>
-                        <td>{row.total_bookings}</td>
-                        <td>{row.total_transactions}</td>
-                        <td className="text-end"><strong>{parseFloat(row.total_revenue).toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong></td>
-                        <td className="text-end">{parseFloat(row.avg_transaction).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                        <td className="text-end">{parseFloat(row.card_revenue).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                        <td className="text-end">{parseFloat(row.cash_revenue).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
-                        <td className="text-end">{parseFloat(row.online_revenue).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                {revenueReport.report && revenueReport.report.length > 0 ? (
+                  <Table responsive hover>
+                    <thead className="table-light">
+                      <tr>
+                        <th>Period</th>
+                        <th>Total Bookings</th>
+                        <th>Transactions</th>
+                        <th>Total Revenue (Rs)</th>
+                        <th>Avg Transaction (Rs)</th>
+                        <th>Card (Rs)</th>
+                        <th>Cash (Rs)</th>
+                        <th>Online (Rs)</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                    </thead>
+                    <tbody>
+                      {revenueReport.report.map((row, idx) => (
+                        <tr key={idx}>
+                          <td>{new Date(row.period).toLocaleDateString()}</td>
+                          <td>{row.total_bookings}</td>
+                          <td>{row.total_transactions}</td>
+                          <td className="text-end"><strong>{parseFloat(row.total_revenue).toLocaleString('en-US', { minimumFractionDigits: 2 })}</strong></td>
+                          <td className="text-end">{parseFloat(row.avg_transaction).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                          <td className="text-end">{parseFloat(row.card_revenue).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                          <td className="text-end">{parseFloat(row.cash_revenue).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                          <td className="text-end">{parseFloat(row.online_revenue).toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                ) : (
+                  <div className="text-center py-4 text-muted">
+                    No revenue data found for the selected period. Try adjusting the date range.
+                  </div>
+                )}
               </Card.Body>
             </Card>
           )}

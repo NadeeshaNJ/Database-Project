@@ -16,6 +16,16 @@ const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
   const [recentBookings, setRecentBookings] = useState([]);
   
+  // Debug: Log user role
+  useEffect(() => {
+    if (user) {
+      console.log('👤 Dashboard User Info:');
+      console.log('- Full User Object:', user);
+      console.log('- Role:', user.role);
+      console.log('- Username:', user.username);
+    }
+  }, [user]);
+  
   // Modal states
   const [showAddGuestModal, setShowAddGuestModal] = useState(false);
   const [showNewReservationModal, setShowNewReservationModal] = useState(false);
