@@ -18,8 +18,14 @@ const Login = () => {
     setLoading(true);
 
     try {
-      await login(identifier, password);
-      navigate('/');
+      const loggedInUser = await login(identifier, password);
+      
+      // Redirect based on role
+      if (loggedInUser?.role === 'Customer') {
+        navigate('/customer');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       setError(err.message || 'Failed to login');
     } finally {

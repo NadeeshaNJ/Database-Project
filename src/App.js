@@ -3,8 +3,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Container } from 'react-bootstrap';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import CustomerRoute from './components/CustomerRoute';
+import AdminRoute from './components/AdminRoute';
 import Navbar from './components/Layout/Navbar';
 import Sidebar from './components/Layout/Sidebar';
+import CustomerNavbar from './components/Layout/CustomerNavbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
@@ -17,6 +20,7 @@ import Guests from './pages/Guests';
 import Services from './pages/Services';
 import Billing from './pages/Billing';
 import Reports from './pages/Reports';
+import CustomerPortal from './pages/CustomerPortal';
 import './App.css';
 
 function App() {
@@ -25,13 +29,25 @@ function App() {
       <AuthProvider>
         <div className="App">
           <Routes>
-            {/* Public Route */}
+            {/* Public Routes */}
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             
-            {/* Protected Routes */}
+            {/* Customer Portal - Only for Customer role */}
+            <Route path="/customer/*" element={
+              <CustomerRoute>
+                <CustomerNavbar />
+                <Routes>
+                  <Route path="/" element={<CustomerPortal />} />
+                  <Route path="/booking" element={<CustomerPortal />} />
+                  <Route path="*" element={<Navigate to="/customer" replace />} />
+                </Routes>
+              </CustomerRoute>
+            } />
+
+            {/* Admin Dashboard - For all roles EXCEPT Customer */}
             <Route path="/*" element={
-              <ProtectedRoute>
+              <AdminRoute>
                 <Navbar />
                 <div className="d-flex">
                   <Sidebar />
@@ -54,7 +70,7 @@ function App() {
                     </Container>
                   </div>
                 </div>
-              </ProtectedRoute>
+              </AdminRoute>
             } />
           </Routes>
         </div>
