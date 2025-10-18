@@ -209,10 +209,6 @@ const CustomerPortal = () => {
         <Row className="justify-content-center">
           <Col lg={10} xl={8}>
             {/* Info Alert */}
-            <Alert variant="info" className="mb-4">
-              <FaInfoCircle className="me-2" />
-              <strong>Instant Confirmation!</strong> Select your preferred room type, and our system will automatically find and reserve the best available room for your dates. Your room will be marked as unavailable for others immediately.
-            </Alert>
 
             {/* Message Alert */}
             {message.text && (
