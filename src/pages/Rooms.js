@@ -235,8 +235,8 @@ const Rooms = () => {
             <Form.Label>Filter by Type</Form.Label>
             <Form.Select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
               <option value="All">All Types</option>
-              <option value="Single">Single</option>
-              <option value="Double">Double</option>
+              <option value="Standard Single">Single</option>
+              <option value="Standard Double">Double</option>
               <option value="Suite">Suite</option>
             </Form.Select>
           </Form.Group>
