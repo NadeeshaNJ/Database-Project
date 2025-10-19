@@ -25,11 +25,17 @@ const AdminRoute = ({ children }) => {
     return <Navigate to="/login" replace />;
   }
 
-  // If customer, redirect to customer portal
-  if (user?.role === 'Customer') {
+  console.log('🔍 AdminRoute - User role:', user?.role);
+
+  // If customer, redirect to customer portal (case-insensitive check)
+  const userRole = user?.role?.toLowerCase();
+  
+  if (userRole === 'customer') {
+    console.log('⚠️ Customer trying to access admin, redirecting to /customer');
     return <Navigate to="/customer" replace />;
   }
 
+  console.log('✅ Admin/Staff access granted');
   return children;
 };
 

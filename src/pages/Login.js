@@ -20,13 +20,22 @@ const Login = () => {
     try {
       const loggedInUser = await login(identifier, password);
       
-      // Redirect based on role
-      if (loggedInUser?.role === 'Customer') {
+      console.log('🔍 Login successful - User:', loggedInUser);
+      console.log('🔍 User role:', loggedInUser?.role);
+      console.log('🔍 Role type:', typeof loggedInUser?.role);
+      
+      // Redirect based on role (case-insensitive check)
+      const userRole = loggedInUser?.role?.toLowerCase();
+      
+      if (userRole === 'customer') {
+        console.log('✅ Redirecting to customer portal');
         navigate('/customer');
       } else {
+        console.log('✅ Redirecting to admin dashboard');
         navigate('/dashboard');
       }
     } catch (err) {
+      console.error('❌ Login error:', err);
       setError(err.message || 'Failed to login');
     } finally {
       setLoading(false);

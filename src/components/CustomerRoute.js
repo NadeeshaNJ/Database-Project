@@ -25,11 +25,18 @@ const CustomerRoute = ({ children }) => {
     return <Navigate to="/login" replace />;
   }
 
-  // If not a customer, redirect to admin dashboard
-  if (user?.role !== 'Customer') {
+  console.log('🔍 CustomerRoute - User role:', user?.role);
+  console.log('🔍 CustomerRoute - Checking access for:', user);
+
+  // If not a customer, redirect to admin dashboard (case-insensitive check)
+  const userRole = user?.role?.toLowerCase();
+  
+  if (userRole !== 'customer') {
+    console.log('⚠️ Not a customer, redirecting to dashboard');
     return <Navigate to="/dashboard" replace />;
   }
 
+  console.log('✅ Customer access granted');
   return children;
 };
 
