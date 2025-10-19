@@ -138,11 +138,52 @@ jobs:
           grep -rn "token\s*=\s*['\"]" src/ --include="*.js" --include="*.jsx" || echo "✅ No hardcoded tokens"
         continue-on-error: true
 
+  # Deploy to GitHub Pages
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: github.ref == 'refs/heads/main' && needs.build.result == 'success'
+    permissions:
+      contents: write
+    
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: 🟢 Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: 📦 Install dependencies
+        run: npm ci
+      
+      - name: 🏗️ Build with production env
+        run: npm run build
+        env:
+          CI: false
+          NODE_ENV: production
+          REACT_APP_API_BASE: https://skynest-backend-api.onrender.com
+          REACT_APP_ENV: production
+          REACT_APP_DEBUG: false
+      
+      - name: 🚀 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+          publish_branch: gh-pages
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Deploy from main: ${{ github.event.head_commit.message }}'
+
   # Final Report
   report:
     name: Pipeline Summary
     runs-on: ubuntu-latest
-    needs: [build, quality, security]
+    needs: [build, quality, security, deploy]
     if: always()
     
     steps:
@@ -156,6 +197,7 @@ jobs:
           echo "  🏗️  Build:    ${{ needs.build.result }}"
           echo "  📊 Quality:   ${{ needs.quality.result }}"
           echo "  🔒 Security:  ${{ needs.security.result }}"
+          echo "  🚀 Deploy:    ${{ needs.deploy.result }}"
           echo ""
           echo "Repository: ${{ github.repository }}"
           echo "Branch:     ${{ github.ref_name }}"
@@ -166,6 +208,9 @@ jobs:
           if [ "${{ needs.build.result }}" == "success" ]; then
             echo "✅ Frontend build completed successfully!"
             echo "✅ React application is ready for deployment"
+            if [ "${{ needs.deploy.result }}" == "success" ]; then
+              echo "✅ Deployed to GitHub Pages!"
+            fi
             echo ""
             echo "💡 Backend validation runs in separate repository:"
             echo "   https://github.com/${{ github.repository_owner }}/Database-Back"
@@ -185,6 +230,7 @@ jobs:
           echo "| 🏗️ Build | ${{ needs.build.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| 📊 Quality | ${{ needs.quality.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "| 🔒 Security | ${{ needs.security.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| 🚀 Deploy | ${{ needs.deploy.result }} |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           
           if [ "${{ needs.build.result }}" == "success" ]; then
@@ -193,6 +239,13 @@ jobs:
             echo "- React application built successfully" >> $GITHUB_STEP_SUMMARY
             echo "- Production bundle ready for deployment" >> $GITHUB_STEP_SUMMARY
             echo "- All frontend checks passed" >> $GITHUB_STEP_SUMMARY
+            
+            if [ "${{ needs.deploy.result }}" == "success" ]; then
+              echo "- ✅ **Deployed to GitHub Pages**" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "🌐 **Live URL:** https://${{ github.repository_owner }}.github.io/Database-Project" >> $GITHUB_STEP_SUMMARY
+            fi
+            
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "---" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
