@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
-  const { selectedBranchId, setSelectedBranchId, branches, isLocked } = useBranch();
+  const { selectedBranchId, setSelectedBranchId, branches, isLocked, selectedBranch } = useBranch();
   const navigate = useNavigate();
 
   // Debug logging
@@ -17,6 +17,7 @@ const Navbar = () => {
   console.log('  - user.branch_id:', user?.branch_id);
   console.log('  - isLocked:', isLocked);
   console.log('  - selectedBranchId:', selectedBranchId);
+  console.log('  - selectedBranch:', selectedBranch);
 
   const handleLogout = () => {
     logout();
@@ -34,8 +35,8 @@ const Navbar = () => {
   // Get branch name for display
   const getCurrentBranchName = () => {
     if (selectedBranchId === 'All') return 'All Branches';
-    const branch = branches.find(b => b.branch_id === selectedBranchId);
-    return branch ? branch.branch_name : 'Unknown Branch';
+    // Use the already-calculated selectedBranch from context (handles type conversion)
+    return selectedBranch ? selectedBranch.branch_name : 'Unknown Branch';
   };
 
   return (
