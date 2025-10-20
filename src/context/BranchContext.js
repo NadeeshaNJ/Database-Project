@@ -46,6 +46,10 @@ export const BranchProvider = ({ children }) => {
           user: user
         });
       }
+    } else {
+      // User logged out - reset to 'All'
+      console.log('🚪 User logged out - resetting branch to All');
+      setSelectedBranchId('All');
     }
   }, [user]);
 
@@ -76,6 +80,14 @@ export const BranchProvider = ({ children }) => {
 
   // Prevent non-admin users from changing branch
   const handleSetSelectedBranchId = (branchId) => {
+    console.log('🎯 handleSetSelectedBranchId called:', {
+      attemptedBranchId: branchId,
+      currentUser: user,
+      userRole: user?.role,
+      userBranchId: user?.branch_id,
+      isAdmin: user?.role === 'Admin'
+    });
+    
     const hasBranchId = user?.branch_id !== null && user?.branch_id !== undefined && user?.branch_id !== '';
     
     if (user && user.role !== 'Admin' && hasBranchId) {
@@ -83,9 +95,12 @@ export const BranchProvider = ({ children }) => {
       console.warn('⚠️ Attempted to change to:', branchId, 'but locked to:', user.branch_id);
       return; // Silently ignore attempt to change branch
     }
+    
+    console.log('✅ Branch change allowed - setting to:', branchId);
     setSelectedBranchId(branchId);
   };
 
+  // Calculate isLocked based on current user state
   const hasBranchId = user?.branch_id !== null && user?.branch_id !== undefined && user?.branch_id !== '';
   const isLocked = user && user.role !== 'Admin' && hasBranchId;
 
@@ -94,8 +109,10 @@ export const BranchProvider = ({ children }) => {
     role: user?.role,
     isNotAdmin: user?.role !== 'Admin',
     hasBranchId: hasBranchId,
-    branch_id: user?.branch_id,
-    isLocked: isLocked
+    branch_id_value: user?.branch_id,
+    branch_id_type: typeof user?.branch_id,
+    isLocked: isLocked,
+    selectedBranchId: selectedBranchId
   });
 
   // Find the selected branch with proper type comparison

@@ -39,6 +39,16 @@ const Navbar = () => {
     return selectedBranch ? selectedBranch.branch_name : 'Unknown Branch';
   };
 
+  // Extra safety: Admin should NEVER be locked, regardless of isLocked value
+  const shouldShowDropdown = user?.role === 'Admin' || !isLocked;
+
+  console.log('🎨 Navbar Render Decision:', {
+    userRole: user?.role,
+    isAdmin: user?.role === 'Admin',
+    isLocked: isLocked,
+    shouldShowDropdown: shouldShowDropdown
+  });
+
   return (
     <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top" className="navbar-custom">
       <Container fluid>
@@ -53,7 +63,29 @@ const Navbar = () => {
               <>
                 {/* Global Branch Selector - Disabled for non-admin users */}
                 <div className="me-3">
-                  {isLocked ? (
+                  {shouldShowDropdown ? (
+                    /* Admin or unlocked - show dropdown */
+                    <Form.Select 
+                      value={selectedBranchId} 
+                      onChange={(e) => setSelectedBranchId(e.target.value)}
+                      style={{ 
+                        width: '200px', 
+                        backgroundColor: '#495057', 
+                        color: 'white', 
+                        border: '1px solid #6c757d',
+                        fontSize: '14px',
+                        cursor: 'pointer'
+                      }}
+                      title="Select branch"
+                    >
+                      <option value="All">🏢 All Branches</option>
+                      {branches.map(branch => (
+                        <option key={branch.branch_id} value={branch.branch_id}>
+                          📍 {branch.branch_name}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  ) : (
                     /* Locked to specific branch - show as badge */
                     <Badge 
                       bg="primary" 
@@ -63,29 +95,6 @@ const Navbar = () => {
                       <FaMapMarkerAlt className="me-2" />
                       {getCurrentBranchName()}
                     </Badge>
-                  ) : (
-                    /* Admin - show dropdown */
-                    <Form.Select 
-                      value={selectedBranchId} 
-                      onChange={(e) => setSelectedBranchId(e.target.value)}
-                      disabled={isLocked}
-                      style={{ 
-                        width: '200px', 
-                        backgroundColor: '#495057', 
-                        color: 'white', 
-                        border: '1px solid #6c757d',
-                        fontSize: '14px',
-                        cursor: isLocked ? 'not-allowed' : 'pointer'
-                      }}
-                      title={isLocked ? `You can only access ${getCurrentBranchName()}` : 'Select branch'}
-                    >
-                      <option value="All">🏢 All Branches</option>
-                      {branches.map(branch => (
-                        <option key={branch.branch_id} value={branch.branch_id}>
-                          📍 {branch.branch_name}
-                        </option>
-                      ))}
-                    </Form.Select>
                   )}
                 </div>
                 
