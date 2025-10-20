@@ -24,11 +24,17 @@ export const BranchProvider = ({ children }) => {
       console.log('🔍 BranchContext - User object:', user);
       console.log('🔍 BranchContext - User role:', user.role);
       console.log('🔍 BranchContext - User branch_id:', user.branch_id);
+      console.log('🔍 BranchContext - branch_id type:', typeof user.branch_id);
+      
+      // Check if user has a branch_id (could be string or number)
+      const hasBranchId = user.branch_id !== null && user.branch_id !== undefined && user.branch_id !== '';
       
       // If user is not Admin and has a branch_id, lock them to their branch
-      if (user.role !== 'Admin' && user.branch_id) {
+      if (user.role !== 'Admin' && hasBranchId) {
         console.log(`🔒 User ${user.name || user.username} locked to branch ${user.branch_id}`);
-        setSelectedBranchId(user.branch_id);
+        // Convert to number if it's a string
+        const branchId = typeof user.branch_id === 'string' ? parseInt(user.branch_id, 10) : user.branch_id;
+        setSelectedBranchId(branchId);
       } else if (user.role === 'Admin') {
         console.log('👑 Admin user - can access all branches');
         setSelectedBranchId('All');
@@ -36,6 +42,7 @@ export const BranchProvider = ({ children }) => {
         console.warn('⚠️ Non-admin user but no branch_id found!', {
           role: user.role,
           branch_id: user.branch_id,
+          hasBranchId: hasBranchId,
           user: user
         });
       }
@@ -67,12 +74,18 @@ export const BranchProvider = ({ children }) => {
 
   // Prevent non-admin users from changing branch
   const handleSetSelectedBranchId = (branchId) => {
-    if (user && user.role !== 'Admin' && user.branch_id) {
+    const hasBranchId = user?.branch_id !== null && user?.branch_id !== undefined && user?.branch_id !== '';
+    
+    if (user && user.role !== 'Admin' && hasBranchId) {
       console.warn('⚠️ Non-admin users cannot change branch');
+      console.warn('⚠️ Attempted to change to:', branchId, 'but locked to:', user.branch_id);
       return; // Silently ignore attempt to change branch
     }
     setSelectedBranchId(branchId);
   };
+
+  const hasBranchId = user?.branch_id !== null && user?.branch_id !== undefined && user?.branch_id !== '';
+  const isLocked = user && user.role !== 'Admin' && hasBranchId;
 
   const value = {
     selectedBranchId,
@@ -80,7 +93,7 @@ export const BranchProvider = ({ children }) => {
     branches,
     loading,
     selectedBranch: Array.isArray(branches) ? branches.find(b => b.branch_id === selectedBranchId) || null : null,
-    isLocked: user && user.role !== 'Admin' && user.branch_id ? true : false
+    isLocked: isLocked
   };
 
   return (
