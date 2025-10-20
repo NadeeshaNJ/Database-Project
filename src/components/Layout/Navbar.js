@@ -10,6 +10,14 @@ const Navbar = () => {
   const { selectedBranchId, setSelectedBranchId, branches, isLocked } = useBranch();
   const navigate = useNavigate();
 
+  // Debug logging
+  console.log('🔍 Navbar Debug:');
+  console.log('  - user:', user);
+  console.log('  - user.role:', user?.role);
+  console.log('  - user.branch_id:', user?.branch_id);
+  console.log('  - isLocked:', isLocked);
+  console.log('  - selectedBranchId:', selectedBranchId);
+
   const handleLogout = () => {
     logout();
     navigate('/login');

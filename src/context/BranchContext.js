@@ -87,6 +87,15 @@ export const BranchProvider = ({ children }) => {
   const hasBranchId = user?.branch_id !== null && user?.branch_id !== undefined && user?.branch_id !== '';
   const isLocked = user && user.role !== 'Admin' && hasBranchId;
 
+  console.log('🔐 BranchContext - isLocked calculation:', {
+    user: user ? 'exists' : 'null',
+    role: user?.role,
+    isNotAdmin: user?.role !== 'Admin',
+    hasBranchId: hasBranchId,
+    branch_id: user?.branch_id,
+    isLocked: isLocked
+  });
+
   const value = {
     selectedBranchId,
     setSelectedBranchId: handleSetSelectedBranchId,
