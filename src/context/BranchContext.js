@@ -57,6 +57,8 @@ export const BranchProvider = ({ children }) => {
         const data = await response.json();
         
         if (data.success && data.data && data.data.branches) {
+          console.log('🏢 Fetched branches:', data.data.branches);
+          console.log('🏢 First branch branch_id type:', typeof data.data.branches[0]?.branch_id);
           setBranches(data.data.branches);
         } else {
           setBranches([]);
@@ -96,12 +98,28 @@ export const BranchProvider = ({ children }) => {
     isLocked: isLocked
   });
 
+  // Find the selected branch with proper type comparison
+  const selectedBranch = Array.isArray(branches) ? 
+    branches.find(b => {
+      // Compare as numbers (convert both sides)
+      const branchId = typeof b.branch_id === 'string' ? parseInt(b.branch_id, 10) : b.branch_id;
+      const selected = typeof selectedBranchId === 'string' ? 
+        (selectedBranchId === 'All' ? 'All' : parseInt(selectedBranchId, 10)) : 
+        selectedBranchId;
+      
+      console.log(`🔍 Comparing branch ${b.branch_name}: branchId=${branchId} (${typeof branchId}) vs selected=${selected} (${typeof selected})`);
+      return branchId === selected;
+    }) || null 
+    : null;
+
+  console.log('🎯 Selected branch:', selectedBranch);
+
   const value = {
     selectedBranchId,
     setSelectedBranchId: handleSetSelectedBranchId,
     branches,
     loading,
-    selectedBranch: Array.isArray(branches) ? branches.find(b => b.branch_id === selectedBranchId) || null : null,
+    selectedBranch: selectedBranch,
     isLocked: isLocked
   };
 
