@@ -8,112 +8,13 @@ body {
   background-attachment: fixed;
   min-height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #2c3e50;
 }
 
-/* ==========================
-   Global Glass Theme Toggle
-   ==========================
-   When the root has class `glass-theme`, we apply glassmorphism defaults to
-   common Bootstrap components across ALL pages so the look is consistent
-   without changing each page one-by-one.
-*/
-.glass-theme .card {
-  background: rgba(255, 255, 255, 0.12) !important;
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  border-radius: 20px !important;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
-  overflow: hidden;
-}
-
-.glass-theme .card-header {
-  background: rgba(255, 255, 255, 0.10) !important;
-  color: #fff !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
-}
-
-.glass-theme .card-body {
-  color: rgba(255, 255, 255, 0.95);
-}
-
-.glass-theme .form-control,
-.glass-theme .form-select,
-.glass-input {
-  background: rgba(255, 255, 255, 0.15) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  color: #fff !important;
-  border-radius: 12px !important;
-}
-
-.glass-theme .form-control::placeholder {
-  color: rgba(255, 255, 255, 0.65) !important;
-}
-
-.glass-theme .btn,
-.glass-button {
-  background: rgba(255, 255, 255, 0.2) !important;
-  color: #fff !important;
-  border: 1px solid rgba(255, 255, 255, 0.35) !important;
-  border-radius: 12px !important;
-  box-shadow: 0 4px 16px rgba(31, 38, 135, 0.18);
-}
-
-.glass-theme .btn:hover,
-.glass-button:hover {
-  background: rgba(255, 255, 255, 0.3) !important;
-  transform: translateY(-2px);
-}
-
-/* Tables (affects all unless explicitly overridden) */
-.glass-theme .table {
-  background: transparent !important;
-  color: rgba(255, 255, 255, 0.92) !important;
-}
-
-.glass-theme .table thead {
-  background: rgba(255, 255, 255, 0.08) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
-}
-
-.glass-theme .table th,
-.glass-theme .table td {
-  border: none !important;
-}
-
-.glass-theme .table tbody tr {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-}
-
-.glass-theme .table-hover tbody tr:hover {
-  background-color: rgba(255, 255, 255, 0.10) !important;
-}
-
-/* Badges maintain contrast on glass */
-.glass-theme .badge {
-  border: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-/* Headings & muted text defaults */
-.glass-theme h1,
-.glass-theme h2,
-.glass-theme h3,
-.glass-theme h4,
-.glass-theme h5,
-.glass-theme h6 {
-  color: #fff;
-}
-
-.glass-theme .text-muted {
-  color: rgba(255, 255, 255, 0.7) !important;
-}
-
-/* Modern Clean Theme */
-body {
-  background: #f5f7fa;
-  background-attachment: fixed;
-  min-height: 100vh;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* Global Headings - Dark Text */
+h1, h2, h3, h4, h5, h6 {
+  color: #2c3e50;
+  font-weight: 700;
 }
 
 /* Clean Sidebar */
