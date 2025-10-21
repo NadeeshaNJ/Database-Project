@@ -2,52 +2,426 @@
   text-align: center;
 }
 
+/* Modern Clean Theme */
+body {
+  background: #f5f7fa;
+  background-attachment: fixed;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ==========================
+   Global Glass Theme Toggle
+   ==========================
+   When the root has class `glass-theme`, we apply glassmorphism defaults to
+   common Bootstrap components across ALL pages so the look is consistent
+   without changing each page one-by-one.
+*/
+.glass-theme .card {
+  background: rgba(255, 255, 255, 0.12) !important;
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
+  overflow: hidden;
+}
+
+.glass-theme .card-header {
+  background: rgba(255, 255, 255, 0.10) !important;
+  color: #fff !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.glass-theme .card-body {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.glass-theme .form-control,
+.glass-theme .form-select,
+.glass-input {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+}
+
+.glass-theme .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.65) !important;
+}
+
+.glass-theme .btn,
+.glass-button {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 16px rgba(31, 38, 135, 0.18);
+}
+
+.glass-theme .btn:hover,
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.3) !important;
+  transform: translateY(-2px);
+}
+
+/* Tables (affects all unless explicitly overridden) */
+.glass-theme .table {
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.92) !important;
+}
+
+.glass-theme .table thead {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.glass-theme .table th,
+.glass-theme .table td {
+  border: none !important;
+}
+
+.glass-theme .table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.glass-theme .table-hover tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.10) !important;
+}
+
+/* Badges maintain contrast on glass */
+.glass-theme .badge {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/* Headings & muted text defaults */
+.glass-theme h1,
+.glass-theme h2,
+.glass-theme h3,
+.glass-theme h4,
+.glass-theme h5,
+.glass-theme h6 {
+  color: #fff;
+}
+
+.glass-theme .text-muted {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Modern Clean Theme */
+body {
+  background: #f5f7fa;
+  background-attachment: fixed;
+  min-height: 100vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Clean Sidebar */
 .sidebar {
   width: 250px;
-  background: #41424b ;
+  background: #2c3e50;
   color: white;
   min-height: calc(100vh - 56px);
-  padding: 20px;
-  box-shadow: 2px 0 10px rgba(51, 52, 59, 0.2);
+  padding: 20px 0;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
   position: fixed;
   top: 56px;
   left: 0;
   overflow-y: auto;
+  z-index: 100;
 }
 
+/* Clean Content Wrapper */
 .content-wrapper {
-  padding: 20px;
-  background-color: #48547C;
+  padding: 30px;
   min-height: calc(100vh - 56px);
   margin-left: 250px;
+  background: #f5f7fa;
+}
+
+/* Modern Navbar */
+.navbar-custom {
+  background: #ffffff !important;
+  border-bottom: 1px solid #e0e6ed;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.08);
 }
 
 .navbar-brand {
-  font-weight: bold;
+  font-weight: 700;
   font-size: 1.5rem;
+  color: #2c3e50 !important;
 }
 
+/* Navigation Links */
 .nav-link-sidebar {
-  color: white !important;
-  padding: 12px 15px;
-  margin: 5px 0;
+  color: #ecf0f1 !important;
+  padding: 12px 20px;
+  margin: 4px 10px;
   border-radius: 8px;
   text-decoration: none;
   display: flex;
   align-items: center;
   transition: all 0.3s ease;
+  font-weight: 500;
 }
 
 .nav-link-sidebar:hover {
-  background-color: rgba(146, 170, 209, 0.3);
-  transform: translateX(5px);
+  background: #34495e;
+  color: #ffffff !important;
+  transform: translateX(4px);
 }
 
 .nav-link-sidebar.active {
-  background-color: rgba(146, 170, 209, 0.4);
+  background: #3498db;
+  color: #ffffff !important;
+  box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
 }
 
 .nav-link-sidebar i {
   margin-right: 10px;
   width: 20px;
+}
+
+/* Modern Card Components */
+.card {
+  background: #ffffff;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  margin-bottom: 24px;
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+}
+
+.card-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e0e6ed;
+  padding: 16px 20px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.card-body {
+  padding: 20px;
+}
+
+/* Modern Buttons */
+.btn {
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-primary {
+  background: #3498db;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2980b9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.btn-success {
+  background: #27ae60;
+  color: white;
+}
+
+.btn-success:hover {
+  background: #229954;
+}
+
+.btn-danger {
+  background: #e74c3c;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #c0392b;
+}
+
+.btn-warning {
+  background: #f39c12;
+  color: white;
+}
+
+.btn-warning:hover {
+  background: #d68910;
+}
+
+.btn-info {
+  background: #16a085;
+  color: white;
+}
+
+.btn-info:hover {
+  background: #138d75;
+}
+
+/* Modern Input Fields */
+.form-control,
+.form-select {
+  border: 1px solid #d1d8e0;
+  border-radius: 8px;
+  padding: 10px 15px;
+  transition: all 0.3s ease;
+  background: #ffffff;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  outline: none;
+}
+
+/* Modern Tables */
+.table {
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table thead {
+  background: #f8f9fa;
+  border-bottom: 2px solid #e0e6ed;
+}
+
+.table th {
+  color: #2c3e50;
+  font-weight: 600;
+  padding: 16px;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.table td {
+  padding: 16px;
+  color: #34495e;
+  vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+
+.table tbody tr {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* Badges */
+.badge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* Modal */
+.modal-content {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
+
+.modal-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e0e6ed;
+  border-radius: 12px 12px 0 0;
+}
+
+.modal-footer {
+  border-top: 1px solid #e0e6ed;
+  background: #f8f9fa;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #bdc3c7;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #95a5a6;
+}
+
+/* Page Header */
+.page-header {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: white;
+  padding: 30px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.page-header h2 {
+  margin: 0;
+  font-weight: 700;
+}
+
+.page-header p {
+  margin: 8px 0 0 0;
+  opacity: 0.95;
+}
+
+/* Stat Cards */
+.stat-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.stat-card h3 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.stat-card p {
+  font-size: 1rem;
+  opacity: 0.9;
+  margin-bottom: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .content-wrapper {
+    margin-left: 0;
+  }
+  
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+  
+  .sidebar.show {
+    transform: translateX(0);
+  }
 }

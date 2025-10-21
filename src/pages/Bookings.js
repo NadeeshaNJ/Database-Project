@@ -148,33 +148,26 @@ const Bookings = () => {
   };
 
   return (
-    <Container fluid className="py-4">
+    <Container fluid className="py-4" style={{ minHeight: '100vh' }}>
+      {/* Page Header */}
       <Row className="mb-4">
         <Col>
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <h2 className="mb-1">Bookings Management</h2>
-              <p className="text-muted">Manage hotel room bookings across all SkyNest branches</p>
+          <div className="page-header">
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <h2 className="mb-1">Bookings Management</h2>
+                <p style={{ marginBottom: 0 }}>
+                  Manage hotel room bookings across all SkyNest branches
+                </p>
+              </div>
+              <Button 
+                variant="primary"
+                onClick={() => handleShowModal('add')}
+              >
+                <FaPlus className="me-2" />
+                New Booking
+              </Button>
             </div>
-            <Button 
-              variant="primary" 
-              onClick={() => handleShowModal('add')}
-              className="d-flex align-items-center"
-            >
-            <Button variant="primary" onClick={() => handleCreateBooking({
-              room_id: 1,
-              check_in_date: '2025-11-01',
-              check_out_date: '2025-11-03',
-              booked_rate: 20000,
-              advance_payment: 5000,
-              preferred_payment_method: 'Cash'
-            })}>
-              Create Booking
-            </Button>
-
-              <FaPlus className="me-2" />
-              New Booking
-            </Button>
           </div>
         </Col>
       </Row>
@@ -182,40 +175,50 @@ const Bookings = () => {
       {/* Booking Statistics */}
       <Row className="mb-4">
         <Col md={3}>
-          <Card className="text-center h-100">
-            <Card.Body>
-              <h3 className="text-primary">{bookings.length}</h3>
-              <p className="mb-0 text-muted">Total Bookings</p>
+          <Card className="stat-card h-100">
+            <Card.Body className="text-center">
+              <h3 style={{ color: 'white', fontWeight: '700', fontSize: '2.5rem' }}>
+                {bookings.length}
+              </h3>
+              <p style={{ color: 'rgba(255, 255, 255, 0.9)', marginBottom: 0, fontWeight: '500' }}>
+                Total Bookings
+              </p>
             </Card.Body>
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="text-center h-100">
-            <Card.Body>
-              <h3 className="text-success">
+          <Card className="stat-card h-100">
+            <Card.Body className="text-center">
+              <h3 style={{ color: 'white', fontWeight: '700', fontSize: '2.5rem' }}>
                 {bookings.filter(b => b.status === 'Checked-In').length}
               </h3>
-              <p className="mb-0 text-muted">Current Guests</p>
+              <p style={{ color: 'rgba(255, 255, 255, 0.9)', marginBottom: 0, fontWeight: '500' }}>
+                Current Guests
+              </p>
             </Card.Body>
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="text-center h-100">
-            <Card.Body>
-              <h3 className="text-warning">
+          <Card className="stat-card h-100">
+            <Card.Body className="text-center">
+              <h3 style={{ color: 'white', fontWeight: '700', fontSize: '2.5rem' }}>
                 {bookings.filter(b => b.status === 'Pending Payment').length}
               </h3>
-              <p className="mb-0 text-muted">Pending Payments</p>
+              <p style={{ color: 'rgba(255, 255, 255, 0.9)', marginBottom: 0, fontWeight: '500' }}>
+                Pending Payments
+              </p>
             </Card.Body>
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="text-center h-100">
-            <Card.Body>
-              <h3 className="text-info">
+          <Card className="stat-card h-100">
+            <Card.Body className="text-center">
+              <h3 style={{ color: 'white', fontWeight: '700', fontSize: '2.5rem' }}>
                 {formatCurrency(bookings.reduce((sum, b) => sum + b.totalAmount, 0))}
               </h3>
-              <p className="mb-0 text-muted">Total Revenue</p>
+              <p style={{ color: 'rgba(255, 255, 255, 0.9)', marginBottom: 0, fontWeight: '500' }}>
+                Total Revenue
+              </p>
             </Card.Body>
           </Card>
         </Col>
@@ -225,7 +228,9 @@ const Bookings = () => {
       <Row className="mb-3">
         <Col md={6}>
           <Form.Group>
-            <Form.Label>Filter by Status</Form.Label>
+            <Form.Label style={{ color: '#2c3e50', fontWeight: '600', marginBottom: '8px' }}>
+              Filter by Status
+            </Form.Label>
             <Form.Select 
               value={filterStatus} 
               onChange={(e) => setFilterStatus(e.target.value)}
@@ -245,25 +250,28 @@ const Bookings = () => {
       <Row>
         <Col>
           <Card>
-            <Card.Header>
-              <h5 className="mb-0">Bookings List ({filteredBookings.length})</h5>
+            <Card.Header style={{ background: '#f8f9fa', borderBottom: '1px solid #e0e6ed' }}>
+              <h5 className="mb-0" style={{ fontWeight: '700', color: '#2c3e50' }}>
+                Bookings List ({filteredBookings.length})
+              </h5>
             </Card.Header>
-            <Card.Body>
-              <Table responsive striped hover>
-                <thead>
-                  <tr>
-                    <th>Booking ID</th>
-                    <th>Guest Name</th>
-                    <th>Hotel/Room</th>
-                    <th>Check-in</th>
-                    <th>Check-out</th>
-                    <th>Nights</th>
-                    <th>Guests</th>
-                    <th>Amount</th>
-                    <th>Payment</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
+            <Card.Body style={{ padding: 0 }}>
+              <div style={{ overflowX: 'auto' }}>
+                <Table responsive style={{ marginBottom: 0 }}>
+                  <thead style={{ backgroundColor: '#f8f9fa', borderBottom: '2px solid #e0e6ed' }}>
+                    <tr>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Booking ID</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Guest Name</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Hotel/Room</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Check-in</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Check-out</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Nights</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Guests</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Amount</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Payment</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Status</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Actions</th>
+                    </tr>
                 </thead>
                 <tbody>
                   {filteredBookings.map((booking) => (
@@ -327,6 +335,7 @@ const Bookings = () => {
                   ))}
                 </tbody>
               </Table>
+              </div>
             </Card.Body>
           </Card>
         </Col>

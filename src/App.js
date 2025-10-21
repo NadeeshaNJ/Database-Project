@@ -28,7 +28,7 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <div className="App">
+  <div className="App">
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Landing />} />

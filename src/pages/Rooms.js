@@ -143,11 +143,11 @@ const Rooms = () => {
   return (
     <Container fluid className="py-4">
       {loading && (
-        <div className="text-center py-5">
-          <Spinner animation="border" role="status" variant="primary">
+        <div className="text-center" style={{ padding: '60px' }}>
+          <Spinner animation="border" role="status">
             <span className="visually-hidden">Loading rooms...</span>
           </Spinner>
-          <p className="mt-3 text-muted">Loading rooms...</p>
+          <p className="mt-3" style={{ color: '#2c3e50' }}>Loading rooms...</p>
         </div>
       )}
 
@@ -160,21 +160,25 @@ const Rooms = () => {
 
       {!loading && !error && (
         <>
+      {/* Header */}
       <Row className="mb-4">
         <Col>
-          <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <h2 className="mb-1">Room Management</h2>
-              <p className="text-muted">Manage room inventory across all SkyNest Hotel branches</p>
+          <div className="page-header">
+            <div className="d-flex justify-content-between align-items-center">
+              <div>
+                <h2 className="mb-1">Room Management</h2>
+                <p style={{ marginBottom: 0 }}>
+                  Manage room inventory across all SkyNest Hotel branches
+                </p>
+              </div>
+              <Button 
+                variant="primary"
+                onClick={() => handleShowModal('add')}
+              >
+                <FaPlus className="me-2" />
+                Add New Room
+              </Button>
             </div>
-            <Button 
-              variant="primary" 
-              onClick={() => handleShowModal('add')}
-              className="d-flex align-items-center"
-            >
-              <FaPlus className="me-2" />
-              Add New Room
-            </Button>
           </div>
         </Col>
       </Row>
@@ -182,35 +186,43 @@ const Rooms = () => {
       {/* Room Statistics */}
       <Row className="mb-4">
         <Col md={3}>
-          <Card className="text-center h-100 border-primary">
-            <Card.Body>
-              <FaBed className="text-primary mb-2" size={24} />
-              <h3 className="text-primary">{totalRooms}</h3>
-              <p className="mb-0 text-muted">Total Rooms</p>
+          <Card className="stat-card text-center h-100">
+            <Card.Body style={{ padding: '24px' }}>
+              <FaBed style={{ color: 'white', marginBottom: '12px' }} size={32} />
+              <h3 style={{ color: 'white', fontWeight: 'bold', fontSize: '2rem', marginBottom: '8px' }}>
+                {totalRooms}
+              </h3>
+              <p style={{ color: 'rgba(255, 255, 255, 0.9)', marginBottom: 0 }}>Total Rooms</p>
             </Card.Body>
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="text-center h-100 border-success">
-            <Card.Body>
-              <h3 className="text-success">{availableRooms}</h3>
-              <p className="mb-0 text-muted">Available</p>
+          <Card className="stat-card text-center h-100">
+            <Card.Body style={{ padding: '24px' }}>
+              <h3 style={{ color: 'white', fontWeight: 'bold', fontSize: '2rem', marginBottom: '8px' }}>
+                {availableRooms}
+              </h3>
+              <p style={{ color: 'rgba(255, 255, 255, 0.9)', marginBottom: 0 }}>Available</p>
             </Card.Body>
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="text-center h-100 border-info">
-            <Card.Body>
-              <h3 className="text-info">{occupiedRooms}</h3>
-              <p className="mb-0 text-muted">Occupied</p>
+          <Card className="stat-card text-center h-100">
+            <Card.Body style={{ padding: '24px' }}>
+              <h3 style={{ color: 'white', fontWeight: 'bold', fontSize: '2rem', marginBottom: '8px' }}>
+                {occupiedRooms}
+              </h3>
+              <p style={{ color: 'rgba(255, 255, 255, 0.9)', marginBottom: 0 }}>Occupied</p>
             </Card.Body>
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="text-center h-100 border-warning">
-            <Card.Body>
-              <h3 className="text-warning">{occupancyRate}%</h3>
-              <p className="mb-0 text-muted">Occupancy Rate</p>
+          <Card className="stat-card text-center h-100">
+            <Card.Body style={{ padding: '24px' }}>
+              <h3 style={{ color: 'white', fontWeight: 'bold', fontSize: '2rem', marginBottom: '8px' }}>
+                {occupancyRate}%
+              </h3>
+              <p style={{ color: 'rgba(255, 255, 255, 0.9)', marginBottom: 0 }}>Occupancy Rate</p>
             </Card.Body>
           </Card>
         </Col>
@@ -219,9 +231,14 @@ const Rooms = () => {
       {/* Filters */}
       <Row className="mb-4">
         <Col md={3}>
-          <Form.Group>
-            <Form.Label>Filter by Status</Form.Label>
-            <Form.Select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)}>
+          <Form.Group style={{ padding: '16px' }}>
+            <Form.Label style={{ color: '#2c3e50', fontWeight: '600', marginBottom: '8px' }}>
+              Filter by Status
+            </Form.Label>
+            <Form.Select 
+              value={filterStatus} 
+              onChange={(e) => setFilterStatus(e.target.value)}
+            >
               <option value="All">All Status</option>
               <option value="Available">Available</option>
               <option value="Occupied">Occupied</option>
@@ -231,9 +248,14 @@ const Rooms = () => {
           </Form.Group>
         </Col>
         <Col md={3}>
-          <Form.Group>
-            <Form.Label>Filter by Type</Form.Label>
-            <Form.Select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+          <Form.Group style={{ padding: '16px' }}>
+            <Form.Label style={{ color: '#2c3e50', fontWeight: '600', marginBottom: '8px' }}>
+              Filter by Type
+            </Form.Label>
+            <Form.Select 
+              value={filterType} 
+              onChange={(e) => setFilterType(e.target.value)}
+            >
               <option value="All">All Types</option>
               <option value="Standard Single">Single</option>
               <option value="Standard Double">Double</option>
