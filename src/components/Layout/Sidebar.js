@@ -16,14 +16,14 @@ const Sidebar = () => {
   const location = useLocation();
 
   const menuItems = [
-    { path: '/dashboard', icon: FaTachometerAlt, label: 'Dashboard' },
-    { path: '/hotels', icon: FaBuilding, label: 'Hotel Branches' },
-    { path: '/rooms', icon: FaBed, label: 'Rooms' },
-    { path: '/bookings', icon: FaCalendarCheck, label: 'Bookings' },
-    { path: '/guests', icon: FaUsers, label: 'Guests' },
-    { path: '/services', icon: FaConciergeBell, label: 'Services' },
-    { path: '/billing', icon: FaReceipt, label: 'Billing' },
-    { path: '/reports', icon: FaChartBar, label: 'Reports' }
+    { path: '/admin/dashboard', icon: FaTachometerAlt, label: 'Dashboard' },
+    { path: '/admin/hotels', icon: FaBuilding, label: 'Hotel Branches' },
+    { path: '/admin/rooms', icon: FaBed, label: 'Rooms' },
+    { path: '/admin/bookings', icon: FaCalendarCheck, label: 'Bookings' },
+    { path: '/admin/guests', icon: FaUsers, label: 'Guests' },
+    { path: '/admin/services', icon: FaConciergeBell, label: 'Services' },
+    { path: '/admin/billing', icon: FaReceipt, label: 'Billing' },
+    { path: '/admin/reports', icon: FaChartBar, label: 'Reports' }
   ];
 
   return (

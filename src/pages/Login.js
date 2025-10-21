@@ -32,7 +32,7 @@ const Login = () => {
         navigate('/customer');
       } else {
         console.log('✅ Redirecting to admin dashboard');
-        navigate('/dashboard');
+        navigate('/admin');
       }
     } catch (err) {
       console.error('❌ Login error:', err);
@@ -185,6 +185,25 @@ const Login = () => {
                           </Button>
                         </div>
                       ))}
+                    </div>
+
+                    {/* Additional Links */}
+                    <div className="mt-4 text-center">
+                      <p className="mb-2">
+                        <small className="text-muted">
+                          Don't have an account?{' '}
+                          <a href="/register" style={{ color: '#749DD0', fontWeight: 'bold' }}>
+                            Register as Customer
+                          </a>
+                        </small>
+                      </p>
+                      <p className="mb-0">
+                        <small>
+                          <a href="/" style={{ color: '#999', textDecoration: 'none' }}>
+                            ← Back to Home
+                          </a>
+                        </small>
+                      </p>
                     </div>
                   </Card.Body>
                 </Col>

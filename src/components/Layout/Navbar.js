@@ -25,11 +25,11 @@ const Navbar = () => {
   };
 
   const handleProfile = () => {
-    navigate('/profile');
+    navigate('/admin/profile');
   };
 
   const handleSettings = () => {
-    navigate('/settings');
+    navigate('/admin/settings');
   };
 
   // Get branch name for display
@@ -52,7 +52,7 @@ const Navbar = () => {
   return (
     <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top" className="navbar-custom">
       <Container fluid>
-        <BootstrapNavbar.Brand href="/" className="d-flex align-items-center">
+        <BootstrapNavbar.Brand href="/admin" className="d-flex align-items-center">
           <FaBed className="me-2" />
           <strong>SkyNest Hotels</strong>
         </BootstrapNavbar.Brand>

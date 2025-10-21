@@ -8,6 +8,7 @@ import AdminRoute from './components/AdminRoute';
 import Navbar from './components/Layout/Navbar';
 import Sidebar from './components/Layout/Sidebar';
 import CustomerNavbar from './components/Layout/CustomerNavbar';
+import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Profile from './pages/Profile';
@@ -30,6 +31,7 @@ function App() {
         <div className="App">
           <Routes>
             {/* Public Routes */}
+            <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             
@@ -46,7 +48,7 @@ function App() {
             } />
 
             {/* Admin Dashboard - For all roles EXCEPT Customer */}
-            <Route path="/*" element={
+            <Route path="/admin/*" element={
               <AdminRoute>
                 <Navbar />
                 <div className="d-flex">
@@ -65,7 +67,7 @@ function App() {
                         <Route path="/services" element={<Services />} />
                         <Route path="/billing" element={<Billing />} />
                         <Route path="/reports" element={<Reports />} />
-                        <Route path="*" element={<Navigate to="/" replace />} />
+                        <Route path="*" element={<Navigate to="/admin" replace />} />
                       </Routes>
                     </Container>
                   </div>
