@@ -91,7 +91,7 @@ const Landing = () => {
                 fontWeight: 'bold'
               }}
             >
-              Staff Login
+              Login
             </Button>
           </div>
         </Container>

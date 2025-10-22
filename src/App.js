@@ -18,6 +18,7 @@ import Hotels from './pages/Hotels';
 import Rooms from './pages/Rooms';
 import Bookings from './pages/Bookings';
 import Guests from './pages/Guests';
+import Employees from './pages/Employees';
 import Services from './pages/Services';
 import Billing from './pages/Billing';
 import Reports from './pages/Reports';
@@ -64,6 +65,7 @@ function App() {
                         <Route path="/rooms" element={<Rooms />} />
                         <Route path="/bookings" element={<Bookings />} />
                         <Route path="/guests" element={<Guests />} />
+                        <Route path="/employees" element={<Employees />} />
                         <Route path="/services" element={<Services />} />
                         <Route path="/billing" element={<Billing />} />
                         <Route path="/reports" element={<Reports />} />

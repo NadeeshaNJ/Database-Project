@@ -7,6 +7,7 @@ import {
   FaBed, 
   FaCalendarCheck,
   FaUsers, 
+  FaUserTie,
   FaConciergeBell, 
   FaReceipt,
   FaChartBar 
@@ -21,6 +22,7 @@ const Sidebar = () => {
     { path: '/admin/rooms', icon: FaBed, label: 'Rooms' },
     { path: '/admin/bookings', icon: FaCalendarCheck, label: 'Bookings' },
     { path: '/admin/guests', icon: FaUsers, label: 'Guests' },
+    { path: '/admin/employees', icon: FaUserTie, label: 'Employees' },
     { path: '/admin/services', icon: FaConciergeBell, label: 'Services' },
     { path: '/admin/billing', icon: FaReceipt, label: 'Billing' },
     { path: '/admin/reports', icon: FaChartBar, label: 'Reports' }

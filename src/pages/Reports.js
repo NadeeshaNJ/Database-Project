@@ -116,9 +116,13 @@ const Reports = () => {
 
   return (
     <div>
+      {/* Page Header */}
       <Row className="mb-4">
         <Col>
-          <h2>Reports & Analytics</h2>
+          <div className="page-header">
+            <h2>Reports & Analytics</h2>
+            <p style={{ marginBottom: 0 }}>Comprehensive business insights and performance metrics</p>
+          </div>
         </Col>
       </Row>
 

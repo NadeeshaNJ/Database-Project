@@ -122,7 +122,9 @@ const Guests = () => {
     <div>
       <Row className="mb-4">
         <Col>
-          <h2>Guest Management</h2>
+        <div className="page-header">
+          <h2 >Guest Management</h2>
+          </div>
         </Col>
         <Col xs="auto">
           <Button variant="primary" onClick={() => handleShowModal()}>

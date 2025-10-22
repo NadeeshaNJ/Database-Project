@@ -63,9 +63,13 @@ const Services = () => {
 
   return (
     <div>
+      {/* Page Header */}
       <Row className="mb-4">
         <Col>
-          <h2>Service Management</h2>
+          <div className="page-header">
+            <h2>Service Management</h2>
+            <p style={{ marginBottom: 0 }}>Manage hotel services and track usage across all bookings</p>
+          </div>
         </Col>
       </Row>
 

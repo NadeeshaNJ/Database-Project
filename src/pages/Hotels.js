@@ -99,9 +99,9 @@ const Hotels = () => {
       <Row className="mb-4">
         <Col>
           <div className="d-flex justify-content-between align-items-center">
-            <div>
-              <h2 className="mb-1" style={{ color: '#2c3e50' }}>Hotel Branches</h2>
-              <p className="mb-2" style={{ color: '#2c3e50' }}>Manage SkyNest Hotels locations across Sri Lanka</p>
+            <div className="page-header">
+              <h2>Hotel Branches</h2>
+              <p style={{ marginBottom: 0 }}>Manage SkyNest Hotels locations across Sri Lanka</p>
             </div>
             <Button 
               variant="primary" 

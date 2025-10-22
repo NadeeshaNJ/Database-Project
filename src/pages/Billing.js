@@ -78,9 +78,13 @@ const Billing = () => {
 
   return (
     <div>
+      {/* Page Header */}
       <Row className="mb-4">
         <Col>
-          <h2>Billing & Payments</h2>
+          <div className="page-header">
+            <h2>Billing & Payments</h2>
+            <p style={{ marginBottom: 0 }}>Manage payments, transactions, and billing adjustments</p>
+          </div>
         </Col>
       </Row>
 
