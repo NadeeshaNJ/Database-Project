@@ -290,7 +290,6 @@ const Employees = () => {
                   <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Phone</th>
                   <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Branch</th>
                   <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Role</th>
-                  <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -309,23 +308,6 @@ const Employees = () => {
                       <Badge bg={getRoleBadgeColor(employee.role || 'Staff')}>
                         {employee.role || 'Staff'}
                       </Badge>
-                    </td>
-                    <td style={{ padding: '16px' }}>
-                      <Button
-                        variant="outline-primary"
-                        size="sm"
-                        onClick={() => handleShowModal(employee)}
-                        className="me-2"
-                      >
-                        <FaEdit />
-                      </Button>
-                      <Button 
-                        variant="outline-danger" 
-                        size="sm"
-                        onClick={() => handleDelete(employee.employee_id)}
-                      >
-                        <FaTrash />
-                      </Button>
                     </td>
                   </tr>
                 ))}
