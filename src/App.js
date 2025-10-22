@@ -26,7 +26,7 @@ import './App.css';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/Database-Project">
       <div className="App">
           <Routes>
             {/* Public Routes */}
