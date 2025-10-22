@@ -148,34 +148,61 @@ const Bookings = () => {
   };
 
   return (
-    <Container fluid className="py-4" style={{ minHeight: '100vh' }}>
+    <Container fluid className="py-4" style={{ 
+      minHeight: '100vh',
+      backgroundColor: '#f8f9fa'
+    }}>
       {/* Page Header */}
-      <Row className="mb-4">
-        <Col>
-          <div className="page-header">
-            <div className="d-flex justify-content-between align-items-center">
-              <div>
-                <h2 className="mb-1">Bookings Management</h2>
-                <p style={{ marginBottom: 0 }}>
-                  Manage hotel room bookings across all SkyNest branches
-                </p>
-              </div>
-              <Button 
-                variant="primary"
-                onClick={() => handleShowModal('add')}
-              >
-                <FaPlus className="me-2" />
-                New Booking
-              </Button>
-            </div>
+      <div style={{
+        background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+        color: 'white',
+        padding: '30px',
+        borderRadius: '12px',
+        marginBottom: '30px',
+        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+      }}>
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            <h2 style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold', marginBottom: '8px' }}>Bookings Management</h2>
+            <p style={{ marginBottom: 0, fontSize: '1.1rem', opacity: 0.9 }}>
+              Manage hotel room bookings across all SkyNest branches
+            </p>
           </div>
-        </Col>
-      </Row>
+          <Button 
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              color: 'white',
+              fontWeight: '600',
+              padding: '10px 24px',
+              borderRadius: '8px',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = 'rgba(255, 255, 255, 0.3)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+            }}
+            onClick={() => handleShowModal('add')}
+          >
+            <FaPlus className="me-2" />
+            New Booking
+          </Button>
+        </div>
+      </div>
 
       {/* Booking Statistics */}
       <Row className="mb-4">
         <Col md={3}>
-          <Card className="stat-card h-100">
+          <Card style={{
+            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+            border: 'none',
+            borderRadius: '12px',
+            boxShadow: '0 4px 12px rgba(26, 35, 126, 0.2)',
+            color: 'white',
+            height: '100%'
+          }}>
             <Card.Body className="text-center">
               <h3 style={{ color: 'white', fontWeight: '700', fontSize: '2.5rem' }}>
                 {bookings.length}
@@ -187,7 +214,14 @@ const Bookings = () => {
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="stat-card h-100">
+          <Card style={{
+            background: 'linear-gradient(135deg, #1976d2 0%, #0d47a1 100%)',
+            border: 'none',
+            borderRadius: '12px',
+            boxShadow: '0 4px 12px rgba(25, 118, 210, 0.2)',
+            color: 'white',
+            height: '100%'
+          }}>
             <Card.Body className="text-center">
               <h3 style={{ color: 'white', fontWeight: '700', fontSize: '2.5rem' }}>
                 {bookings.filter(b => b.status === 'Checked-In').length}
@@ -199,7 +233,14 @@ const Bookings = () => {
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="stat-card h-100">
+          <Card style={{
+            background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+            border: 'none',
+            borderRadius: '12px',
+            boxShadow: '0 4px 12px rgba(245, 158, 11, 0.2)',
+            color: 'white',
+            height: '100%'
+          }}>
             <Card.Body className="text-center">
               <h3 style={{ color: 'white', fontWeight: '700', fontSize: '2.5rem' }}>
                 {bookings.filter(b => b.status === 'Pending Payment').length}
@@ -211,7 +252,14 @@ const Bookings = () => {
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="stat-card h-100">
+          <Card style={{
+            background: 'linear-gradient(135deg, #28a745 0%, #218838 100%)',
+            border: 'none',
+            borderRadius: '12px',
+            boxShadow: '0 4px 12px rgba(40, 167, 69, 0.2)',
+            color: 'white',
+            height: '100%'
+          }}>
             <Card.Body className="text-center">
               <h3 style={{ color: 'white', fontWeight: '700', fontSize: '2.5rem' }}>
                 {formatCurrency(bookings.reduce((sum, b) => sum + b.totalAmount, 0))}
@@ -228,12 +276,17 @@ const Bookings = () => {
       <Row className="mb-3">
         <Col md={6}>
           <Form.Group>
-            <Form.Label style={{ color: '#2c3e50', fontWeight: '600', marginBottom: '8px' }}>
+            <Form.Label style={{ color: '#1a237e', fontWeight: '600', marginBottom: '8px' }}>
               Filter by Status
             </Form.Label>
             <Form.Select 
               value={filterStatus} 
               onChange={(e) => setFilterStatus(e.target.value)}
+              style={{
+                borderColor: '#1976d2',
+                borderRadius: '8px',
+                padding: '10px'
+              }}
             >
               <option value="All">All Bookings</option>
               <option value="Confirmed">Confirmed</option>
@@ -249,28 +302,37 @@ const Bookings = () => {
       {/* Bookings Table */}
       <Row>
         <Col>
-          <Card>
-            <Card.Header style={{ background: '#f8f9fa', borderBottom: '1px solid #e0e6ed' }}>
-              <h5 className="mb-0" style={{ fontWeight: '700', color: '#2c3e50' }}>
+          <Card style={{
+            background: 'white',
+            borderRadius: '12px',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+          }}>
+            <Card.Header style={{ 
+              background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+              borderBottom: '2px solid #1976d2',
+              borderRadius: '12px 12px 0 0'
+            }}>
+              <h5 className="mb-0" style={{ fontWeight: '700', color: 'white' }}>
                 Bookings List ({filteredBookings.length})
               </h5>
             </Card.Header>
             <Card.Body style={{ padding: 0 }}>
               <div style={{ overflowX: 'auto' }}>
                 <Table responsive style={{ marginBottom: 0 }}>
-                  <thead style={{ backgroundColor: '#f8f9fa', borderBottom: '2px solid #e0e6ed' }}>
+                  <thead style={{ backgroundColor: '#f8f9fa', borderBottom: '2px solid #1976d2' }}>
                     <tr>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Booking ID</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Guest Name</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Hotel/Room</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Check-in</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Check-out</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Nights</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Guests</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Amount</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Payment</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Status</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Actions</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Booking ID</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Guest Name</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Hotel/Room</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Check-in</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Check-out</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Nights</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Guests</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Amount</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Payment</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Status</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -316,14 +378,30 @@ const Bookings = () => {
                       <td>
                         <div className="d-flex gap-1">
                           <Button
-                            variant="outline-primary"
+                            style={{
+                              background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '6px',
+                              padding: '6px 12px',
+                              fontSize: '0.875rem',
+                              transition: 'all 0.3s ease'
+                            }}
                             size="sm"
                             onClick={() => handleShowModal('view', booking)}
                           >
                             <FaEye />
                           </Button>
                           <Button
-                            variant="outline-secondary"
+                            style={{
+                              background: '#6c757d',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '6px',
+                              padding: '6px 12px',
+                              fontSize: '0.875rem',
+                              transition: 'all 0.3s ease'
+                            }}
                             size="sm"
                             onClick={() => handleShowModal('edit', booking)}
                           >
@@ -343,8 +421,15 @@ const Bookings = () => {
 
       {/* Modal for Add/Edit/View Booking */}
       <Modal show={showModal} onHide={handleCloseModal} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>
+        <Modal.Header 
+          closeButton
+          style={{
+            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+            color: 'white',
+            borderBottom: '2px solid #1976d2'
+          }}
+        >
+          <Modal.Title style={{ color: 'white', fontWeight: 'bold' }}>
             {modalType === 'add' && 'New Booking'}
             {modalType === 'edit' && 'Edit Booking'}
             {modalType === 'view' && 'Booking Details'}
@@ -503,11 +588,30 @@ const Bookings = () => {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <Button 
+            variant="secondary" 
+            onClick={handleCloseModal}
+            style={{
+              background: '#6c757d',
+              border: 'none',
+              padding: '10px 24px',
+              borderRadius: '6px',
+              fontWeight: '500'
+            }}
+          >
             Close
           </Button>
           {modalType !== 'view' && (
-            <Button variant="primary">
+            <Button 
+              style={{
+                background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                border: 'none',
+                padding: '10px 24px',
+                borderRadius: '6px',
+                fontWeight: '500',
+                transition: 'all 0.3s ease'
+              }}
+            >
               {modalType === 'add' ? 'Create Booking' : 'Save Changes'}
             </Button>
           )}
