@@ -2,18 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Button, Modal, Form, Table, Badge, Spinner, Alert } from 'react-bootstrap';
 import { FaPlus, FaEdit, FaTrash, FaUserTie } from 'react-icons/fa';
 import { useBranch } from '../context/BranchContext';
-import { apiUrl } from '../utils/api';
+import { employeeAPI } from '../services/api';
 
 const Employees = () => {
   const { selectedBranchId } = useBranch();
   const [employees, setEmployees] = useState([]);
+  const [branches, setBranches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [formData, setFormData] = useState({
+    user_id: '',
+    branch_id: '',
+    name: '',
+    email: '',
+    contact_no: ''
+  });
 
   useEffect(() => {
     fetchEmployees();
+    fetchBranches();
   }, [selectedBranchId]);
 
   const fetchEmployees = async () => {
@@ -21,35 +31,131 @@ const Employees = () => {
       setLoading(true);
       setError(null);
       
-      let url = '/api/employees?limit=1000';
-      if (selectedBranchId !== 'All') {
-        url += `&branch_id=${selectedBranchId}`;
+      const params = { limit: 1000 };
+      if (selectedBranchId && selectedBranchId !== 'All') {
+        params.branch_id = selectedBranchId;
       }
       
-      const response = await fetch(apiUrl(url));
-      const data = await response.json();
+      const response = await employeeAPI.getAllEmployees(params);
       
-      if (data.success && data.data && data.data.employees) {
-        setEmployees(data.data.employees);
+      if (response.data.success && response.data.data && response.data.data.employees) {
+        setEmployees(response.data.data.employees);
       } else {
         setError('No employees found');
+        setEmployees([]);
       }
     } catch (err) {
       console.error('Error fetching employees:', err);
-      setError('Failed to load employees. Please check backend connection.');
+      setError(err.response?.data?.error || 'Failed to load employees. Please check backend connection.');
+      setEmployees([]);
     } finally {
       setLoading(false);
     }
   };
 
+  const fetchBranches = async () => {
+    try {
+      const apiClient = (await import('../services/apiClient')).default;
+      const response = await apiClient.get('/branches');
+      if (response.data.success && response.data.data) {
+        setBranches(response.data.data.branches || []);
+      }
+    } catch (err) {
+      console.error('Error fetching branches:', err);
+    }
+  };
+
   const handleShowModal = (employee = null) => {
-    setSelectedEmployee(employee);
+    if (employee) {
+      setSelectedEmployee(employee);
+      setFormData({
+        user_id: employee.user_id || '',
+        branch_id: employee.branch_id || '',
+        name: employee.name || '',
+        email: employee.email || '',
+        contact_no: employee.contact_no || ''
+      });
+    } else {
+      setSelectedEmployee(null);
+      setFormData({
+        user_id: '',
+        branch_id: '',
+        name: '',
+        email: '',
+        contact_no: ''
+      });
+    }
     setShowModal(true);
+    setError(null);
+    setSuccess(null);
   };
 
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedEmployee(null);
+    setFormData({
+      user_id: '',
+      branch_id: '',
+      name: '',
+      email: '',
+      contact_no: ''
+    });
+    setError(null);
+    setSuccess(null);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setSuccess(null);
+
+    try {
+      if (selectedEmployee) {
+        // Update existing employee
+        await employeeAPI.updateEmployee(selectedEmployee.employee_id, formData);
+        setSuccess('Employee updated successfully!');
+      } else {
+        // Create new employee
+        await employeeAPI.createEmployee(formData);
+        setSuccess('Employee created successfully!');
+      }
+      
+      // Refresh the employee list
+      await fetchEmployees();
+      
+      // Close modal after a short delay
+      setTimeout(() => {
+        handleCloseModal();
+      }, 1500);
+    } catch (err) {
+      console.error('Error saving employee:', err);
+      setError(err.response?.data?.error || 'Failed to save employee');
+    }
+  };
+
+  const handleDelete = async (employeeId) => {
+    if (!window.confirm('Are you sure you want to delete this employee?')) {
+      return;
+    }
+
+    try {
+      await employeeAPI.deleteEmployee(employeeId);
+      setSuccess('Employee deleted successfully!');
+      await fetchEmployees();
+      setTimeout(() => setSuccess(null), 3000);
+    } catch (err) {
+      console.error('Error deleting employee:', err);
+      setError(err.response?.data?.error || 'Failed to delete employee');
+      setTimeout(() => setError(null), 3000);
+    }
   };
 
   const getRoleBadgeColor = (role) => {
@@ -58,7 +164,8 @@ const Employees = () => {
       'Manager': 'primary',
       'Receptionist': 'info',
       'Accountant': 'success',
-      'Housekeeping': 'warning'
+      'Housekeeping': 'warning',
+      'Customer': 'secondary'
     };
     return roleColors[role] || 'secondary';
   };
@@ -98,7 +205,8 @@ const Employees = () => {
         </Col>
       </Row>
 
-      {error && <Alert variant="warning">{error}</Alert>}
+      {error && !showModal && <Alert variant="danger" dismissible onClose={() => setError(null)}>{error}</Alert>}
+      {success && !showModal && <Alert variant="success" dismissible onClose={() => setSuccess(null)}>{success}</Alert>}
 
       {/* Employee Statistics */}
       <Row className="mb-4">
@@ -168,6 +276,10 @@ const Employees = () => {
               <Spinner animation="border" variant="primary" />
               <p className="mt-2 text-muted">Loading employees...</p>
             </div>
+          ) : employees.length === 0 ? (
+            <div className="text-center py-5">
+              <p className="text-muted">No employees found</p>
+            </div>
           ) : (
             <Table responsive hover className="mb-0">
               <thead style={{ backgroundColor: '#f8f9fa', borderBottom: '2px solid #e0e6ed' }}>
@@ -178,7 +290,6 @@ const Employees = () => {
                   <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Phone</th>
                   <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Branch</th>
                   <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Role</th>
-                  <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Hire Date</th>
                   <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Actions</th>
                 </tr>
               </thead>
@@ -199,9 +310,6 @@ const Employees = () => {
                         {employee.role || 'Staff'}
                       </Badge>
                     </td>
-                    <td style={{ padding: '16px', color: '#2c3e50', fontWeight: '500' }}>
-                      {employee.hire_date ? new Date(employee.hire_date).toLocaleDateString() : 'N/A'}
-                    </td>
                     <td style={{ padding: '16px' }}>
                       <Button
                         variant="outline-primary"
@@ -211,7 +319,11 @@ const Employees = () => {
                       >
                         <FaEdit />
                       </Button>
-                      <Button variant="outline-danger" size="sm">
+                      <Button 
+                        variant="outline-danger" 
+                        size="sm"
+                        onClick={() => handleDelete(employee.employee_id)}
+                      >
                         <FaTrash />
                       </Button>
                     </td>
@@ -228,19 +340,35 @@ const Employees = () => {
         <Modal.Header closeButton>
           <Modal.Title>{selectedEmployee ? 'Edit Employee' : 'Add New Employee'}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          <Form>
+        <Form onSubmit={handleSubmit}>
+          <Modal.Body>
+            {error && <Alert variant="danger">{error}</Alert>}
+            {success && <Alert variant="success">{success}</Alert>}
+            
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Full Name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter full name" />
+                  <Form.Label>Full Name <span className="text-danger">*</span></Form.Label>
+                  <Form.Control 
+                    type="text" 
+                    name="name"
+                    placeholder="Enter full name" 
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                  />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Email</Form.Label>
-                  <Form.Control type="email" placeholder="Enter email" />
+                  <Form.Control 
+                    type="email" 
+                    name="email"
+                    placeholder="Enter email" 
+                    value={formData.email}
+                    onChange={handleInputChange}
+                  />
                 </Form.Group>
               </Col>
             </Row>
@@ -248,51 +376,64 @@ const Employees = () => {
               <Col md={6}>
                 <Form.Group className="mb-3">
                   <Form.Label>Phone Number</Form.Label>
-                  <Form.Control type="tel" placeholder="Enter phone number" />
+                  <Form.Control 
+                    type="tel" 
+                    name="contact_no"
+                    placeholder="Enter phone number" 
+                    value={formData.contact_no}
+                    onChange={handleInputChange}
+                  />
                 </Form.Group>
               </Col>
               <Col md={6}>
                 <Form.Group className="mb-3">
-                  <Form.Label>Branch</Form.Label>
-                  <Form.Select>
+                  <Form.Label>Branch <span className="text-danger">*</span></Form.Label>
+                  <Form.Select 
+                    name="branch_id"
+                    value={formData.branch_id}
+                    onChange={handleInputChange}
+                    required
+                  >
                     <option value="">Select Branch</option>
-                    <option value="1">Colombo</option>
-                    <option value="2">Kandy</option>
-                    <option value="3">Galle</option>
+                    {branches.map(branch => (
+                      <option key={branch.branch_id} value={branch.branch_id}>
+                        {branch.branch_name}
+                      </option>
+                    ))}
                   </Form.Select>
                 </Form.Group>
               </Col>
             </Row>
-            <Row>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Role</Form.Label>
-                  <Form.Select>
-                    <option value="">Select Role</option>
-                    <option value="Manager">Manager</option>
-                    <option value="Receptionist">Receptionist</option>
-                    <option value="Accountant">Accountant</option>
-                    <option value="Housekeeping">Housekeeping</option>
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Hire Date</Form.Label>
-                  <Form.Control type="date" />
-                </Form.Group>
-              </Col>
-            </Row>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Cancel
-          </Button>
-          <Button variant="primary">
-            {selectedEmployee ? 'Update Employee' : 'Add Employee'}
-          </Button>
-        </Modal.Footer>
+            {!selectedEmployee && (
+              <Row>
+                <Col md={12}>
+                  <Form.Group className="mb-3">
+                    <Form.Label>User ID <span className="text-danger">*</span></Form.Label>
+                    <Form.Control 
+                      type="number" 
+                      name="user_id"
+                      placeholder="Enter user account ID" 
+                      value={formData.user_id}
+                      onChange={handleInputChange}
+                      required
+                    />
+                    <Form.Text className="text-muted">
+                      The user account must be created first in the system
+                    </Form.Text>
+                  </Form.Group>
+                </Col>
+              </Row>
+            )}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Cancel
+            </Button>
+            <Button variant="primary" type="submit">
+              {selectedEmployee ? 'Update Employee' : 'Add Employee'}
+            </Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
     </div>
   );
