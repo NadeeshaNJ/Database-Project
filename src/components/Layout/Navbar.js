@@ -50,11 +50,28 @@ const Navbar = () => {
   });
 
   return (
-    <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top" className="navbar-custom">
+    <BootstrapNavbar 
+      expand="lg" 
+      fixed="top" 
+      style={{
+        background: 'linear-gradient(90deg, #1a237e 0%, #0d47a1 100%)',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+        padding: '8px 0'
+      }}
+    >
       <Container fluid>
-        <BootstrapNavbar.Brand href="/admin" className="d-flex align-items-center">
-          <FaBed style={{ color: '#87CEEB' }} className="me-2" />          
-          <strong style={{ color: '#87CEEB' }}>SkyNest Hotels</strong>
+        <BootstrapNavbar.Brand 
+          href="/admin" 
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '1.4rem',
+            fontWeight: 'bold',
+            color: 'white'
+          }}
+        >
+          <FaBed style={{ color: 'white', marginRight: '10px', fontSize: '1.5rem' }} />          
+          <strong style={{ color: 'white' }}>SkyNest Hotels</strong>
         </BootstrapNavbar.Brand>
         <BootstrapNavbar.Toggle aria-controls="basic-navbar-nav" />
         <BootstrapNavbar.Collapse id="basic-navbar-nav">
@@ -70,17 +87,20 @@ const Navbar = () => {
                       onChange={(e) => setSelectedBranchId(e.target.value)}
                       style={{ 
                         width: '200px', 
-                        backgroundColor: '#495057', 
+                        backgroundColor: 'rgba(255, 255, 255, 0.2)', 
                         color: 'white', 
-                        border: '1px solid #6c757d',
+                        border: '1px solid rgba(255, 255, 255, 0.3)',
                         fontSize: '14px',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        borderRadius: '6px',
+                        padding: '8px 12px',
+                        fontWeight: '500'
                       }}
                       title="Select branch"
                     >
-                      <option value="All">🏢 All Branches</option>
+                      <option value="All" style={{ background: '#1a237e', color: 'white' }}>🏢 All Branches</option>
                       {branches.map(branch => (
-                        <option key={branch.branch_id} value={branch.branch_id}>
+                        <option key={branch.branch_id} value={branch.branch_id} style={{ background: '#1a237e', color: 'white' }}>
                           📍 {branch.branch_name}
                         </option>
                       ))}
@@ -88,9 +108,15 @@ const Navbar = () => {
                   ) : (
                     /* Locked to specific branch - show as badge */
                     <Badge 
-                      bg="primary" 
-                      className="px-3 py-2"
-                      style={{ fontSize: '14px' }}
+                      style={{ 
+                        fontSize: '14px',
+                        background: 'rgba(255, 255, 255, 0.2)',
+                        color: 'white',
+                        padding: '10px 16px',
+                        borderRadius: '6px',
+                        fontWeight: '500',
+                        border: '1px solid rgba(255, 255, 255, 0.3)'
+                      }}
                     >
                       <FaMapMarkerAlt className="me-2" />
                       {getCurrentBranchName()}
@@ -100,7 +126,7 @@ const Navbar = () => {
                 
                 <NavDropdown 
                   title={
-                    <span className="text-light">
+                    <span style={{ color: 'white', fontWeight: '500', fontSize: '1rem' }}>
                       <FaUser className="me-2" />
                       {user.name}
                     </span>

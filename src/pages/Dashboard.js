@@ -171,7 +171,7 @@ const Dashboard = () => {
       <div style={{
         background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
         color: 'white',
-        padding: '60px 0 40px 0',
+        padding: '40px 0 30px 0',
         position: 'relative',
         overflow: 'hidden'
       }}>
@@ -212,7 +212,7 @@ const Dashboard = () => {
       )}
 
       {/* Stats Grid */}
-      <div className="container" style={{ marginTop: '-20px', position: 'relative', zIndex: 2 }}>
+      <div className="container" style={{ marginTop: '30px', marginBottom: '30px' }}>
         <Row className="g-4 mb-4">
           {stats.map((stat, index) => {
             const IconComponent = stat.icon;
@@ -283,7 +283,7 @@ const Dashboard = () => {
       </div>
 
       {/* Content Section */}
-      <div className="container" style={{ paddingTop: '40px', paddingBottom: '60px' }}>
+      <div className="container" style={{ paddingTop: '20px', paddingBottom: '60px' }}>
         <Row className="g-4">
           <Col xl={8} lg={7}>
             {/* Recent Bookings Card - Matching Landing Page Style */}
