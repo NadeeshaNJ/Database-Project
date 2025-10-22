@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Table, Badge, Modal, Form, Spinner, Alert } from 'react-bootstrap';
-import { FaBed, FaPlus, FaEdit, FaEye, FaWifi, FaTv, FaSnowflake, FaCoffee, FaSwimmingPool } from 'react-icons/fa';
+import { FaBed, FaEye, FaWifi, FaTv, FaSnowflake, FaCoffee, FaSwimmingPool } from 'react-icons/fa';
 import { apiUrl } from '../utils/api';
 import { useBranch } from '../context/BranchContext';
+import './Rooms.css';
 
 const Rooms = () => {
   const { selectedBranchId } = useBranch();
@@ -11,7 +12,6 @@ const Rooms = () => {
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const [modalType, setModalType] = useState('add');
   const [filterStatus, setFilterStatus] = useState('All');
   const [filterType, setFilterType] = useState('All');
 
@@ -71,8 +71,7 @@ const Rooms = () => {
     fetchRooms();
   }, [selectedBranchId]); // Re-fetch when global branch filter changes
 
-  const handleShowModal = (type, room = null) => {
-    setModalType(type);
+  const handleShowModal = (room) => {
     setSelectedRoom(room);
     setShowModal(true);
   };
@@ -141,15 +140,16 @@ const Rooms = () => {
   const occupancyRate = Math.round((occupiedRooms / totalRooms) * 100);
 
   return (
-    <Container fluid className="py-4">
-      {loading && (
-        <div className="text-center" style={{ padding: '60px' }}>
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Loading rooms...</span>
-          </Spinner>
-          <p className="mt-3" style={{ color: '#2c3e50' }}>Loading rooms...</p>
-        </div>
-      )}
+    <div className="rooms-container">
+      <Container fluid className="py-4">
+        {loading && (
+          <div className="text-center loading-container" style={{ padding: '60px', margin: '2rem auto', maxWidth: '500px' }}>
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden">Loading rooms...</span>
+            </Spinner>
+            <p className="mt-3" style={{ color: '#2c3e50' }}>Loading rooms...</p>
+          </div>
+        )}
 
       {error && (
         <Alert variant="danger" dismissible onClose={() => setError('')}>
@@ -166,18 +166,11 @@ const Rooms = () => {
           <div className="page-header">
             <div className="d-flex justify-content-between align-items-center">
               <div>
-                <h2 className="mb-1">Room Management</h2>
+                <h2 className="mb-1">Room Status Overview</h2>
                 <p style={{ marginBottom: 0 }}>
-                  Manage room inventory across all SkyNest Hotel branches
+                  View room status and information across all SkyNest Hotel branches
                 </p>
               </div>
-              <Button 
-                variant="primary"
-                onClick={() => handleShowModal('add')}
-              >
-                <FaPlus className="me-2" />
-                Add New Room
-              </Button>
             </div>
           </div>
         </Col>
@@ -230,38 +223,49 @@ const Rooms = () => {
 
       {/* Filters */}
       <Row className="mb-4">
-        <Col md={3}>
-          <Form.Group style={{ padding: '16px' }}>
-            <Form.Label style={{ color: '#2c3e50', fontWeight: '600', marginBottom: '8px' }}>
-              Filter by Status
-            </Form.Label>
-            <Form.Select 
-              value={filterStatus} 
-              onChange={(e) => setFilterStatus(e.target.value)}
-            >
-              <option value="All">All Status</option>
-              <option value="Available">Available</option>
-              <option value="Occupied">Occupied</option>
-              <option value="Maintenance">Maintenance</option>
-              <option value="Cleaning">Cleaning</option>
-            </Form.Select>
-          </Form.Group>
-        </Col>
-        <Col md={3}>
-          <Form.Group style={{ padding: '16px' }}>
-            <Form.Label style={{ color: '#2c3e50', fontWeight: '600', marginBottom: '8px' }}>
-              Filter by Type
-            </Form.Label>
-            <Form.Select 
-              value={filterType} 
-              onChange={(e) => setFilterType(e.target.value)}
-            >
-              <option value="All">All Types</option>
-              <option value="Standard Single">Single</option>
-              <option value="Standard Double">Double</option>
-              <option value="Suite">Suite</option>
-            </Form.Select>
-          </Form.Group>
+        <Col>
+          <div className="filter-section">
+            <Row>
+              <Col md={4}>
+                <Form.Group>
+                  <Form.Label>Filter by Status</Form.Label>
+                  <Form.Select 
+                    value={filterStatus} 
+                    onChange={(e) => setFilterStatus(e.target.value)}
+                  >
+                    <option value="All">All Status</option>
+                    <option value="Available">Available</option>
+                    <option value="Occupied">Occupied</option>
+                    <option value="Maintenance">Maintenance</option>
+                    <option value="Cleaning">Cleaning</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col md={4}>
+                <Form.Group>
+                  <Form.Label>Filter by Type</Form.Label>
+                  <Form.Select 
+                    value={filterType} 
+                    onChange={(e) => setFilterType(e.target.value)}
+                  >
+                    <option value="All">All Types</option>
+                    <option value="Standard Single">Single</option>
+                    <option value="Standard Double">Double</option>
+                    <option value="Suite">Suite</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+              <Col md={4}>
+                <Form.Group>
+                  <Form.Label>Quick Stats</Form.Label>
+                  <div className="mt-2">
+                    <Badge bg="success" className="me-2">{availableRooms} Available</Badge>
+                    <Badge bg="primary">{occupiedRooms} Occupied</Badge>
+                  </div>
+                </Form.Group>
+              </Col>
+            </Row>
+          </div>
         </Col>
       </Row>
 
@@ -269,7 +273,7 @@ const Rooms = () => {
       <Row className="mb-4">
         {filteredRooms.map((room) => (
           <Col lg={4} md={6} key={room.id} className="mb-3">
-            <Card className="h-100 shadow-sm">
+            <Card className="h-100 room-card">
               <Card.Header className="d-flex justify-content-between align-items-center">
                 <div>
                   <h6 className="mb-0">Room {room.roomNumber}</h6>
@@ -302,14 +306,14 @@ const Rooms = () => {
                   <small className="text-muted">Amenities:</small>
                   <div className="mt-1">
                     {room.amenities.slice(0, 4).map((amenity, index) => (
-                      <Badge key={index} bg="light" text="dark" className="me-1 mb-1">
+                      <span key={index} className="amenity-badge">
                         {getAmenityIcon(amenity)} {amenity}
-                      </Badge>
+                      </span>
                     ))}
                     {room.amenities.length > 4 && (
-                      <Badge bg="light" text="dark">
+                      <span className="amenity-badge">
                         +{room.amenities.length - 4} more
-                      </Badge>
+                      </span>
                     )}
                   </div>
                 </div>
@@ -317,22 +321,14 @@ const Rooms = () => {
                 <p className="text-muted small">{room.description}</p>
               </Card.Body>
               <Card.Footer className="bg-light">
-                <div className="d-flex justify-content-between">
+                <div className="d-flex justify-content-center">
                   <Button 
                     variant="outline-primary" 
                     size="sm"
-                    onClick={() => handleShowModal('view', room)}
+                    onClick={() => handleShowModal(room)}
                   >
                     <FaEye className="me-1" />
-                    View
-                  </Button>
-                  <Button 
-                    variant="outline-secondary" 
-                    size="sm"
-                    onClick={() => handleShowModal('edit', room)}
-                  >
-                    <FaEdit className="me-1" />
-                    Edit
+                    View Details
                   </Button>
                 </div>
               </Card.Footer>
@@ -344,7 +340,7 @@ const Rooms = () => {
       {/* Rooms Table */}
       <Row>
         <Col>
-          <Card>
+          <Card className="rooms-table">
             <Card.Header>
               <h5 className="mb-0">Rooms Summary ({filteredRooms.length} rooms)</h5>
             </Card.Header>
@@ -383,22 +379,13 @@ const Rooms = () => {
                         </Badge>
                       </td>
                       <td>
-                        <div className="d-flex gap-2">
-                          <Button
-                            variant="outline-primary"
-                            size="sm"
-                            onClick={() => handleShowModal('view', room)}
-                          >
-                            <FaEye />
-                          </Button>
-                          <Button
-                            variant="outline-secondary"
-                            size="sm"
-                            onClick={() => handleShowModal('edit', room)}
-                          >
-                            <FaEdit />
-                          </Button>
-                        </div>
+                        <Button
+                          variant="outline-primary"
+                          size="sm"
+                          onClick={() => handleShowModal(room)}
+                        >
+                          <FaEye />
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -409,17 +396,13 @@ const Rooms = () => {
         </Col>
       </Row>
 
-      {/* Modal for Add/Edit/View Room */}
+      {/* Modal for View Room Details */}
       <Modal show={showModal} onHide={handleCloseModal} size="lg">
         <Modal.Header closeButton>
-          <Modal.Title>
-            {modalType === 'add' && 'Add New Room'}
-            {modalType === 'edit' && 'Edit Room'}
-            {modalType === 'view' && 'Room Details'}
-          </Modal.Title>
+          <Modal.Title>Room Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {selectedRoom && modalType === 'view' ? (
+          {selectedRoom && (
             <Row>
               <Col md={6}>
                 <h6>Room Information</h6>
@@ -444,9 +427,9 @@ const Rooms = () => {
                 <h6 className="mt-4">Amenities</h6>
                 <div>
                   {selectedRoom.amenities.map((amenity, index) => (
-                    <Badge key={index} bg="primary" className="me-1 mb-1">
+                    <span key={index} className="amenity-badge me-1 mb-1">
                       {getAmenityIcon(amenity)} {amenity}
-                    </Badge>
+                    </span>
                   ))}
                 </div>
                 
@@ -454,124 +437,18 @@ const Rooms = () => {
                 <p>{selectedRoom.description}</p>
               </Col>
             </Row>
-          ) : (
-            <Form>
-              <Row>
-                <Col md={6}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Room Number</Form.Label>
-                    <Form.Control
-                      type="text"
-                      defaultValue={selectedRoom?.roomNumber || ''}
-                      placeholder="Enter room number"
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Hotel Branch</Form.Label>
-                    <Form.Select defaultValue={selectedRoom?.hotelBranch || ''}>
-                      <option value="">Select hotel branch</option>
-                      <option value="SkyNest Colombo">SkyNest Colombo</option>
-                      <option value="SkyNest Kandy">SkyNest Kandy</option>
-                      <option value="SkyNest Galle">SkyNest Galle</option>
-                    </Form.Select>
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Room Type</Form.Label>
-                    <Form.Select defaultValue={selectedRoom?.roomType || ''}>
-                      <option value="">Select room type</option>
-                      <option value="Single">Single</option>
-                      <option value="Double">Double</option>
-                      <option value="Suite">Suite</option>
-                    </Form.Select>
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Floor</Form.Label>
-                    <Form.Control
-                      type="number"
-                      defaultValue={selectedRoom?.floor || ''}
-                      placeholder="Enter floor number"
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Capacity</Form.Label>
-                    <Form.Control
-                      type="number"
-                      defaultValue={selectedRoom?.capacity || ''}
-                      placeholder="Enter guest capacity"
-                    />
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Daily Rate (LKR)</Form.Label>
-                    <Form.Control
-                      type="number"
-                      defaultValue={selectedRoom?.dailyRate || ''}
-                      placeholder="Enter daily rate"
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Status</Form.Label>
-                    <Form.Select defaultValue={selectedRoom?.status || 'Available'}>
-                      <option value="Available">Available</option>
-                      <option value="Occupied">Occupied</option>
-                      <option value="Maintenance">Maintenance</option>
-                      <option value="Cleaning">Cleaning</option>
-                      <option value="Out of Order">Out of Order</option>
-                    </Form.Select>
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Bed Type</Form.Label>
-                    <Form.Control
-                      type="text"
-                      defaultValue={selectedRoom?.bedType || ''}
-                      placeholder="e.g., King, Queen, Single"
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Size (sq meters)</Form.Label>
-                    <Form.Control
-                      type="number"
-                      defaultValue={selectedRoom?.size || ''}
-                      placeholder="Enter room size"
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>View</Form.Label>
-                    <Form.Control
-                      type="text"
-                      defaultValue={selectedRoom?.view || ''}
-                      placeholder="e.g., Ocean View, City View"
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Form.Group className="mb-3">
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={3}
-                  defaultValue={selectedRoom?.description || ''}
-                  placeholder="Enter room description"
-                />
-              </Form.Group>
-            </Form>
           )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>
             Close
           </Button>
-          {modalType !== 'view' && (
-            <Button variant="primary">
-              {modalType === 'add' ? 'Add Room' : 'Save Changes'}
-            </Button>
-          )}
         </Modal.Footer>
       </Modal>
         </>
       )}
-    </Container>
+      </Container>
+    </div>
   );
 };
 
