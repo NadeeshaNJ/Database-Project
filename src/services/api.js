@@ -197,6 +197,27 @@ export const serviceAPI = {
   deleteService: (id) => apiClient.delete(`/services/${id}`)
 };
 
+// ==================== EMPLOYEE API ====================
+export const employeeAPI = {
+  // Get all employees
+  getAllEmployees: (params) => apiClient.get('/employees', { params }),
+  
+  // Get employee by ID
+  getEmployeeById: (id) => apiClient.get(`/employees/${id}`),
+  
+  // Create new employee
+  createEmployee: (employeeData) => apiClient.post('/employees', employeeData),
+  
+  // Update employee
+  updateEmployee: (id, employeeData) => apiClient.put(`/employees/${id}`, employeeData),
+  
+  // Delete employee
+  deleteEmployee: (id) => apiClient.delete(`/employees/${id}`),
+  
+  // Get employee statistics
+  getEmployeeStats: (params) => apiClient.get('/employees/stats', { params })
+};
+
 // Default export for convenience
 export default {
   auth: authAPI,
@@ -206,5 +227,6 @@ export default {
   payment: paymentAPI,
   report: reportAPI,
   reservation: reservationAPI,
-  service: serviceAPI
+  service: serviceAPI,
+  employee: employeeAPI
 };

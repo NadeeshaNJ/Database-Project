@@ -13,7 +13,22 @@ const apiClient = axios.create({
 // Request interceptor for adding auth tokens
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('authToken');
+    // Check both possible token storage locations
+    let token = localStorage.getItem('authToken');
+    
+    // If not found, check the skyNestUser object
+    if (!token) {
+      const skyNestUser = localStorage.getItem('skyNestUser');
+      if (skyNestUser) {
+        try {
+          const userData = JSON.parse(skyNestUser);
+          token = userData.token;
+        } catch (e) {
+          console.error('Error parsing skyNestUser:', e);
+        }
+      }
+    }
+    
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -31,10 +46,13 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized access
+      // Handle unauthorized access - clear all auth-related data
       localStorage.removeItem('authToken');
-      // Redirect to login page
-      window.location.href = '/login';
+      localStorage.removeItem('user');
+      localStorage.removeItem('skyNestUser');
+      // Redirect to login page - check if we're on GitHub Pages or local
+      const basePath = process.env.PUBLIC_URL || '';
+      window.location.href = `${basePath}/login`;
     }
     return Promise.reject(error);
   }
