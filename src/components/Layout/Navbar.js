@@ -52,7 +52,7 @@ const Navbar = () => {
   return (
     <BootstrapNavbar bg="dark" variant="dark" expand="lg" fixed="top" className="navbar-custom">
       <Container fluid>
-        <BootstrapNavbar.Brand href="/admin" className="d-flex align-items-center">
+        <BootstrapNavbar.Brand href="/.." className="d-flex align-items-center">
           <FaBed style={{ color: '#87CEEB' }} className="me-2" />          
           <strong style={{ color: '#87CEEB' }}>SkyNest Hotels</strong>
         </BootstrapNavbar.Brand>
