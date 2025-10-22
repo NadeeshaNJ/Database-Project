@@ -67,7 +67,7 @@ const BackendIntegrationTest = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'success': return '#28a745';
-      case 'warning': return '#ffc107';
+      case 'warning': return '#f59e0b';
       case 'error': return '#dc3545';
       default: return '#6c757d';
     }
@@ -151,7 +151,7 @@ const BackendIntegrationTest = () => {
 const styles = {
   container: {
     minHeight: '100vh',
-    backgroundColor: '#f8f9fa',
+    background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
     padding: '40px 20px',
     fontFamily: 'Arial, sans-serif'
   },
@@ -159,89 +159,99 @@ const styles = {
     maxWidth: '900px',
     margin: '0 auto',
     backgroundColor: 'white',
-    borderRadius: '8px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-    padding: '30px'
+    borderRadius: '12px',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+    padding: '40px',
+    border: '1px solid #e2e8f0'
   },
   title: {
-    color: '#333',
+    color: '#1a237e',
     marginBottom: '10px',
-    fontSize: '28px'
+    fontSize: '32px',
+    fontWeight: 'bold'
   },
   subtitle: {
     color: '#666',
-    marginBottom: '20px',
+    marginBottom: '30px',
     fontSize: '16px'
   },
   button: {
-    backgroundColor: '#007bff',
+    background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
     color: 'white',
     border: 'none',
-    borderRadius: '5px',
-    padding: '12px 30px',
+    borderRadius: '8px',
+    padding: '14px 32px',
     fontSize: '16px',
+    fontWeight: '600',
     cursor: 'pointer',
-    marginBottom: '20px',
-    transition: 'background-color 0.3s'
+    marginBottom: '25px',
+    transition: 'all 0.3s ease',
+    boxShadow: '0 2px 8px rgba(25, 118, 210, 0.3)'
   },
   info: {
-    backgroundColor: '#e7f3ff',
-    padding: '15px',
-    borderRadius: '5px',
-    borderLeft: '4px solid #007bff',
-    marginBottom: '20px'
+    background: 'rgba(25, 118, 210, 0.08)',
+    padding: '20px',
+    borderRadius: '8px',
+    borderLeft: '4px solid #1976d2',
+    marginBottom: '25px'
   },
   results: {
     marginTop: '30px'
   },
   resultsTitle: {
-    color: '#333',
-    marginBottom: '15px'
+    color: '#1a237e',
+    marginBottom: '20px',
+    fontSize: '24px',
+    fontWeight: 'bold'
   },
   resultItem: {
     backgroundColor: '#f8f9fa',
-    padding: '15px',
-    borderRadius: '5px',
+    padding: '20px',
+    borderRadius: '8px',
     borderLeft: '4px solid',
-    marginBottom: '15px'
+    marginBottom: '15px',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
   },
   resultHeader: {
     display: 'flex',
     alignItems: 'center',
-    gap: '10px',
-    marginBottom: '8px'
+    gap: '12px',
+    marginBottom: '10px'
   },
   testName: {
-    fontSize: '16px',
-    color: '#333'
+    fontSize: '18px',
+    color: '#1a237e',
+    fontWeight: 'bold'
   },
   resultMessage: {
     color: '#555',
-    margin: '5px 0'
+    margin: '8px 0',
+    fontSize: '15px'
   },
   details: {
-    marginTop: '10px'
+    marginTop: '12px'
   },
   summary: {
     cursor: 'pointer',
-    color: '#007bff',
+    color: '#1976d2',
     fontSize: '14px',
     fontWeight: 'bold'
   },
   pre: {
     backgroundColor: '#f4f4f4',
-    padding: '10px',
-    borderRadius: '4px',
+    padding: '15px',
+    borderRadius: '6px',
     overflow: 'auto',
     fontSize: '12px',
-    marginTop: '10px'
+    marginTop: '10px',
+    border: '1px solid #e2e8f0'
   },
   instructions: {
     marginTop: '30px',
-    backgroundColor: '#fff3cd',
-    padding: '15px',
-    borderRadius: '5px',
-    borderLeft: '4px solid #ffc107'
+    background: 'rgba(245, 158, 11, 0.1)',
+    padding: '20px',
+    borderRadius: '8px',
+    borderLeft: '4px solid #f59e0b'
   }
 };
 

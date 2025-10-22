@@ -14,8 +14,16 @@ const AdminRoute = ({ children }) => {
     return (
       <Container className="d-flex justify-content-center align-items-center" style={{ minHeight: '100vh' }}>
         <div className="text-center">
-          <Spinner animation="border" variant="primary" />
-          <p className="mt-3">Loading...</p>
+          <Spinner 
+            animation="border" 
+            style={{ 
+              color: '#1976d2',
+              width: '3rem',
+              height: '3rem',
+              borderWidth: '4px'
+            }} 
+          />
+          <p className="mt-3" style={{ color: '#0d47a1', fontSize: '1.1rem', fontWeight: '500' }}>Loading...</p>
         </div>
       </Container>
     );
