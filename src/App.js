@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
-import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import CustomerRoute from './components/CustomerRoute';
 import AdminRoute from './components/AdminRoute';
@@ -28,8 +27,7 @@ import './App.css';
 function App() {
   return (
     <Router>
-      <AuthProvider>
-  <div className="App">
+      <div className="App">
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<Landing />} />
@@ -78,7 +76,6 @@ function App() {
             } />
           </Routes>
         </div>
-      </AuthProvider>
     </Router>
   );
 }
