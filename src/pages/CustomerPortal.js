@@ -212,7 +212,7 @@ const CustomerPortal = () => {
             <Col lg={10} xl={8}>
               <div className="hero-content text-center">
                 <h1 className="display-4 mb-3">
-                  Welcome to SkyNest Hotels, {user?.name || user?.username}!
+                  Welcome to SkyNest Hotels, {user?.full_name || user?.username}!
                 </h1>
                 <p className="lead mb-4">
                   Book your perfect stay with us. Choose your preferred room type and we'll automatically reserve the best available room for you.
