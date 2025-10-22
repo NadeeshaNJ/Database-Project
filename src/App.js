@@ -25,8 +25,11 @@ import CustomerPortal from './pages/CustomerPortal';
 import './App.css';
 
 function App() {
+  // Only use basename for GitHub Pages, not for local development
+  const basename = process.env.NODE_ENV === 'production' ? '/Database-Project' : '/';
+  
   return (
-    <Router basename="/Database-Project">
+    <Router basename={basename}>
       <div className="App">
           <Routes>
             {/* Public Routes */}
