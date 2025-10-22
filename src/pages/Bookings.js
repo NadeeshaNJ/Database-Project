@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Table, Badge, Modal, Form, Alert, Spinner } from 'react-bootstrap';
-import { FaCalendarCheck, FaPlus, FaEdit, FaEye, FaSearch, FaFilter } from 'react-icons/fa';
+import { Container, Row, Col, Card, Button, Table, Badge, Modal, Form, Alert, Spinner, Tabs, Tab } from 'react-bootstrap';
+import { FaCalendarCheck, FaPlus, FaEdit, FaEye, FaSearch, FaFilter, FaCheckCircle, FaClock } from 'react-icons/fa';
 import { apiUrl } from '../utils/api';
 import { useBranch } from '../context/BranchContext';
 
 const Bookings = () => {
   const { selectedBranchId } = useBranch();
   const [bookings, setBookings] = useState([]);
+  const [preBookings, setPreBookings] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [modalType, setModalType] = useState('add');
   const [filterStatus, setFilterStatus] = useState('All');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [activeTab, setActiveTab] = useState('bookings');
 
-  // Fetch bookings from backend
+  // Fetch bookings and pre-bookings from backend
   useEffect(() => {
     fetchBookings();
+    fetchPreBookings();
   }, [filterStatus, selectedBranchId]);
 
   const fetchBookings = async () => {
@@ -73,6 +76,79 @@ const Bookings = () => {
       setError('Failed to connect to server. Please ensure the backend is running.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchPreBookings = async () => {
+    try {
+      setError('');
+      
+      let url = '/api/bookings/pre-bookings?';
+      if (selectedBranchId !== 'All') {
+        url += `branch_id=${selectedBranchId}`;
+      }
+      
+      const response = await fetch(apiUrl(url));
+      const data = await response.json();
+      
+      if (data.success && data.data && data.data.preBookings) {
+        const transformedPreBookings = data.data.preBookings.map(pb => ({
+          id: `PB${String(pb.pre_booking_id).padStart(3, '0')}`,
+          preBookingId: pb.pre_booking_id,
+          guestName: pb.guest_name,
+          guestEmail: pb.guest_email,
+          guestPhone: pb.guest_phone,
+          hotelBranch: `SkyNest ${pb.branch_name}`,
+          roomNumber: pb.room_number,
+          roomType: pb.room_type,
+          checkInDate: pb.expected_check_in?.split('T')[0],
+          checkOutDate: pb.expected_check_out?.split('T')[0],
+          capacity: parseInt(pb.capacity) || 2,
+          method: pb.prebooking_method,
+          pricePerNight: parseFloat(pb.price_per_night) || 0,
+          createdAt: pb.created_at?.split('T')[0]
+        }));
+        
+        setPreBookings(transformedPreBookings);
+      }
+    } catch (err) {
+      console.error('Error fetching pre-bookings:', err);
+    }
+  };
+
+  const handleConfirmPreBooking = async (preBooking) => {
+    if (!window.confirm(`Confirm pre-booking ${preBooking.id} and convert it to a confirmed booking?`)) {
+      return;
+    }
+
+    try {
+      const user = JSON.parse(localStorage.getItem('skyNestUser'));
+      const response = await fetch(apiUrl(`/api/bookings/pre-booking/${preBooking.preBookingId}/confirm`), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user?.token}`
+        },
+        body: JSON.stringify({
+          num_adults: preBooking.capacity,
+          num_children: 0,
+          special_requests: ''
+        })
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        alert(`✅ ${data.message}`);
+        // Refresh both lists
+        fetchBookings();
+        fetchPreBookings();
+      } else {
+        alert(`❌ ${data.error || 'Failed to confirm pre-booking'}`);
+      }
+    } catch (err) {
+      console.error('Error confirming pre-booking:', err);
+      alert('❌ Failed to confirm pre-booking');
     }
   };
 
@@ -224,32 +300,43 @@ const Bookings = () => {
         </Col>
       </Row>
 
-      {/* Filters */}
-      <Row className="mb-3">
-        <Col md={6}>
-          <Form.Group>
-            <Form.Label style={{ color: '#2c3e50', fontWeight: '600', marginBottom: '8px' }}>
-              Filter by Status
-            </Form.Label>
-            <Form.Select 
-              value={filterStatus} 
-              onChange={(e) => setFilterStatus(e.target.value)}
-            >
-              <option value="All">All Bookings</option>
-              <option value="Confirmed">Confirmed</option>
-              <option value="Checked-In">Checked-In</option>
-              <option value="Checked-Out">Checked-Out</option>
-              <option value="Pending Payment">Pending Payment</option>
-              <option value="Cancelled">Cancelled</option>
-            </Form.Select>
-          </Form.Group>
-        </Col>
-      </Row>
-
-      {/* Bookings Table */}
+      {/* Tabs for Bookings and Pre-Bookings */}
       <Row>
         <Col>
           <Card>
+            <Card.Body>
+              <Tabs
+                activeKey={activeTab}
+                onSelect={(k) => setActiveTab(k)}
+                className="mb-3"
+              >
+                <Tab eventKey="bookings" title={
+                  <span><FaCalendarCheck className="me-2" />Confirmed Bookings ({bookings.length})</span>
+                }>
+                  {/* Filters */}
+                  <Row className="mb-3">
+                    <Col md={6}>
+                      <Form.Group>
+                        <Form.Label style={{ color: '#2c3e50', fontWeight: '600', marginBottom: '8px' }}>
+                          Filter by Status
+                        </Form.Label>
+                        <Form.Select 
+                          value={filterStatus} 
+                          onChange={(e) => setFilterStatus(e.target.value)}
+                        >
+                          <option value="All">All Bookings</option>
+                          <option value="Confirmed">Confirmed</option>
+                          <option value="Checked-In">Checked-In</option>
+                          <option value="Checked-Out">Checked-Out</option>
+                          <option value="Pending Payment">Pending Payment</option>
+                          <option value="Cancelled">Cancelled</option>
+                        </Form.Select>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+
+                  {/* Bookings Table */}
+                  <Card>
             <Card.Header style={{ background: '#f8f9fa', borderBottom: '1px solid #e0e6ed' }}>
               <h5 className="mb-0" style={{ fontWeight: '700', color: '#2c3e50' }}>
                 Bookings List ({filteredBookings.length})
@@ -336,6 +423,90 @@ const Bookings = () => {
                 </tbody>
               </Table>
               </div>
+            </Card.Body>
+          </Card>
+                </Tab>
+
+                <Tab eventKey="pre-bookings" title={
+                  <span><FaClock className="me-2" />Pre-Bookings ({preBookings.length})</span>
+                }>
+                  {/* Pre-Bookings Table */}
+                  <Card>
+                    <Card.Header style={{ background: '#f8f9fa', borderBottom: '1px solid #e0e6ed' }}>
+                      <h5 className="mb-0" style={{ fontWeight: '700', color: '#2c3e50' }}>
+                        Pending Pre-Bookings ({preBookings.length})
+                      </h5>
+                    </Card.Header>
+                    <Card.Body style={{ padding: 0 }}>
+                      <div style={{ overflowX: 'auto' }}>
+                        <Table responsive style={{ marginBottom: 0 }}>
+                          <thead style={{ backgroundColor: '#f8f9fa', borderBottom: '2px solid #e0e6ed' }}>
+                            <tr>
+                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Pre-Booking ID</th>
+                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Guest Name</th>
+                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Hotel/Room</th>
+                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Expected Check-in</th>
+                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Expected Check-out</th>
+                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Capacity</th>
+                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Method</th>
+                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Created</th>
+                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {preBookings.length === 0 ? (
+                              <tr>
+                                <td colSpan="9" className="text-center py-4">
+                                  <p className="text-muted mb-0">No pending pre-bookings</p>
+                                </td>
+                              </tr>
+                            ) : (
+                              preBookings.map((preBooking) => (
+                                <tr key={preBooking.id}>
+                                  <td>
+                                    <strong>{preBooking.id}</strong>
+                                  </td>
+                                  <td>
+                                    <div>
+                                      <strong>{preBooking.guestName}</strong>
+                                      <br />
+                                      <small className="text-muted">{preBooking.guestEmail}</small>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div>
+                                      <strong>{preBooking.hotelBranch}</strong>
+                                      <br />
+                                      <small>Room {preBooking.roomNumber} ({preBooking.roomType})</small>
+                                    </div>
+                                  </td>
+                                  <td>{new Date(preBooking.checkInDate).toLocaleDateString()}</td>
+                                  <td>{new Date(preBooking.checkOutDate).toLocaleDateString()}</td>
+                                  <td>{preBooking.capacity} guests</td>
+                                  <td>
+                                    <Badge bg="info">{preBooking.method}</Badge>
+                                  </td>
+                                  <td>{new Date(preBooking.createdAt).toLocaleDateString()}</td>
+                                  <td>
+                                    <Button
+                                      variant="success"
+                                      size="sm"
+                                      onClick={() => handleConfirmPreBooking(preBooking)}
+                                    >
+                                      <FaCheckCircle className="me-1" />
+                                      Confirm Booking
+                                    </Button>
+                                  </td>
+                                </tr>
+                              ))
+                            )}
+                          </tbody>
+                        </Table>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Tab>
+              </Tabs>
             </Card.Body>
           </Card>
         </Col>
