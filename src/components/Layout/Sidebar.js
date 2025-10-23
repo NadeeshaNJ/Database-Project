@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Nav } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
 import { 
@@ -10,11 +10,41 @@ import {
   FaUserTie,
   FaConciergeBell, 
   FaReceipt,
-  FaChartBar 
+  FaChartBar,
+  FaBars,
+  FaTimes
 } from 'react-icons/fa';
+import './Sidebar.css';
 
 const Sidebar = () => {
   const location = useLocation();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 992);
+
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 992;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setIsOpen(false); // Auto-close on desktop
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Close sidebar when route changes on mobile
+  useEffect(() => {
+    if (isMobile) {
+      setIsOpen(false);
+    }
+  }, [location.pathname, isMobile]);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
 
   const menuItems = [
     { path: '/admin/dashboard', icon: FaTachometerAlt, label: 'Dashboard' },
@@ -29,62 +59,115 @@ const Sidebar = () => {
   ];
 
   return (
-    <div style={{
-      background: 'linear-gradient(180deg, #1a237e 0%, #0d47a1 100%)',
-      minHeight: '100vh',
-      width: '250px',
-      position: 'fixed',
-      left: 0,
-      top: '56px',
-      bottom: 0,
-      overflowY: 'auto',
-      boxShadow: '2px 0 10px rgba(0,0,0,0.1)',
-      zIndex: 1000
-    }}>
-      <Nav className="flex-column" style={{ padding: '20px 0' }}>
-        {menuItems.map((item, index) => {
-          const IconComponent = item.icon;
-          const isActive = location.pathname === item.path;
-          
-          return (
-            <Link
-              key={index}
-              to={item.path}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                padding: '14px 24px',
-                color: isActive ? 'white' : 'rgba(255, 255, 255, 0.8)',
-                textDecoration: 'none',
-                fontSize: '1rem',
-                fontWeight: isActive ? '600' : '500',
-                background: isActive ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                borderLeft: isActive ? '4px solid #1976d2' : '4px solid transparent',
-                transition: 'all 0.3s ease',
-                marginBottom: '4px'
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                  e.currentTarget.style.color = 'white';
-                  e.currentTarget.style.paddingLeft = '28px';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
-                  e.currentTarget.style.paddingLeft = '24px';
-                }
-              }}
-            >
-              <IconComponent style={{ marginRight: '12px', fontSize: '1.2rem' }} />
-              {item.label}
-            </Link>
-          );
-        })}
-      </Nav>
-    </div>
+    <>
+      {/* Mobile Toggle Button - Fixed position */}
+      {isMobile && (
+        <button
+          onClick={toggleSidebar}
+          style={{
+            position: 'fixed',
+            top: '70px',
+            left: '10px',
+            zIndex: 1100,
+            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+            border: 'none',
+            borderRadius: '8px',
+            padding: '10px 12px',
+            color: 'white',
+            cursor: 'pointer',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.transform = 'scale(1.05)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.transform = 'scale(1)';
+          }}
+        >
+          {isOpen ? <FaTimes size={20} /> : <FaBars size={20} />}
+        </button>
+      )}
+
+      {/* Overlay for mobile when sidebar is open */}
+      {isMobile && isOpen && (
+        <div
+          onClick={toggleSidebar}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 1040,
+            transition: 'opacity 0.3s ease'
+          }}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div style={{
+        background: 'linear-gradient(180deg, #1a237e 0%, #0d47a1 100%)',
+        minHeight: '100vh',
+        width: '250px',
+        position: 'fixed',
+        left: isMobile ? (isOpen ? '0' : '-250px') : '0',
+        top: '56px',
+        bottom: 0,
+        overflowY: 'auto',
+        boxShadow: '2px 0 10px rgba(0,0,0,0.1)',
+        zIndex: 1050,
+        transition: 'left 0.3s ease-in-out'
+      }}>
+        <Nav className="flex-column" style={{ padding: '20px 0' }}>
+          {menuItems.map((item, index) => {
+            const IconComponent = item.icon;
+            const isActive = location.pathname === item.path;
+            
+            return (
+              <Link
+                key={index}
+                to={item.path}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '14px 24px',
+                  color: isActive ? 'white' : 'rgba(255, 255, 255, 0.8)',
+                  textDecoration: 'none',
+                  fontSize: '1rem',
+                  fontWeight: isActive ? '600' : '500',
+                  background: isActive ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                  borderLeft: isActive ? '4px solid #1976d2' : '4px solid transparent',
+                  transition: 'all 0.3s ease',
+                  marginBottom: '4px'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                    e.currentTarget.style.color = 'white';
+                    e.currentTarget.style.paddingLeft = '28px';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
+                    e.currentTarget.style.paddingLeft = '24px';
+                  }
+                }}
+              >
+                <IconComponent style={{ marginRight: '12px', fontSize: '1.2rem' }} />
+                {item.label}
+              </Link>
+            );
+          })}
+        </Nav>
+      </div>
+    </>
   );
 };
 

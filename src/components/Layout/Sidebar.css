@@ -1,0 +1,99 @@
+/* Sidebar Base Styles */
+.admin-sidebar {
+  background: linear-gradient(180deg, #1a237e 0%, #0d47a1 100%);
+  min-height: 100vh;
+  width: 250px;
+  position: fixed;
+  left: 0;
+  top: 56px;
+  bottom: 0;
+  overflow-y: auto;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  z-index: 1050;
+  transition: left 0.3s ease-in-out;
+}
+
+/* Desktop View - Always visible */
+@media (min-width: 992px) {
+  .admin-sidebar {
+    left: 0 !important;
+  }
+  
+  .sidebar-toggle-btn {
+    display: none !important;
+  }
+  
+  .sidebar-overlay {
+    display: none !important;
+  }
+}
+
+/* Tablet and Mobile View */
+@media (max-width: 991px) {
+  .admin-sidebar {
+    left: -250px;
+  }
+  
+  .admin-sidebar.open {
+    left: 0;
+  }
+}
+
+/* Sidebar Toggle Button */
+.sidebar-toggle-btn {
+  position: fixed;
+  top: 70px;
+  left: 10px;
+  z-index: 1100;
+  background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.sidebar-toggle-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.sidebar-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+  transition: opacity 0.3s ease;
+  opacity: 1;
+}
+
+/* Smooth scrollbar for sidebar */
+.admin-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.admin-sidebar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.admin-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+}
+
+.admin-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
