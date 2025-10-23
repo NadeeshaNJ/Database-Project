@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Table, Badge, Tabs, Tab, Spinner, Form } from 'react-bootstrap';
+import { FaConciergeBell, FaChartLine, FaDollarSign } from 'react-icons/fa';
 import { apiUrl } from '../utils/api';
 import { useBranch } from '../context/BranchContext';
 
@@ -64,69 +65,143 @@ const Services = () => {
   return (
     <div>
       {/* Page Header */}
-      <Row className="mb-4">
-        <Col>
-          <div className="page-header">
-            <h2>Service Management</h2>
-            <p style={{ marginBottom: 0 }}>Manage hotel services and track usage across all bookings</p>
-          </div>
-        </Col>
-      </Row>
+      <div className="mb-4 p-4 rounded-3" style={{
+        background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+        color: 'white',
+        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+      }}>
+        <Row className="align-items-center">
+          <Col>
+            <div className="d-flex align-items-center">
+              <FaConciergeBell size={32} className="me-3" />
+              <div>
+                <h2 className="mb-0">Service Management</h2>
+                <p className="mb-0 opacity-75">Manage hotel services and track usage across all bookings</p>
+              </div>
+            </div>
+          </Col>
+        </Row>
+      </div>
 
       {/* Service Statistics */}
       <Row className="mb-4">
         <Col md={4}>
-          <Card className="card-custom text-center">
-            <Card.Body>
-              <h4 className="text-primary">{serviceCatalog.length}</h4>
-              <p className="mb-0">Available Services</p>
+          <Card className="text-center border-0 shadow-sm" style={{
+            borderRadius: '12px',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            cursor: 'pointer'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.1)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+          }}>
+            <Card.Body style={{
+              background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+              borderRadius: '12px',
+              padding: '24px',
+              color: 'white'
+            }}>
+              <FaConciergeBell size={32} className="mb-3" />
+              <h4 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '8px' }}>{serviceCatalog.length}</h4>
+              <p className="mb-0" style={{ fontSize: '0.95rem', opacity: 0.9 }}>Available Services</p>
             </Card.Body>
           </Card>
         </Col>
         <Col md={4}>
-          <Card className="card-custom text-center">
-            <Card.Body>
-              <h4 className="text-info">{serviceUsage.length}</h4>
-              <p className="mb-0">Total Usage Records</p>
+          <Card className="text-center border-0 shadow-sm" style={{
+            borderRadius: '12px',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            cursor: 'pointer'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.1)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+          }}>
+            <Card.Body style={{
+              background: 'linear-gradient(135deg, #0288d1 0%, #03a9f4 100%)',
+              borderRadius: '12px',
+              padding: '24px',
+              color: 'white'
+            }}>
+              <FaChartLine size={32} className="mb-3" />
+              <h4 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '8px' }}>{serviceUsage.length}</h4>
+              <p className="mb-0" style={{ fontSize: '0.95rem', opacity: 0.9 }}>Total Usage Records</p>
             </Card.Body>
           </Card>
         </Col>
         <Col md={4}>
-          <Card className="card-custom text-center">
-            <Card.Body>
-              <h4 className="text-success">
+          <Card className="text-center border-0 shadow-sm" style={{
+            borderRadius: '12px',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            cursor: 'pointer'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.1)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+          }}>
+            <Card.Body style={{
+              background: 'linear-gradient(135deg, #388e3c 0%, #4caf50 100%)',
+              borderRadius: '12px',
+              padding: '24px',
+              color: 'white'
+            }}>
+              <FaDollarSign size={32} className="mb-3" />
+              <h4 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '8px' }}>
                 Rs {serviceUsage.reduce((sum, u) => sum + parseFloat(u.total_price || 0), 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </h4>
-              <p className="mb-0">Total Revenue</p>
+              <p className="mb-0" style={{ fontSize: '0.95rem', opacity: 0.9 }}>Total Revenue</p>
             </Card.Body>
           </Card>
         </Col>
       </Row>
 
       {/* Tabs for Catalog and Usage */}
-      <Card className="card-custom">
+      <Card className="border-0 shadow-sm" style={{ borderRadius: '12px' }}>
         <Card.Body>
-          <Tabs activeKey={activeTab} onSelect={(k) => setActiveTab(k)} className="mb-3">
+          <Tabs 
+            activeKey={activeTab} 
+            onSelect={(k) => setActiveTab(k)} 
+            className="mb-3"
+            style={{
+              borderBottom: '2px solid #e9ecef'
+            }}
+          >
             
             {/* Service Catalog Tab */}
             <Tab eventKey="catalog" title="Service Catalog">
               {loadingCatalog ? (
                 <div className="text-center py-5">
-                  <Spinner animation="border" role="status">
+                  <Spinner animation="border" role="status" style={{ color: '#1a237e' }}>
                     <span className="visually-hidden">Loading...</span>
                   </Spinner>
+                  <p className="mt-3" style={{ color: '#1a237e', fontWeight: '500' }}>Loading service catalog...</p>
                 </div>
               ) : (
                 <div className="table-container">
                   <Table responsive hover className="mb-0">
-                    <thead className="table-light">
+                    <thead style={{
+                      background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                      color: 'white'
+                    }}>
                       <tr>
-                        <th>Code</th>
-                        <th>Service Name</th>
-                        <th>Category</th>
-                        <th>Unit Price (Rs)</th>
-                        <th>Tax Rate (%)</th>
-                        <th>Status</th>
+                        <th style={{ borderBottom: 'none', padding: '16px' }}>Code</th>
+                        <th style={{ borderBottom: 'none', padding: '16px' }}>Service Name</th>
+                        <th style={{ borderBottom: 'none', padding: '16px' }}>Category</th>
+                        <th style={{ borderBottom: 'none', padding: '16px' }}>Unit Price (Rs)</th>
+                        <th style={{ borderBottom: 'none', padding: '16px' }}>Tax Rate (%)</th>
+                        <th style={{ borderBottom: 'none', padding: '16px' }}>Status</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -167,24 +242,28 @@ const Services = () => {
             <Tab eventKey="usage" title="Service Usage History">
               {loadingUsage ? (
                 <div className="text-center py-5">
-                  <Spinner animation="border" role="status">
+                  <Spinner animation="border" role="status" style={{ color: '#1a237e' }}>
                     <span className="visually-hidden">Loading...</span>
                   </Spinner>
+                  <p className="mt-3" style={{ color: '#1a237e', fontWeight: '500' }}>Loading service usage...</p>
                 </div>
               ) : (
                 <div className="table-container">
                   <Table responsive hover className="mb-0">
-                    <thead className="table-light">
+                    <thead style={{
+                      background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                      color: 'white'
+                    }}>
                       <tr>
-                        <th>Date Used</th>
-                        <th>Service</th>
-                        <th>Category</th>
-                        <th>Guest Name</th>
-                        <th>Room</th>
-                        <th>Qty</th>
-                        <th>Unit Price (Rs)</th>
-                        <th>Total (Rs)</th>
-                        <th>Booking Status</th>
+                        <th style={{ borderBottom: 'none', padding: '16px' }}>Date Used</th>
+                        <th style={{ borderBottom: 'none', padding: '16px' }}>Service</th>
+                        <th style={{ borderBottom: 'none', padding: '16px' }}>Category</th>
+                        <th style={{ borderBottom: 'none', padding: '16px' }}>Guest Name</th>
+                        <th style={{ borderBottom: 'none', padding: '16px' }}>Room</th>
+                        <th style={{ borderBottom: 'none', padding: '16px' }}>Qty</th>
+                        <th style={{ borderBottom: 'none', padding: '16px' }}>Unit Price (Rs)</th>
+                        <th style={{ borderBottom: 'none', padding: '16px' }}>Total (Rs)</th>
+                        <th style={{ borderBottom: 'none', padding: '16px' }}>Booking Status</th>
                       </tr>
                     </thead>
                     <tbody>

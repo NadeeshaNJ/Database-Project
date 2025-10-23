@@ -144,10 +144,10 @@ const Rooms = () => {
       <Container fluid className="py-4">
         {loading && (
           <div className="text-center loading-container" style={{ padding: '60px', margin: '2rem auto', maxWidth: '500px' }}>
-            <Spinner animation="border" role="status">
+            <Spinner animation="border" role="status" style={{ color: '#1a237e' }}>
               <span className="visually-hidden">Loading rooms...</span>
             </Spinner>
-            <p className="mt-3" style={{ color: '#2c3e50' }}>Loading rooms...</p>
+            <p className="mt-3" style={{ color: '#1a237e', fontWeight: '600' }}>Loading rooms...</p>
           </div>
         )}
 
@@ -163,11 +163,15 @@ const Rooms = () => {
       {/* Header */}
       <Row className="mb-4">
         <Col>
-          <div className="page-header">
-            <div className="d-flex justify-content-between align-items-center">
+                {/* <div className="page-header"> */}
+                <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '10px' }}>
               <div>
-                <h2 className="mb-1">Room Status Overview</h2>
-                <p style={{ marginBottom: 0 }}>
+                      {/* <h2 className="mb-1">Room Status Overview</h2> */}
+                      <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '8px' }}>
+                Room Status Overview
+              </h1>
+                <p style={{ fontSize: '1.1rem', marginBottom: 0 , color: '#ffffff'}}>
                   View room status and information across all SkyNest Hotel branches
                 </p>
               </div>

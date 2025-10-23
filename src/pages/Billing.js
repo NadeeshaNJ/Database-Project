@@ -77,55 +77,87 @@ const Billing = () => {
   };
 
   return (
-    <div>
+    <div style={{ backgroundColor: '#f8f9fa', minHeight: '100vh', padding: '20px' }}>
       {/* Page Header */}
-      <Row className="mb-4">
-        <Col>
-          <div className="page-header">
-            <h2>Billing & Payments</h2>
-            <p style={{ marginBottom: 0 }}>Manage payments, transactions, and billing adjustments</p>
-          </div>
-        </Col>
-      </Row>
+      <div style={{
+        background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+        color: 'white',
+        padding: '30px',
+        borderRadius: '12px',
+        marginBottom: '30px',
+        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+      }}>
+        <h2 style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold' }}>Billing & Payments</h2>
+        <p style={{ marginBottom: 0, fontSize: '1.1rem', opacity: 0.9 }}>Manage payments, transactions, and billing adjustments</p>
+      </div>
 
       {/* Statistics */}
       <Row className="mb-4">
         <Col md={3}>
-          <Card className="card-custom text-center">
-            <Card.Body>
-              <h4 className="text-success">Rs {payments.reduce((sum, p) => sum + parseFloat(p.amount || 0), 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</h4>
-              <p className="mb-0">Total Payments</p>
+          <Card style={{
+            background: 'white',
+            borderRadius: '12px',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+            transition: 'transform 0.3s ease'
+          }}>
+            <Card.Body className="text-center">
+              <h4 style={{ color: '#28a745', fontWeight: 'bold', fontSize: '1.8rem' }}>Rs {payments.reduce((sum, p) => sum + parseFloat(p.amount || 0), 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</h4>
+              <p className="mb-0" style={{ color: '#666', fontWeight: '500' }}>Total Payments</p>
             </Card.Body>
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="card-custom text-center">
-            <Card.Body>
-              <h4 className="text-primary">{payments.length}</h4>
-              <p className="mb-0">Payment Transactions</p>
+          <Card style={{
+            background: 'white',
+            borderRadius: '12px',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+            transition: 'transform 0.3s ease'
+          }}>
+            <Card.Body className="text-center">
+              <h4 style={{ color: '#1976d2', fontWeight: 'bold', fontSize: '1.8rem' }}>{payments.length}</h4>
+              <p className="mb-0" style={{ color: '#666', fontWeight: '500' }}>Payment Transactions</p>
             </Card.Body>
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="card-custom text-center">
-            <Card.Body>
-              <h4 className="text-warning">Rs {adjustments.reduce((sum, a) => sum + parseFloat(a.amount || 0), 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</h4>
-              <p className="mb-0">Total Adjustments</p>
+          <Card style={{
+            background: 'white',
+            borderRadius: '12px',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+            transition: 'transform 0.3s ease'
+          }}>
+            <Card.Body className="text-center">
+              <h4 style={{ color: '#f59e0b', fontWeight: 'bold', fontSize: '1.8rem' }}>Rs {adjustments.reduce((sum, a) => sum + parseFloat(a.amount || 0), 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}</h4>
+              <p className="mb-0" style={{ color: '#666', fontWeight: '500' }}>Total Adjustments</p>
             </Card.Body>
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="card-custom text-center">
-            <Card.Body>
-              <h4 className="text-info">{adjustments.length}</h4>
-              <p className="mb-0">Adjustment Records</p>
+          <Card style={{
+            background: 'white',
+            borderRadius: '12px',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+            transition: 'transform 0.3s ease'
+          }}>
+            <Card.Body className="text-center">
+              <h4 style={{ color: '#0d47a1', fontWeight: 'bold', fontSize: '1.8rem' }}>{adjustments.length}</h4>
+              <p className="mb-0" style={{ color: '#666', fontWeight: '500' }}>Adjustment Records</p>
             </Card.Body>
           </Card>
         </Col>
       </Row>
 
       {/* Tabs */}
-      <Card className="card-custom">
+      <Card style={{
+        background: 'white',
+        borderRadius: '12px',
+        border: '1px solid #e2e8f0',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+      }}>
         <Card.Body>
           <Tabs activeKey={activeTab} onSelect={(k) => setActiveTab(k)} className="mb-3">
             
@@ -133,7 +165,16 @@ const Billing = () => {
             <Tab eventKey="payments" title="Payments">
               {loading ? (
                 <div className="text-center py-5">
-                  <Spinner animation="border" />
+                  <Spinner 
+                    animation="border" 
+                    style={{ 
+                      color: '#1976d2',
+                      width: '3rem',
+                      height: '3rem',
+                      borderWidth: '4px'
+                    }} 
+                  />
+                  <p className="mt-3" style={{ color: '#0d47a1', fontSize: '1.1rem', fontWeight: '500' }}>Loading...</p>
                 </div>
               ) : (
                 <div className="table-container">
@@ -175,7 +216,25 @@ const Billing = () => {
                           </td>
                           <td>
                             <button 
-                              className="btn btn-sm btn-outline-primary"
+                              style={{
+                                background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '6px',
+                                padding: '6px 14px',
+                                fontSize: '0.875rem',
+                                fontWeight: '500',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s ease'
+                              }}
+                              onMouseEnter={(e) => {
+                                e.target.style.transform = 'translateY(-2px)';
+                                e.target.style.boxShadow = '0 4px 8px rgba(25, 118, 210, 0.3)';
+                              }}
+                              onMouseLeave={(e) => {
+                                e.target.style.transform = 'translateY(0)';
+                                e.target.style.boxShadow = 'none';
+                              }}
                               onClick={() => fetchBillingSummary(payment.booking_id)}
                             >
                               <FaEye /> View Bill
@@ -235,8 +294,15 @@ const Billing = () => {
 
       {/* Billing Detail Modal */}
       <Modal show={showModal} onHide={() => setShowModal(false)} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>
+        <Modal.Header 
+          closeButton
+          style={{
+            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+            color: 'white',
+            borderBottom: '2px solid #1976d2'
+          }}
+        >
+          <Modal.Title style={{ color: 'white', fontWeight: 'bold' }}>
             <FaReceipt className="me-2" />
             Billing Summary - Booking #{selectedBilling?.booking.booking_id}
           </Modal.Title>
@@ -263,8 +329,15 @@ const Billing = () => {
               </Card>
 
               {/* Charges Breakdown */}
-              <Card className="mb-3">
-                <Card.Header><strong>Charges Breakdown</strong></Card.Header>
+              <Card className="mb-3" style={{ border: '1px solid #e2e8f0', borderRadius: '8px' }}>
+                <Card.Header style={{
+                  background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                  color: 'white',
+                  fontWeight: 'bold',
+                  borderBottom: '2px solid #1976d2'
+                }}>
+                  <strong>Charges Breakdown</strong>
+                </Card.Header>
                 <ListGroup variant="flush">
                   <ListGroup.Item className="d-flex justify-content-between">
                     <span>Room Charges ({selectedBilling.booking.nights} nights)</span>
@@ -291,8 +364,8 @@ const Billing = () => {
                     </ListGroup.Item>
                   )}
                   <ListGroup.Item className="d-flex justify-content-between bg-light">
-                    <strong>Grand Total</strong>
-                    <strong className="text-primary">Rs {selectedBilling.summary.grandTotal}</strong>
+                    <strong style={{ color: '#1a237e' }}>Grand Total</strong>
+                    <strong style={{ color: '#1976d2', fontSize: '1.2rem' }}>Rs {selectedBilling.summary.grandTotal}</strong>
                   </ListGroup.Item>
                   <ListGroup.Item className="d-flex justify-content-between">
                     <span>Total Paid</span>
@@ -304,17 +377,24 @@ const Billing = () => {
                       <strong>Rs {selectedBilling.summary.refunds}</strong>
                     </ListGroup.Item>
                   )}
-                  <ListGroup.Item className="d-flex justify-content-between bg-info text-white">
-                    <strong>Balance</strong>
-                    <strong>Rs {selectedBilling.summary.balance}</strong>
+                  <ListGroup.Item className="d-flex justify-content-between" style={{ background: '#e3f2fd' }}>
+                    <strong style={{ color: '#1a237e' }}>Balance</strong>
+                    <strong style={{ color: '#0d47a1', fontSize: '1.2rem' }}>Rs {selectedBilling.summary.balance}</strong>
                   </ListGroup.Item>
                 </ListGroup>
               </Card>
 
               {/* Payment History */}
               {selectedBilling.payments.length > 0 && (
-                <Card className="mb-3">
-                  <Card.Header><strong>Payment History</strong></Card.Header>
+                <Card className="mb-3" style={{ border: '1px solid #e2e8f0', borderRadius: '8px' }}>
+                  <Card.Header style={{
+                    background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    borderBottom: '2px solid #1976d2'
+                  }}>
+                    <strong>Payment History</strong>
+                  </Card.Header>
                   <Card.Body>
                     <Table size="sm" responsive>
                       <thead>
@@ -340,8 +420,15 @@ const Billing = () => {
 
               {/* Services Used */}
               {selectedBilling.services.length > 0 && (
-                <Card>
-                  <Card.Header><strong>Services Used</strong></Card.Header>
+                <Card style={{ border: '1px solid #e2e8f0', borderRadius: '8px' }}>
+                  <Card.Header style={{
+                    background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                    color: 'white',
+                    fontWeight: 'bold',
+                    borderBottom: '2px solid #1976d2'
+                  }}>
+                    <strong>Services Used</strong>
+                  </Card.Header>
                   <Card.Body>
                     <Table size="sm" responsive>
                       <thead>

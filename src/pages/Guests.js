@@ -339,93 +339,140 @@ const Guests = () => {
     <div>
       <Row className="mb-4">
         <Col>
-        <div className="page-header">
-          <h2 >Guest Management</h2>
+        <div className="page-header" style={{
+          background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+          padding: '2rem',
+          borderRadius: '1rem',
+          boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+          color: 'white'
+        }}>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '8px' }}>
+                                
+                                Guest Management
+                        </h1>
           </div>
         </Col>
         <Col xs="auto">
-          <Button variant="primary" onClick={() => handleShowModal()}>
-            <FaPlus className="me-2" />
-            Add New Guest
-          </Button>
-        </Col>
-      </Row>
+          <Button 
+            onClick={() => handleShowModal()}
+            style={{
+              background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+              border: 'none',
+              fontWeight: '600',
+              padding: '0.75rem 1.5rem',
+              boxShadow: '0 4px 15px rgba(26, 35, 126, 0.4)',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 20px rgba(25, 118, 210, 0.5)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(26, 35, 126, 0.4)';
+              }}
+              >
+              <FaPlus className="me-2" />
+              Add New Guest
+              </Button>
+            </Col>
+            </Row>
 
-      {error && <Alert variant="warning">{error}</Alert>}
+            {error && <Alert variant="warning">{error}</Alert>}
 
-      <Card>
-        <Card.Header>
-          <Row className="align-items-center mb-3">
-            <Col md={12}>
-              <Form.Label>Search</Form.Label>
-              <InputGroup>
-                <InputGroup.Text><FaSearch /></InputGroup.Text>
+            <Card style={{ border: 'none', borderRadius: '1rem', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
+            <Card.Header style={{
+              background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+              borderBottom: 'none',
+              borderRadius: '1rem 1rem 0 0',
+              padding: '1.5rem',
+              color: 'white'
+            }}>
+              <Row className="align-items-center mb-3">
+              <Col md={12}>
+                <Form.Label style={{ color: 'white', fontWeight: '600' }}>Search</Form.Label>
+                <InputGroup>
+                <InputGroup.Text style={{ 
+                  background: 'white', 
+                  border: 'none',
+                  color: '#1976d2'
+                }}>
+                  <FaSearch />
+                </InputGroup.Text>
                 <Form.Control
                   type="text"
                   placeholder="Search guests..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{ border: 'none' }}
                 />
-              </InputGroup>
-            </Col>
-          </Row>
-          <Row className="align-items-center">
-            <Col>
-              <h5 className="mb-0">Guest List</h5>
-            </Col>
-          </Row>
-        </Card.Header>
-        <Card.Body className="p-0">
-          {loading ? (
-            <div className="text-center py-5">
-              <Spinner animation="border" variant="primary" />
-              <p className="mt-2 text-muted">Loading guests...</p>
-            </div>
-          ) : (
-            <Table responsive hover className="mb-0">
-              <thead className="table-light">
+                </InputGroup>
+              </Col>
+              </Row>
+              <Row className="align-items-center">
+              <Col>
+                <h5 className="mb-0" style={{ color: 'white', fontWeight: '700' }}>Guest List</h5>
+              </Col>
+              </Row>
+            </Card.Header>
+            <Card.Body className="p-0">
+              {loading ? (
+              <div className="text-center py-5">
+                <Spinner animation="border" style={{ color: '#1976d2', width: '3rem', height: '3rem' }} />
+                <p className="mt-2" style={{ color: '#1976d2' }}>Loading guests...</p>
+              </div>
+              ) : (
+              <Table responsive hover className="mb-0">
+                <thead style={{
+                background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 50%)',
+                borderBottom: '2px solid #0d47a1'
+                }}>
                 <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Nationality</th>
-                  <th>ID Number</th>
-                  <th>Check-in Date</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'black', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Email</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'black', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Name</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'black', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Phone</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'black', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Nationality</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'black', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>ID Number</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'black', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Check-in Date</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'black', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Status</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'black', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Actions</th>
                 </tr>
-              </thead>
-              <tbody>
+                </thead>
+                <tbody>
                 {filteredGuests.map((guest) => (
-                  <tr key={guest.id}>
-                    <td>{`${guest.firstName} ${guest.lastName}`}</td>
-                    <td>{guest.email}</td>
-                    <td>{guest.phone}</td>
-                    <td>{guest.nationality}</td>
-                    <td>{guest.idNumber}</td>
-                    <td>{guest.checkInDate}</td>
-                    <td>{getStatusBadge(guest.status)}</td>
-                    <td>
-                      <Button 
-                        variant="outline-danger" 
-                        size="sm"
-                        onClick={() => handleDeleteGuest(guest.id)}
-                      >
-                        <FaTrash />
-                      </Button>
-                    </td>
+                  <tr key={guest.id} style={{ borderBottom: '1px solid #e0e6ed' }}>
+                  <td style={{ padding: '16px', color: 'black', fontWeight: '500' }}>{`${guest.firstName} ${guest.lastName}`}</td>
+                  <td style={{ padding: '16px', color: 'black', fontWeight: '500' }}>{guest.email}</td>
+                  <td style={{ padding: '16px', color: 'black', fontWeight: '500' }}>{guest.phone}</td>
+                  <td style={{ padding: '16px', color: 'black', fontWeight: '500' }}>{guest.nationality}</td>
+                  <td style={{ padding: '16px', color: 'black', fontWeight: '500' }}>{guest.idNumber}</td>
+                  <td style={{ padding: '16px', color: 'black', fontWeight: '500' }}>{guest.checkInDate}</td>
+                  <td style={{ padding: '16px' }}>{getStatusBadge(guest.status)}</td>
+                  <td style={{ padding: '16px' }}>
+                    <Button 
+                    variant="outline-danger" 
+                    size="sm"
+                    onClick={() => handleDeleteGuest(guest.id)}
+                    >
+                    <FaTrash />
+                    </Button>
+                  </td>
                   </tr>
                 ))}
-              </tbody>
-            </Table>
-          )}
-        </Card.Body>
-      </Card>
+                </tbody>
+              </Table>
+              )}
+            </Card.Body>
+            </Card>
 
-      {/* Add/Edit Guest Modal */}
+            {/* Add/Edit Guest Modal */}
       <Modal show={showModal} onHide={handleCloseModal} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>Add New Guest</Modal.Title>
+        <Modal.Header closeButton style={{
+          background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+          color: 'white',
+          border: 'none'
+        }}>
+          <Modal.Title style={{ color: 'white', fontWeight: '600' }}>Add New Guest</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {formError && (
@@ -436,170 +483,202 @@ const Guests = () => {
           <Form onSubmit={handleSubmit}>
             <Row>
               {/* Personal Information */}
-              <Col xs={12}>
-                <h6 className="text-primary mb-3">Personal Information</h6>
-              </Col>
-              
-              <Col md={12}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Full Name *</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="full_name"
-                    value={formData.full_name}
-                    onChange={handleInputChange}
-                    placeholder="Enter full name"
-                    maxLength={120}
-                    required
-                  />
-                  <Form.Text className="text-muted">
-                    Maximum 120 characters
-                  </Form.Text>
-                </Form.Group>
-              </Col>
+                      <Col xs={12}>
+                      <h6 className="mb-3" style={{ 
+                        color: 'black', 
+                        fontWeight: '600',
+                        borderBottom: '2px solid #1976d2',
+                        paddingBottom: '0.5rem'
+                      }}>
+                        Personal Information
+                      </h6>
+                      </Col>
+                      
+                      <Col md={12}>
+                      <Form.Group className="mb-3">
+                        <Form.Label style={{ color: 'black' }}>Full Name *</Form.Label>
+                        <Form.Control
+                        type="text"
+                        name="full_name"
+                        value={formData.full_name}
+                        onChange={handleInputChange}
+                        placeholder="Enter full name"
+                        maxLength={120}
+                        required
+                        />
+                        <Form.Text className="text-muted">
+                        Maximum 120 characters
+                        </Form.Text>
+                      </Form.Group>
+                      </Col>
 
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Email Address</Form.Label>
-                  <Form.Control
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="Enter email address"
-                    maxLength={150}
-                  />
-                  <Form.Text className="text-muted">
-                    Optional, max 150 characters
-                  </Form.Text>
-                </Form.Group>
-              </Col>
+                      <Col md={6}>
+                      <Form.Group className="mb-3">
+                        <Form.Label style={{ color: 'black' }}>Email Address</Form.Label>
+                        <Form.Control
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        placeholder="Enter email address"
+                        maxLength={150}
+                        />
+                        <Form.Text className="text-muted">
+                        Optional, max 150 characters
+                        </Form.Text>
+                      </Form.Group>
+                      </Col>
 
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Phone Number</Form.Label>
-                  <Form.Control
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder="Enter phone number"
-                    maxLength={30}
-                  />
-                  <Form.Text className="text-muted">
-                    Optional, max 30 characters
-                  </Form.Text>
-                </Form.Group>
-              </Col>
+                      <Col md={6}>
+                      <Form.Group className="mb-3">
+                        <Form.Label style={{ color: 'black' }}>Phone Number</Form.Label>
+                        <Form.Control
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        placeholder="Enter phone number"
+                        maxLength={30}
+                        />
+                        <Form.Text className="text-muted">
+                        Optional, max 30 characters
+                        </Form.Text>
+                      </Form.Group>
+                      </Col>
 
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Nationality</Form.Label>
-                  <Form.Select
-                    name="nationality"
-                    value={formData.nationality}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Select nationality</option>
-                    <option value="Sri Lankan">Sri Lankan</option>
-                    <option value="Indian">Indian</option>
-                    <option value="American">American</option>
-                    <option value="British">British</option>
-                    <option value="Canadian">Canadian</option>
-                    <option value="Australian">Australian</option>
-                    <option value="German">German</option>
-                    <option value="French">French</option>
-                    <option value="Japanese">Japanese</option>
-                    <option value="Chinese">Chinese</option>
-                    <option value="Other">Other</option>
-                  </Form.Select>
-                  <Form.Text className="text-muted">
-                    Optional, max 80 characters
-                  </Form.Text>
-                </Form.Group>
-              </Col>
+                      <Col md={6}>
+                      <Form.Group className="mb-3">
+                        <Form.Label style={{ color: 'black' }}>Nationality</Form.Label>
+                        <Form.Select
+                        name="nationality"
+                        value={formData.nationality}
+                        onChange={handleInputChange}
+                        >
+                        <option value="">Select nationality</option>
+                        <option value="Sri Lankan">Sri Lankan</option>
+                        <option value="Indian">Indian</option>
+                        <option value="American">American</option>
+                        <option value="British">British</option>
+                        <option value="Canadian">Canadian</option>
+                        <option value="Australian">Australian</option>
+                        <option value="German">German</option>
+                        <option value="French">French</option>
+                        <option value="Japanese">Japanese</option>
+                        <option value="Chinese">Chinese</option>
+                        <option value="Other">Other</option>
+                        </Form.Select>
+                        <Form.Text className="text-muted">
+                        Optional, max 80 characters
+                        </Form.Text>
+                      </Form.Group>
+                      </Col>
 
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>ID Number (NIC/Passport)</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="nic"
-                    value={formData.nic}
-                    onChange={handleInputChange}
-                    placeholder="Enter NIC or Passport number"
-                    maxLength={30}
-                  />
-                  <Form.Text className="text-muted">
-                    Optional, max 30 characters
-                  </Form.Text>
-                </Form.Group>
-              </Col>
+                      <Col md={6}>
+                      <Form.Group className="mb-3">
+                        <Form.Label style={{ color: 'black' }}>ID Number (NIC/Passport)</Form.Label>
+                        <Form.Control
+                        type="text"
+                        name="nic"
+                        value={formData.nic}
+                        onChange={handleInputChange}
+                        placeholder="Enter NIC or Passport number"
+                        maxLength={30}
+                        />
+                        <Form.Text className="text-muted">
+                        Optional, max 30 characters
+                        </Form.Text>
+                      </Form.Group>
+                      </Col>
 
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Gender</Form.Label>
-                  <Form.Select
-                    name="gender"
-                    value={formData.gender}
-                    onChange={handleInputChange}
-                  >
-                    <option value="">Select gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                    <option value="Prefer not to say">Prefer not to say</option>
-                  </Form.Select>
-                  <Form.Text className="text-muted">
-                    Optional, max 20 characters
-                  </Form.Text>
-                </Form.Group>
-              </Col>
+                      <Col md={6}>
+                      <Form.Group className="mb-3">
+                        <Form.Label style={{ color: 'black' }}>Gender</Form.Label>
+                        <Form.Select
+                        name="gender"
+                        value={formData.gender}
+                        onChange={handleInputChange}
+                        >
+                        <option value="">Select gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                        <option value="Prefer not to say">Prefer not to say</option>
+                        </Form.Select>
+                        <Form.Text className="text-muted">
+                        Optional, max 20 characters
+                        </Form.Text>
+                      </Form.Group>
+                      </Col>
 
-              <Col md={6}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Date of Birth</Form.Label>
-                  <Form.Control
-                    type="date"
-                    name="date_of_birth"
-                    value={formData.date_of_birth}
-                    onChange={handleInputChange}
-                  />
-                  <Form.Text className="text-muted">
-                    Format: YYYY-MM-DD
-                  </Form.Text>
-                </Form.Group>
-              </Col>
+                      <Col md={6}>
+                      <Form.Group className="mb-3">
+                        <Form.Label style={{ color: 'black' }}>Date of Birth</Form.Label>
+                        <Form.Control
+                        type="date"
+                        name="date_of_birth"
+                        value={formData.date_of_birth}
+                        onChange={handleInputChange}
+                        />
+                        <Form.Text className="text-muted">
+                        Format: YYYY-MM-DD
+                        </Form.Text>
+                      </Form.Group>
+                      </Col>
 
-              <Col md={12}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Address</Form.Label>
-                  <Form.Control
-                    as="textarea"
-                    rows={3}
-                    name="address"
-                    value={formData.address}
-                    onChange={handleInputChange}
-                    placeholder="Enter full address"
-                  />
-                  <Form.Text className="text-muted">
-                    Optional - Full residential address
-                  </Form.Text>
-                </Form.Group>
-              </Col>
+                      <Col md={12}>
+                      <Form.Group className="mb-3">
+                        <Form.Label style={{ color: 'black' }}>Address</Form.Label>
+                        <Form.Control
+                        as="textarea"
+                        rows={3}
+                        name="address"
+                        value={formData.address}
+                        onChange={handleInputChange}
+                        placeholder="Enter full address"
+                        />
+                        <Form.Text className="text-muted">
+                        Optional - Full residential address
+                        </Form.Text>
+                      </Form.Group>
+                      </Col>
 
 
-            </Row>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal} disabled={formLoading}>
-            Cancel
-          </Button>
-          <Button 
-            variant="primary" 
-            onClick={handleSubmit}
-            disabled={formLoading}
+                    </Row>
+                    </Form>
+                  </Modal.Body>
+                  <Modal.Footer style={{ borderTop: '1px solid #e0e6ed', padding: '1.5rem' }}>
+                    <Button 
+                    variant="secondary" 
+                    onClick={handleCloseModal} 
+                    disabled={formLoading}
+                    style={{
+                      padding: '0.5rem 1.5rem',
+                      fontWeight: '600'
+                    }}
+                    >
+                    Cancel
+                    </Button>
+                    <Button 
+                    onClick={handleSubmit}
+                    disabled={formLoading}
+                    style={{
+                      background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                      border: 'none',
+                      padding: '0.5rem 1.5rem',
+                      fontWeight: '600',
+                      boxShadow: '0 4px 10px rgba(26, 35, 126, 0.3)',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+              if (!formLoading) {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 15px rgba(25, 118, 210, 0.4)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 10px rgba(26, 35, 126, 0.3)';
+            }}
           >
             {formLoading ? (
               <>

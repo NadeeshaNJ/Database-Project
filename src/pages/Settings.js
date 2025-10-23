@@ -104,15 +104,19 @@ const Settings = () => {
 
   return (
     <Container fluid className="py-4">
-      <Row className="mb-4">
-        <Col>
-          <h2 className="mb-1">
-            <FaCog className="me-2" />
-            Settings
-          </h2>
-          <p className="text-muted">Manage your account and system preferences</p>
-        </Col>
-      </Row>
+      <div className="mb-4 p-4 rounded-3" style={{
+        background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+        color: 'white',
+        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+      }}>
+        <div className="d-flex align-items-center">
+          <FaCog size={32} className="me-3" />
+          <div>
+            <h2 className="mb-0">Settings</h2>
+            <p className="mb-0 opacity-75">Manage your account and system preferences</p>
+          </div>
+        </div>
+      </div>
 
       {success && (
         <Alert variant="success" dismissible onClose={() => setSuccess('')}>
@@ -122,18 +126,26 @@ const Settings = () => {
 
       <Row>
         <Col>
-          <Card className="shadow-sm">
+          <Card className="border-0 shadow-sm" style={{ borderRadius: '12px' }}>
             <Card.Body>
               <Tabs
                 activeKey={activeTab}
                 onSelect={(k) => setActiveTab(k)}
                 className="mb-4"
+                style={{
+                  borderBottom: '2px solid #e9ecef'
+                }}
               >
                 {/* General Settings Tab */}
                 <Tab eventKey="general" title={<span><FaCog className="me-2" />General</span>}>
                   <Row>
                     <Col lg={8}>
-                      <h5 className="mb-3">General Settings</h5>
+                      <h5 className="mb-3" style={{
+                        color: '#1a237e',
+                        fontWeight: '600',
+                        paddingBottom: '12px',
+                        borderBottom: '2px solid rgba(26, 35, 126, 0.2)'
+                      }}>General Settings</h5>
                       <Form>
                         <Form.Group className="mb-3">
                           <Form.Label>Hotel Name</Form.Label>
@@ -211,7 +223,25 @@ const Settings = () => {
                           </Col>
                         </Row>
 
-                        <Button variant="primary" onClick={() => handleSave('General')}>
+                        <Button 
+                          onClick={() => handleSave('General')}
+                          style={{
+                            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '10px 24px',
+                            fontWeight: '600',
+                            transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+                          }}
+                          onMouseOver={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = '0 4px 8px rgba(26, 35, 126, 0.3)';
+                          }}
+                          onMouseOut={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = 'none';
+                          }}
+                        >
                           <FaSave className="me-2" />
                           Save Changes
                         </Button>
@@ -224,11 +254,16 @@ const Settings = () => {
                 <Tab eventKey="notifications" title={<span><FaBell className="me-2" />Notifications</span>}>
                   <Row>
                     <Col lg={8}>
-                      <h5 className="mb-3">Notification Preferences</h5>
+                      <h5 className="mb-3" style={{
+                        color: '#1a237e',
+                        fontWeight: '600',
+                        paddingBottom: '12px',
+                        borderBottom: '2px solid rgba(26, 35, 126, 0.2)'
+                      }}>Notification Preferences</h5>
                       <Form>
-                        <Card className="mb-3">
+                        <Card className="mb-3 border-0 shadow-sm" style={{ borderRadius: '10px' }}>
                           <Card.Body>
-                            <h6 className="mb-3">
+                            <h6 className="mb-3" style={{ color: '#1a237e', fontWeight: '600' }}>
                               <FaEnvelope className="me-2" />
                               Email Notifications
                             </h6>
@@ -253,9 +288,9 @@ const Settings = () => {
                           </Card.Body>
                         </Card>
 
-                        <Card className="mb-3">
+                        <Card className="mb-3 border-0 shadow-sm" style={{ borderRadius: '10px' }}>
                           <Card.Body>
-                            <h6 className="mb-3">Booking Alerts</h6>
+                            <h6 className="mb-3" style={{ color: '#1a237e', fontWeight: '600' }}>Booking Alerts</h6>
                             <Form.Check
                               type="switch"
                               id="bookingAlerts"
@@ -286,9 +321,9 @@ const Settings = () => {
                           </Card.Body>
                         </Card>
 
-                        <Card className="mb-3">
+                        <Card className="mb-3 border-0 shadow-sm" style={{ borderRadius: '10px' }}>
                           <Card.Body>
-                            <h6 className="mb-3">System Alerts</h6>
+                            <h6 className="mb-3" style={{ color: '#1a237e', fontWeight: '600' }}>System Alerts</h6>
                             <Form.Check
                               type="switch"
                               id="paymentAlerts"
@@ -319,7 +354,25 @@ const Settings = () => {
                           </Card.Body>
                         </Card>
 
-                        <Button variant="primary" onClick={() => handleSave('Notification')}>
+                        <Button 
+                          onClick={() => handleSave('Notification')}
+                          style={{
+                            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '10px 24px',
+                            fontWeight: '600',
+                            transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+                          }}
+                          onMouseOver={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = '0 4px 8px rgba(26, 35, 126, 0.3)';
+                          }}
+                          onMouseOut={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = 'none';
+                          }}
+                        >
                           <FaSave className="me-2" />
                           Save Preferences
                         </Button>
@@ -332,7 +385,12 @@ const Settings = () => {
                 <Tab eventKey="appearance" title={<span><FaPalette className="me-2" />Appearance</span>}>
                   <Row>
                     <Col lg={8}>
-                      <h5 className="mb-3">Appearance Settings</h5>
+                      <h5 className="mb-3" style={{
+                        color: '#1a237e',
+                        fontWeight: '600',
+                        paddingBottom: '12px',
+                        borderBottom: '2px solid rgba(26, 35, 126, 0.2)'
+                      }}>Appearance Settings</h5>
                       <Form>
                         <Form.Group className="mb-3">
                           <Form.Label>Theme</Form.Label>
@@ -390,7 +448,25 @@ const Settings = () => {
                           className="mb-3"
                         />
 
-                        <Button variant="primary" onClick={() => handleSave('Appearance')}>
+                        <Button 
+                          onClick={() => handleSave('Appearance')}
+                          style={{
+                            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '10px 24px',
+                            fontWeight: '600',
+                            transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+                          }}
+                          onMouseOver={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = '0 4px 8px rgba(26, 35, 126, 0.3)';
+                          }}
+                          onMouseOut={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = 'none';
+                          }}
+                        >
                           <FaSave className="me-2" />
                           Save Changes
                         </Button>
@@ -403,11 +479,16 @@ const Settings = () => {
                 <Tab eventKey="security" title={<span><FaShieldAlt className="me-2" />Security</span>}>
                   <Row>
                     <Col lg={8}>
-                      <h5 className="mb-3">Security Settings</h5>
+                      <h5 className="mb-3" style={{
+                        color: '#1a237e',
+                        fontWeight: '600',
+                        paddingBottom: '12px',
+                        borderBottom: '2px solid rgba(26, 35, 126, 0.2)'
+                      }}>Security Settings</h5>
                       <Form>
-                        <Card className="mb-3">
+                        <Card className="mb-3 border-0 shadow-sm" style={{ borderRadius: '10px' }}>
                           <Card.Body>
-                            <h6 className="mb-3">Authentication</h6>
+                            <h6 className="mb-3" style={{ color: '#1a237e', fontWeight: '600' }}>Authentication</h6>
                             <Form.Check
                               type="switch"
                               id="twoFactorAuth"
@@ -459,7 +540,25 @@ const Settings = () => {
                           </Form.Select>
                         </Form.Group>
 
-                        <Button variant="primary" onClick={() => handleSave('Security')}>
+                        <Button 
+                          onClick={() => handleSave('Security')}
+                          style={{
+                            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '10px 24px',
+                            fontWeight: '600',
+                            transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+                          }}
+                          onMouseOver={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = '0 4px 8px rgba(26, 35, 126, 0.3)';
+                          }}
+                          onMouseOut={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = 'none';
+                          }}
+                        >
                           <FaSave className="me-2" />
                           Save Security Settings
                         </Button>
@@ -472,7 +571,12 @@ const Settings = () => {
                 <Tab eventKey="hotel" title={<span><FaHotel className="me-2" />Hotel Preferences</span>}>
                   <Row>
                     <Col lg={8}>
-                      <h5 className="mb-3">Hotel Operation Settings</h5>
+                      <h5 className="mb-3" style={{
+                        color: '#1a237e',
+                        fontWeight: '600',
+                        paddingBottom: '12px',
+                        borderBottom: '2px solid rgba(26, 35, 126, 0.2)'
+                      }}>Hotel Operation Settings</h5>
                       <Form>
                         <Row>
                           <Col md={6}>
@@ -559,7 +663,25 @@ const Settings = () => {
                           </Form.Select>
                         </Form.Group>
 
-                        <Button variant="primary" onClick={() => handleSave('Hotel Preferences')}>
+                        <Button 
+                          onClick={() => handleSave('Hotel Preferences')}
+                          style={{
+                            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '10px 24px',
+                            fontWeight: '600',
+                            transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+                          }}
+                          onMouseOver={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                            e.currentTarget.style.boxShadow = '0 4px 8px rgba(26, 35, 126, 0.3)';
+                          }}
+                          onMouseOut={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = 'none';
+                          }}
+                        >
                           <FaSave className="me-2" />
                           Save Preferences
                         </Button>
@@ -573,7 +695,12 @@ const Settings = () => {
                   <Tab eventKey="system" title={<span><FaDatabase className="me-2" />System</span>}>
                     <Row>
                       <Col lg={8}>
-                        <h5 className="mb-3">System Information</h5>
+                        <h5 className="mb-3" style={{
+                          color: '#1a237e',
+                          fontWeight: '600',
+                          paddingBottom: '12px',
+                          borderBottom: '2px solid rgba(26, 35, 126, 0.2)'
+                        }}>System Information</h5>
                         
                         <ListGroup className="mb-4">
                           <ListGroup.Item>
@@ -598,20 +725,46 @@ const Settings = () => {
                           </ListGroup.Item>
                         </ListGroup>
 
-                        <h6 className="mb-3">System Actions</h6>
+                        <h6 className="mb-3" style={{ color: '#1a237e', fontWeight: '600' }}>System Actions</h6>
                         <div className="d-flex gap-2 flex-wrap">
-                          <Button variant="outline-primary">
+                          <Button 
+                            variant="outline-primary"
+                            style={{
+                              borderColor: '#1a237e',
+                              color: '#1a237e',
+                              borderRadius: '8px',
+                              fontWeight: '500'
+                            }}
+                          >
                             <FaDatabase className="me-2" />
                             Backup Database
                           </Button>
-                          <Button variant="outline-warning">
+                          <Button 
+                            variant="outline-warning"
+                            style={{
+                              borderRadius: '8px',
+                              fontWeight: '500'
+                            }}
+                          >
                             <FaUsers className="me-2" />
                             Manage Users
                           </Button>
-                          <Button variant="outline-info">
+                          <Button 
+                            variant="outline-info"
+                            style={{
+                              borderRadius: '8px',
+                              fontWeight: '500'
+                            }}
+                          >
                             View Logs
                           </Button>
-                          <Button variant="outline-danger">
+                          <Button 
+                            variant="outline-danger"
+                            style={{
+                              borderRadius: '8px',
+                              fontWeight: '500'
+                            }}
+                          >
                             Clear Cache
                           </Button>
                         </div>

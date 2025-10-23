@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Table, Badge, Modal, Form, Alert, Spinner, Tabs, Tab } from 'react-bootstrap';
-import { FaCalendarCheck, FaPlus, FaEdit, FaEye, FaSearch, FaFilter, FaCheckCircle, FaClock } from 'react-icons/fa';
+import { Container, Row, Col, Card, Button, Table, Badge, Modal, Form, Alert, Spinner } from 'react-bootstrap';
+import { FaCalendarCheck, FaPlus, FaEdit, FaEye, FaSearch, FaFilter } from 'react-icons/fa';
 import { apiUrl } from '../utils/api';
 import { useBranch } from '../context/BranchContext';
 
 const Bookings = () => {
   const { selectedBranchId } = useBranch();
   const [bookings, setBookings] = useState([]);
-  const [preBookings, setPreBookings] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [modalType, setModalType] = useState('add');
   const [filterStatus, setFilterStatus] = useState('All');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState('bookings');
 
-  // Fetch bookings and pre-bookings from backend
+  // Fetch bookings from backend
   useEffect(() => {
     fetchBookings();
-    fetchPreBookings();
   }, [filterStatus, selectedBranchId]);
 
   const fetchBookings = async () => {
@@ -76,79 +73,6 @@ const Bookings = () => {
       setError('Failed to connect to server. Please ensure the backend is running.');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const fetchPreBookings = async () => {
-    try {
-      setError('');
-      
-      let url = '/api/bookings/pre-bookings?';
-      if (selectedBranchId !== 'All') {
-        url += `branch_id=${selectedBranchId}`;
-      }
-      
-      const response = await fetch(apiUrl(url));
-      const data = await response.json();
-      
-      if (data.success && data.data && data.data.preBookings) {
-        const transformedPreBookings = data.data.preBookings.map(pb => ({
-          id: `PB${String(pb.pre_booking_id).padStart(3, '0')}`,
-          preBookingId: pb.pre_booking_id,
-          guestName: pb.guest_name,
-          guestEmail: pb.guest_email,
-          guestPhone: pb.guest_phone,
-          hotelBranch: `SkyNest ${pb.branch_name}`,
-          roomNumber: pb.room_number,
-          roomType: pb.room_type,
-          checkInDate: pb.expected_check_in?.split('T')[0],
-          checkOutDate: pb.expected_check_out?.split('T')[0],
-          capacity: parseInt(pb.capacity) || 2,
-          method: pb.prebooking_method,
-          pricePerNight: parseFloat(pb.price_per_night) || 0,
-          createdAt: pb.created_at?.split('T')[0]
-        }));
-        
-        setPreBookings(transformedPreBookings);
-      }
-    } catch (err) {
-      console.error('Error fetching pre-bookings:', err);
-    }
-  };
-
-  const handleConfirmPreBooking = async (preBooking) => {
-    if (!window.confirm(`Confirm pre-booking ${preBooking.id} and convert it to a confirmed booking?`)) {
-      return;
-    }
-
-    try {
-      const user = JSON.parse(localStorage.getItem('skyNestUser'));
-      const response = await fetch(apiUrl(`/api/bookings/pre-booking/${preBooking.preBookingId}/confirm`), {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user?.token}`
-        },
-        body: JSON.stringify({
-          num_adults: preBooking.capacity,
-          num_children: 0,
-          special_requests: ''
-        })
-      });
-
-      const data = await response.json();
-      
-      if (data.success) {
-        alert(`✅ ${data.message}`);
-        // Refresh both lists
-        fetchBookings();
-        fetchPreBookings();
-      } else {
-        alert(`❌ ${data.error || 'Failed to confirm pre-booking'}`);
-      }
-    } catch (err) {
-      console.error('Error confirming pre-booking:', err);
-      alert('❌ Failed to confirm pre-booking');
     }
   };
 
@@ -224,34 +148,61 @@ const Bookings = () => {
   };
 
   return (
-    <Container fluid className="py-4" style={{ minHeight: '100vh' }}>
+    <Container fluid className="py-4" style={{ 
+      minHeight: '100vh',
+      backgroundColor: '#f8f9fa'
+    }}>
       {/* Page Header */}
-      <Row className="mb-4">
-        <Col>
-          <div className="page-header">
-            <div className="d-flex justify-content-between align-items-center">
-              <div>
-                <h2 className="mb-1">Bookings Management</h2>
-                <p style={{ marginBottom: 0 }}>
-                  Manage hotel room bookings across all SkyNest branches
-                </p>
-              </div>
-              <Button 
-                variant="primary"
-                onClick={() => handleShowModal('add')}
-              >
-                <FaPlus className="me-2" />
-                New Booking
-              </Button>
-            </div>
+      <div style={{
+        background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+        color: 'white',
+        padding: '30px',
+        borderRadius: '12px',
+        marginBottom: '30px',
+        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+      }}>
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            <h2 style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold', marginBottom: '8px' }}>Bookings Management</h2>
+            <p style={{ marginBottom: 0, fontSize: '1.1rem', opacity: 0.9 }}>
+              Manage hotel room bookings across all SkyNest branches
+            </p>
           </div>
-        </Col>
-      </Row>
+          <Button 
+            style={{
+              background: 'rgba(255, 255, 255, 0.2)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              color: 'white',
+              fontWeight: '600',
+              padding: '10px 24px',
+              borderRadius: '8px',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = 'rgba(255, 255, 255, 0.3)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = 'rgba(255, 255, 255, 0.2)';
+            }}
+            onClick={() => handleShowModal('add')}
+          >
+            <FaPlus className="me-2" />
+            New Booking
+          </Button>
+        </div>
+      </div>
 
       {/* Booking Statistics */}
       <Row className="mb-4">
         <Col md={3}>
-          <Card className="stat-card h-100">
+          <Card style={{
+            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+            border: 'none',
+            borderRadius: '12px',
+            boxShadow: '0 4px 12px rgba(26, 35, 126, 0.2)',
+            color: 'white',
+            height: '100%'
+          }}>
             <Card.Body className="text-center">
               <h3 style={{ color: 'white', fontWeight: '700', fontSize: '2.5rem' }}>
                 {bookings.length}
@@ -263,7 +214,14 @@ const Bookings = () => {
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="stat-card h-100">
+          <Card style={{
+            background: 'linear-gradient(135deg, #1976d2 0%, #0d47a1 100%)',
+            border: 'none',
+            borderRadius: '12px',
+            boxShadow: '0 4px 12px rgba(25, 118, 210, 0.2)',
+            color: 'white',
+            height: '100%'
+          }}>
             <Card.Body className="text-center">
               <h3 style={{ color: 'white', fontWeight: '700', fontSize: '2.5rem' }}>
                 {bookings.filter(b => b.status === 'Checked-In').length}
@@ -275,7 +233,14 @@ const Bookings = () => {
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="stat-card h-100">
+          <Card style={{
+            background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+            border: 'none',
+            borderRadius: '12px',
+            boxShadow: '0 4px 12px rgba(245, 158, 11, 0.2)',
+            color: 'white',
+            height: '100%'
+          }}>
             <Card.Body className="text-center">
               <h3 style={{ color: 'white', fontWeight: '700', fontSize: '2.5rem' }}>
                 {bookings.filter(b => b.status === 'Pending Payment').length}
@@ -287,7 +252,14 @@ const Bookings = () => {
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="stat-card h-100">
+          <Card style={{
+            background: 'linear-gradient(135deg, #28a745 0%, #218838 100%)',
+            border: 'none',
+            borderRadius: '12px',
+            boxShadow: '0 4px 12px rgba(40, 167, 69, 0.2)',
+            color: 'white',
+            height: '100%'
+          }}>
             <Card.Body className="text-center">
               <h3 style={{ color: 'white', fontWeight: '700', fontSize: '2.5rem' }}>
                 {formatCurrency(bookings.reduce((sum, b) => sum + b.totalAmount, 0))}
@@ -300,64 +272,67 @@ const Bookings = () => {
         </Col>
       </Row>
 
-      {/* Tabs for Bookings and Pre-Bookings */}
+      {/* Filters */}
+      <Row className="mb-3">
+        <Col md={6}>
+          <Form.Group>
+            <Form.Label style={{ color: '#1a237e', fontWeight: '600', marginBottom: '8px' }}>
+              Filter by Status
+            </Form.Label>
+            <Form.Select 
+              value={filterStatus} 
+              onChange={(e) => setFilterStatus(e.target.value)}
+              style={{
+                borderColor: '#1976d2',
+                borderRadius: '8px',
+                padding: '10px'
+              }}
+            >
+              <option value="All">All Bookings</option>
+              <option value="Confirmed">Confirmed</option>
+              <option value="Checked-In">Checked-In</option>
+              <option value="Checked-Out">Checked-Out</option>
+              <option value="Pending Payment">Pending Payment</option>
+              <option value="Cancelled">Cancelled</option>
+            </Form.Select>
+          </Form.Group>
+        </Col>
+      </Row>
+
+      {/* Bookings Table */}
       <Row>
         <Col>
-          <Card>
-            <Card.Body>
-              <Tabs
-                activeKey={activeTab}
-                onSelect={(k) => setActiveTab(k)}
-                className="mb-3"
-              >
-                <Tab eventKey="bookings" title={
-                  <span><FaCalendarCheck className="me-2" />Confirmed Bookings ({bookings.length})</span>
-                }>
-                  {/* Filters */}
-                  <Row className="mb-3">
-                    <Col md={6}>
-                      <Form.Group>
-                        <Form.Label style={{ color: '#2c3e50', fontWeight: '600', marginBottom: '8px' }}>
-                          Filter by Status
-                        </Form.Label>
-                        <Form.Select 
-                          value={filterStatus} 
-                          onChange={(e) => setFilterStatus(e.target.value)}
-                        >
-                          <option value="All">All Bookings</option>
-                          <option value="Confirmed">Confirmed</option>
-                          <option value="Checked-In">Checked-In</option>
-                          <option value="Checked-Out">Checked-Out</option>
-                          <option value="Pending Payment">Pending Payment</option>
-                          <option value="Cancelled">Cancelled</option>
-                        </Form.Select>
-                      </Form.Group>
-                    </Col>
-                  </Row>
-
-                  {/* Bookings Table */}
-                  <Card>
-            <Card.Header style={{ background: '#f8f9fa', borderBottom: '1px solid #e0e6ed' }}>
-              <h5 className="mb-0" style={{ fontWeight: '700', color: '#2c3e50' }}>
+          <Card style={{
+            background: 'white',
+            borderRadius: '12px',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
+          }}>
+            <Card.Header style={{ 
+              background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+              borderBottom: '2px solid #1976d2',
+              borderRadius: '12px 12px 0 0'
+            }}>
+              <h5 className="mb-0" style={{ fontWeight: '700', color: 'white' }}>
                 Bookings List ({filteredBookings.length})
               </h5>
             </Card.Header>
             <Card.Body style={{ padding: 0 }}>
               <div style={{ overflowX: 'auto' }}>
                 <Table responsive style={{ marginBottom: 0 }}>
-                  <thead style={{ backgroundColor: '#f8f9fa', borderBottom: '2px solid #e0e6ed' }}>
+                  <thead style={{ backgroundColor: '#f8f9fa', borderBottom: '2px solid #1976d2' }}>
                     <tr>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Booking ID</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Guest Name</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Hotel/Room</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Check-in</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Check-out</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Nights</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Guests</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Amount</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Payment</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Status</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Actions</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Booking ID</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Guest Name</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Hotel/Room</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Check-in</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Check-out</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Nights</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Guests</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Amount</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Payment</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Status</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -403,14 +378,30 @@ const Bookings = () => {
                       <td>
                         <div className="d-flex gap-1">
                           <Button
-                            variant="outline-primary"
+                            style={{
+                              background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '6px',
+                              padding: '6px 12px',
+                              fontSize: '0.875rem',
+                              transition: 'all 0.3s ease'
+                            }}
                             size="sm"
                             onClick={() => handleShowModal('view', booking)}
                           >
                             <FaEye />
                           </Button>
                           <Button
-                            variant="outline-secondary"
+                            style={{
+                              background: '#6c757d',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '6px',
+                              padding: '6px 12px',
+                              fontSize: '0.875rem',
+                              transition: 'all 0.3s ease'
+                            }}
                             size="sm"
                             onClick={() => handleShowModal('edit', booking)}
                           >
@@ -425,97 +416,20 @@ const Bookings = () => {
               </div>
             </Card.Body>
           </Card>
-                </Tab>
-
-                <Tab eventKey="pre-bookings" title={
-                  <span><FaClock className="me-2" />Pre-Bookings ({preBookings.length})</span>
-                }>
-                  {/* Pre-Bookings Table */}
-                  <Card>
-                    <Card.Header style={{ background: '#f8f9fa', borderBottom: '1px solid #e0e6ed' }}>
-                      <h5 className="mb-0" style={{ fontWeight: '700', color: '#2c3e50' }}>
-                        Pending Pre-Bookings ({preBookings.length})
-                      </h5>
-                    </Card.Header>
-                    <Card.Body style={{ padding: 0 }}>
-                      <div style={{ overflowX: 'auto' }}>
-                        <Table responsive style={{ marginBottom: 0 }}>
-                          <thead style={{ backgroundColor: '#f8f9fa', borderBottom: '2px solid #e0e6ed' }}>
-                            <tr>
-                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Pre-Booking ID</th>
-                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Guest Name</th>
-                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Hotel/Room</th>
-                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Expected Check-in</th>
-                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Expected Check-out</th>
-                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Capacity</th>
-                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Method</th>
-                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Created</th>
-                              <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Actions</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {preBookings.length === 0 ? (
-                              <tr>
-                                <td colSpan="9" className="text-center py-4">
-                                  <p className="text-muted mb-0">No pending pre-bookings</p>
-                                </td>
-                              </tr>
-                            ) : (
-                              preBookings.map((preBooking) => (
-                                <tr key={preBooking.id}>
-                                  <td>
-                                    <strong>{preBooking.id}</strong>
-                                  </td>
-                                  <td>
-                                    <div>
-                                      <strong>{preBooking.guestName}</strong>
-                                      <br />
-                                      <small className="text-muted">{preBooking.guestEmail}</small>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <div>
-                                      <strong>{preBooking.hotelBranch}</strong>
-                                      <br />
-                                      <small>Room {preBooking.roomNumber} ({preBooking.roomType})</small>
-                                    </div>
-                                  </td>
-                                  <td>{new Date(preBooking.checkInDate).toLocaleDateString()}</td>
-                                  <td>{new Date(preBooking.checkOutDate).toLocaleDateString()}</td>
-                                  <td>{preBooking.capacity} guests</td>
-                                  <td>
-                                    <Badge bg="info">{preBooking.method}</Badge>
-                                  </td>
-                                  <td>{new Date(preBooking.createdAt).toLocaleDateString()}</td>
-                                  <td>
-                                    <Button
-                                      variant="success"
-                                      size="sm"
-                                      onClick={() => handleConfirmPreBooking(preBooking)}
-                                    >
-                                      <FaCheckCircle className="me-1" />
-                                      Confirm Booking
-                                    </Button>
-                                  </td>
-                                </tr>
-                              ))
-                            )}
-                          </tbody>
-                        </Table>
-                      </div>
-                    </Card.Body>
-                  </Card>
-                </Tab>
-              </Tabs>
-            </Card.Body>
-          </Card>
         </Col>
       </Row>
 
       {/* Modal for Add/Edit/View Booking */}
       <Modal show={showModal} onHide={handleCloseModal} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>
+        <Modal.Header 
+          closeButton
+          style={{
+            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+            color: 'white',
+            borderBottom: '2px solid #1976d2'
+          }}
+        >
+          <Modal.Title style={{ color: 'white', fontWeight: 'bold' }}>
             {modalType === 'add' && 'New Booking'}
             {modalType === 'edit' && 'Edit Booking'}
             {modalType === 'view' && 'Booking Details'}
@@ -674,11 +588,30 @@ const Bookings = () => {
           )}
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <Button 
+            variant="secondary" 
+            onClick={handleCloseModal}
+            style={{
+              background: '#6c757d',
+              border: 'none',
+              padding: '10px 24px',
+              borderRadius: '6px',
+              fontWeight: '500'
+            }}
+          >
             Close
           </Button>
           {modalType !== 'view' && (
-            <Button variant="primary">
+            <Button 
+              style={{
+                background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                border: 'none',
+                padding: '10px 24px',
+                borderRadius: '6px',
+                fontWeight: '500',
+                transition: 'all 0.3s ease'
+              }}
+            >
               {modalType === 'add' ? 'Create Booking' : 'Save Changes'}
             </Button>
           )}

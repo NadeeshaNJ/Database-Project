@@ -133,74 +133,183 @@ const Reservations = () => {
         </Alert>
       )}
 
-      <Row className="mb-4">
-        <Col>
-          <h2>Reservation Management</h2>
-        </Col>
-        <Col xs="auto">
-          <Button 
-            variant="primary" 
-            onClick={() => handleShowModal()}
-            className="btn-primary-custom"
-          >
-            <FaPlus className="me-2" />
-            New Reservation
-          </Button>
-        </Col>
-      </Row>
+      <div className="mb-4 p-4 rounded-3" style={{
+        background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+        color: 'white',
+        boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
+      }}>
+        <Row className="align-items-center">
+          <Col>
+            <div className="d-flex align-items-center">
+              <FaCalendarAlt size={32} className="me-3" />
+              <div>
+                <h2 className="mb-0">Reservation Management</h2>
+                <p className="mb-0 opacity-75">Manage all hotel reservations and bookings</p>
+              </div>
+            </div>
+          </Col>
+          <Col xs="auto">
+            <Button 
+              onClick={() => handleShowModal()}
+              style={{
+                background: 'white',
+                color: '#1a237e',
+                border: 'none',
+                padding: '10px 24px',
+                borderRadius: '8px',
+                fontWeight: '600',
+                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 4px 8px rgba(0,0,0,0.15)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+              }}
+            >
+              <FaPlus className="me-2" />
+              New Reservation
+            </Button>
+          </Col>
+        </Row>
+      </div>
 
       <Row className="mb-4">
         <Col md={3}>
-          <Card className="card-custom text-center">
-            <Card.Body>
-              <h4 className="text-primary">{stats.total}</h4>
-              <p className="mb-0">Total Reservations</p>
+          <Card className="text-center border-0 shadow-sm" style={{
+            borderRadius: '12px',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            cursor: 'pointer'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.1)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+          }}>
+            <Card.Body style={{
+              background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+              borderRadius: '12px',
+              padding: '24px',
+              color: 'white'
+            }}>
+              <h4 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '8px' }}>{stats.total}</h4>
+              <p className="mb-0" style={{ fontSize: '0.95rem', opacity: 0.9 }}>Total Reservations</p>
             </Card.Body>
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="card-custom text-center">
-            <Card.Body>
-              <h4 className="text-success">{stats.confirmed}</h4>
-              <p className="mb-0">Confirmed</p>
+          <Card className="text-center border-0 shadow-sm" style={{
+            borderRadius: '12px',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            cursor: 'pointer'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.1)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+          }}>
+            <Card.Body style={{
+              background: 'linear-gradient(135deg, #388e3c 0%, #4caf50 100%)',
+              borderRadius: '12px',
+              padding: '24px',
+              color: 'white'
+            }}>
+              <h4 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '8px' }}>{stats.confirmed}</h4>
+              <p className="mb-0" style={{ fontSize: '0.95rem', opacity: 0.9 }}>Confirmed</p>
             </Card.Body>
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="card-custom text-center">
-            <Card.Body>
-              <h4 className="text-warning">{stats.pending}</h4>
-              <p className="mb-0">Pending</p>
+          <Card className="text-center border-0 shadow-sm" style={{
+            borderRadius: '12px',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            cursor: 'pointer'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.1)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+          }}>
+            <Card.Body style={{
+              background: 'linear-gradient(135deg, #f57c00 0%, #ff9800 100%)',
+              borderRadius: '12px',
+              padding: '24px',
+              color: 'white'
+            }}>
+              <h4 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '8px' }}>{stats.pending}</h4>
+              <p className="mb-0" style={{ fontSize: '0.95rem', opacity: 0.9 }}>Pending</p>
             </Card.Body>
           </Card>
         </Col>
         <Col md={3}>
-          <Card className="card-custom text-center">
-            <Card.Body>
-              <h4 className="text-info">{stats.checkins_today}</h4>
-              <p className="mb-0">Check-ins Today</p>
+          <Card className="text-center border-0 shadow-sm" style={{
+            borderRadius: '12px',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+            cursor: 'pointer'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 8px 16px rgba(0,0,0,0.1)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+          }}>
+            <Card.Body style={{
+              background: 'linear-gradient(135deg, #0288d1 0%, #03a9f4 100%)',
+              borderRadius: '12px',
+              padding: '24px',
+              color: 'white'
+            }}>
+              <h4 style={{ fontSize: '2.5rem', fontWeight: '700', marginBottom: '8px' }}>{stats.checkins_today}</h4>
+              <p className="mb-0" style={{ fontSize: '0.95rem', opacity: 0.9 }}>Check-ins Today</p>
             </Card.Body>
           </Card>
         </Col>
       </Row>
 
-      <Card className="card-custom">
-        <Card.Header>
+      <Card className="border-0 shadow-sm" style={{ borderRadius: '12px' }}>
+        <Card.Header style={{
+          background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+          color: 'white',
+          borderRadius: '12px 12px 0 0',
+          padding: '20px'
+        }}>
           <Row className="align-items-center">
             <Col>
-              <h5 className="mb-0">Reservation List</h5>
+              <h5 className="mb-0" style={{ fontWeight: '600', fontSize: '1.25rem' }}>Reservation List</h5>
             </Col>
             <Col xs="auto">
               <InputGroup>
-                <InputGroup.Text>
-                  <FaSearch />
+                <InputGroup.Text style={{
+                  background: 'white',
+                  border: 'none',
+                  borderRadius: '8px 0 0 8px'
+                }}>
+                  <FaSearch style={{ color: '#1a237e' }} />
                 </InputGroup.Text>
                 <Form.Control
                   type="text"
                   placeholder="Search reservations..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="search-box"
+                  style={{
+                    border: 'none',
+                    borderRadius: '0 8px 8px 0',
+                    padding: '8px 16px'
+                  }}
                 />
               </InputGroup>
             </Col>
@@ -209,24 +318,27 @@ const Reservations = () => {
         <Card.Body className="p-0">
           {loading ? (
             <div className="text-center py-5">
-              <Spinner animation="border" />
-              <p className="mt-3">Loading reservations...</p>
+              <Spinner animation="border" style={{ color: '#1a237e' }} />
+              <p className="mt-3" style={{ color: '#1a237e', fontWeight: '500' }}>Loading reservations...</p>
             </div>
           ) : (
           <div className="table-container">
             <Table responsive hover className="mb-0">
-              <thead className="table-light">
+              <thead style={{
+                background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                color: 'white'
+              }}>
                 <tr>
-                  <th>Booking ID</th>
-                  <th>Guest Name</th>
-                  <th>Room</th>
-                  <th>Room Type</th>
-                  <th>Check-in</th>
-                  <th>Check-out</th>
-                  <th>Nights</th>
-                  <th>Total Amount</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+                  <th style={{ borderBottom: 'none', padding: '16px' }}>Booking ID</th>
+                  <th style={{ borderBottom: 'none', padding: '16px' }}>Guest Name</th>
+                  <th style={{ borderBottom: 'none', padding: '16px' }}>Room</th>
+                  <th style={{ borderBottom: 'none', padding: '16px' }}>Room Type</th>
+                  <th style={{ borderBottom: 'none', padding: '16px' }}>Check-in</th>
+                  <th style={{ borderBottom: 'none', padding: '16px' }}>Check-out</th>
+                  <th style={{ borderBottom: 'none', padding: '16px' }}>Nights</th>
+                  <th style={{ borderBottom: 'none', padding: '16px' }}>Total Amount</th>
+                  <th style={{ borderBottom: 'none', padding: '16px' }}>Status</th>
+                  <th style={{ borderBottom: 'none', padding: '16px' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -271,8 +383,12 @@ const Reservations = () => {
 
       {/* Add/Edit Reservation Modal */}
       <Modal show={showModal} onHide={handleCloseModal} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>
+        <Modal.Header closeButton style={{
+          background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+          color: 'white',
+          borderRadius: '8px 8px 0 0'
+        }}>
+          <Modal.Title style={{ fontWeight: '600' }}>
             {selectedReservation ? 'Edit Reservation' : 'New Reservation'}
           </Modal.Title>
         </Modal.Header>
@@ -348,10 +464,35 @@ const Reservations = () => {
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <Button 
+            variant="secondary" 
+            onClick={handleCloseModal}
+            style={{
+              borderRadius: '8px',
+              padding: '10px 24px',
+              fontWeight: '500'
+            }}
+          >
             Cancel
           </Button>
-          <Button variant="primary" className="btn-primary-custom">
+          <Button 
+            style={{
+              background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+              border: 'none',
+              borderRadius: '8px',
+              padding: '10px 24px',
+              fontWeight: '600',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 4px 8px rgba(26, 35, 126, 0.3)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = 'none';
+            }}
+          >
             {selectedReservation ? 'Update Reservation' : 'Create Reservation'}
           </Button>
         </Modal.Footer>
