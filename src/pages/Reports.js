@@ -119,9 +119,18 @@ const Reports = () => {
       {/* Page Header */}
       <Row className="mb-4">
         <Col>
-          <div className="page-header">
-            <h2>Reports & Analytics</h2>
-            <p style={{ marginBottom: 0 }}>Comprehensive business insights and performance metrics</p>
+          <div className="page-header" style={{
+            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+            padding: '2rem',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+            color: 'white'
+          }}>
+            <h2 style={{ color: 'white', fontWeight: '700', marginBottom: '0.5rem' }}>
+              <FaChartBar className="me-2" />
+              Reports & Analytics
+            </h2>
+            <p style={{ marginBottom: 0, color: 'rgba(255, 255, 255, 0.9)' }}>Comprehensive business insights and performance metrics</p>
           </div>
         </Col>
       </Row>
@@ -130,38 +139,98 @@ const Reports = () => {
       {dashboardData && (
         <Row className="mb-4">
           <Col md={3}>
-            <Card className="card-custom text-center">
+            <Card className="text-center" style={{
+              background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+              border: 'none',
+              borderRadius: '1rem',
+              boxShadow: '0 4px 15px rgba(26, 35, 126, 0.3)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              color: 'white'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+              e.currentTarget.style.boxShadow = '0 8px 25px rgba(26, 35, 126, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 15px rgba(26, 35, 126, 0.3)';
+            }}>
               <Card.Body>
-                <FaCalendarAlt size={30} className="text-primary mb-2" />
-                <h4 className="text-primary">{dashboardData.today.today_checkins}</h4>
-                <p className="mb-0">Today's Check-ins</p>
+                <FaCalendarAlt size={30} style={{ color: 'white' }} className="mb-2" />
+                <h4 style={{ color: 'white', fontWeight: '700' }}>{dashboardData.today.today_checkins}</h4>
+                <p className="mb-0" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Today's Check-ins</p>
               </Card.Body>
             </Card>
           </Col>
           <Col md={3}>
-            <Card className="card-custom text-center">
+            <Card className="text-center" style={{
+              background: 'linear-gradient(135deg, #f57c00 0%, #ff9800 100%)',
+              border: 'none',
+              borderRadius: '1rem',
+              boxShadow: '0 4px 15px rgba(245, 124, 0, 0.3)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              color: 'white'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+              e.currentTarget.style.boxShadow = '0 8px 25px rgba(245, 124, 0, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 15px rgba(245, 124, 0, 0.3)';
+            }}>
               <Card.Body>
-                <FaCalendarAlt size={30} className="text-warning mb-2" />
-                <h4 className="text-warning">{dashboardData.today.today_checkouts}</h4>
-                <p className="mb-0">Today's Check-outs</p>
+                <FaCalendarAlt size={30} style={{ color: 'white' }} className="mb-2" />
+                <h4 style={{ color: 'white', fontWeight: '700' }}>{dashboardData.today.today_checkouts}</h4>
+                <p className="mb-0" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Today's Check-outs</p>
               </Card.Body>
             </Card>
           </Col>
           <Col md={3}>
-            <Card className="card-custom text-center">
+            <Card className="text-center" style={{
+              background: 'linear-gradient(135deg, #388e3c 0%, #4caf50 100%)',
+              border: 'none',
+              borderRadius: '1rem',
+              boxShadow: '0 4px 15px rgba(56, 142, 60, 0.3)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              color: 'white'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+              e.currentTarget.style.boxShadow = '0 8px 25px rgba(56, 142, 60, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 15px rgba(56, 142, 60, 0.3)';
+            }}>
               <Card.Body>
-                <FaUsers size={30} className="text-success mb-2" />
-                <h4 className="text-success">{dashboardData.today.current_guests}</h4>
-                <p className="mb-0">Current Guests</p>
+                <FaUsers size={30} style={{ color: 'white' }} className="mb-2" />
+                <h4 style={{ color: 'white', fontWeight: '700' }}>{dashboardData.today.current_guests}</h4>
+                <p className="mb-0" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Current Guests</p>
               </Card.Body>
             </Card>
           </Col>
           <Col md={3}>
-            <Card className="card-custom text-center">
+            <Card className="text-center" style={{
+              background: 'linear-gradient(135deg, #0288d1 0%, #03a9f4 100%)',
+              border: 'none',
+              borderRadius: '1rem',
+              boxShadow: '0 4px 15px rgba(2, 136, 209, 0.3)',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              color: 'white'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-5px)';
+              e.currentTarget.style.boxShadow = '0 8px 25px rgba(2, 136, 209, 0.4)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 15px rgba(2, 136, 209, 0.3)';
+            }}>
               <Card.Body>
-                <FaBed size={30} className="text-info mb-2" />
-                <h4 className="text-info">{dashboardData.rooms.available_rooms}/{dashboardData.rooms.total_rooms}</h4>
-                <p className="mb-0">Available Rooms</p>
+                <FaBed size={30} style={{ color: 'white' }} className="mb-2" />
+                <h4 style={{ color: 'white', fontWeight: '700' }}>{dashboardData.rooms.available_rooms}/{dashboardData.rooms.total_rooms}</h4>
+                <p className="mb-0" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Available Rooms</p>
               </Card.Body>
             </Card>
           </Col>
@@ -172,10 +241,17 @@ const Reports = () => {
       {dashboardData && (
         <Row className="mb-4">
           <Col md={6}>
-            <Card className="card-custom">
+            <Card style={{
+              border: 'none',
+              borderRadius: '1rem',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+            }}>
               <Card.Body>
-                <h5 className="mb-3"><FaDollarSign className="me-2" />Monthly Revenue</h5>
-                <h2 className="text-success mb-0">
+                <h5 className="mb-3" style={{ color: '#1a237e', fontWeight: '700' }}>
+                  <FaDollarSign className="me-2" style={{ color: '#1976d2' }} />
+                  Monthly Revenue
+                </h5>
+                <h2 className="text-success mb-0" style={{ fontWeight: '700' }}>
                   Rs {parseFloat(dashboardData.monthly.monthly_revenue).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                 </h2>
                 <p className="text-muted">From {dashboardData.monthly.monthly_bookings} bookings this month</p>
@@ -183,13 +259,20 @@ const Reports = () => {
             </Card>
           </Col>
           <Col md={6}>
-            <Card className="card-custom">
+            <Card style={{
+              border: 'none',
+              borderRadius: '1rem',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+            }}>
               <Card.Body>
-                <h5 className="mb-3"><FaBed className="me-2" />Room Status</h5>
+                <h5 className="mb-3" style={{ color: '#1a237e', fontWeight: '700' }}>
+                  <FaBed className="me-2" style={{ color: '#1976d2' }} />
+                  Room Status
+                </h5>
                 <div className="d-flex justify-content-between">
                   <div>
                     <Badge bg="success" className="me-2">Available: {dashboardData.rooms.available_rooms}</Badge>
-                    <Badge bg="primary" className="me-2">Occupied: {dashboardData.rooms.occupied_rooms}</Badge>
+                    <Badge style={{ background: '#1976d2' }} className="me-2">Occupied: {dashboardData.rooms.occupied_rooms}</Badge>
                     <Badge bg="warning">Maintenance: {dashboardData.rooms.maintenance_rooms}</Badge>
                   </div>
                 </div>
@@ -200,8 +283,22 @@ const Reports = () => {
       )}
 
       {/* Report Generation */}
-      <Card className="card-custom mb-4">
-        <Card.Header><h5 className="mb-0"><FaChartBar className="me-2" />Generate Report</h5></Card.Header>
+      <Card className="mb-4" style={{
+        border: 'none',
+        borderRadius: '1rem',
+        boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+      }}>
+        <Card.Header style={{
+          background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+          borderBottom: 'none',
+          borderRadius: '1rem 1rem 0 0',
+          padding: '1.5rem'
+        }}>
+          <h5 className="mb-0" style={{ color: 'white', fontWeight: '700' }}>
+            <FaChartBar className="me-2" />
+            Generate Report
+          </h5>
+        </Card.Header>
         <Card.Body>
           <Row>
             <Col md={2}>
@@ -252,7 +349,28 @@ const Reports = () => {
             </Col>
 
             <Col md={1} className="d-flex align-items-end">
-              <button className="btn btn-primary mb-3" onClick={fetchReport}>
+              <button 
+                className="btn mb-3" 
+                onClick={fetchReport}
+                style={{
+                  background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                  color: 'white',
+                  border: 'none',
+                  fontWeight: '600',
+                  padding: '0.5rem 1.5rem',
+                  borderRadius: '0.5rem',
+                  boxShadow: '0 4px 10px rgba(26, 35, 126, 0.3)',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 6px 15px rgba(25, 118, 210, 0.4)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 10px rgba(26, 35, 126, 0.3)';
+                }}
+              >
                 Generate
               </button>
             </Col>
@@ -263,30 +381,43 @@ const Reports = () => {
       {/* Report Display */}
       {loading ? (
         <div className="text-center py-5">
-          <Spinner animation="border" />
+          <Spinner animation="border" style={{ color: '#1976d2', width: '3rem', height: '3rem' }} />
+          <p className="mt-3" style={{ color: '#1976d2' }}>Generating report...</p>
         </div>
       ) : (
         <>
           {/* Revenue Report */}
           {reportType === 'revenue' && revenueReport && (
-            <Card className="card-custom">
-              <Card.Header>
-                <h5 className="mb-0">Revenue Report</h5>
-                <p className="mb-0 text-muted">Total Revenue: Rs {revenueReport.summary.totalRevenue} | Bookings: {revenueReport.summary.totalBookings} | Transactions: {revenueReport.summary.totalTransactions}</p>
+            <Card style={{
+              border: 'none',
+              borderRadius: '1rem',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+            }}>
+              <Card.Header style={{
+                background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                borderBottom: 'none',
+                borderRadius: '1rem 1rem 0 0',
+                padding: '1.5rem',
+                color: 'white'
+              }}>
+                <h5 className="mb-0" style={{ fontWeight: '700' }}>Revenue Report</h5>
+                <p className="mb-0" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Total Revenue: Rs {revenueReport.summary.totalRevenue} | Bookings: {revenueReport.summary.totalBookings} | Transactions: {revenueReport.summary.totalTransactions}</p>
               </Card.Header>
               <Card.Body>
                 {revenueReport.report && revenueReport.report.length > 0 ? (
                   <Table responsive hover>
-                    <thead className="table-light">
+                    <thead style={{
+                      background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)'
+                    }}>
                       <tr>
-                        <th>Period</th>
-                        <th>Total Bookings</th>
-                        <th>Transactions</th>
-                        <th>Total Revenue (Rs)</th>
-                        <th>Avg Transaction (Rs)</th>
-                        <th>Card (Rs)</th>
-                        <th>Cash (Rs)</th>
-                        <th>Online (Rs)</th>
+                        <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Period</th>
+                        <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Total Bookings</th>
+                        <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Transactions</th>
+                        <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Total Revenue (Rs)</th>
+                        <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Avg Transaction (Rs)</th>
+                        <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Card (Rs)</th>
+                        <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Cash (Rs)</th>
+                        <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Online (Rs)</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -315,20 +446,32 @@ const Reports = () => {
 
           {/* Occupancy Report */}
           {reportType === 'occupancy' && occupancyReport && (
-            <Card className="card-custom">
-              <Card.Header>
-                <h5 className="mb-0">Occupancy Report</h5>
-                <p className="mb-0 text-muted">Average Occupancy: {occupancyReport.summary.averageOccupancy}%</p>
+            <Card style={{
+              border: 'none',
+              borderRadius: '1rem',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+            }}>
+              <Card.Header style={{
+                background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                borderBottom: 'none',
+                borderRadius: '1rem 1rem 0 0',
+                padding: '1.5rem',
+                color: 'white'
+              }}>
+                <h5 className="mb-0" style={{ fontWeight: '700' }}>Occupancy Report</h5>
+                <p className="mb-0" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Average Occupancy: {occupancyReport.summary.averageOccupancy}%</p>
               </Card.Header>
               <Card.Body>
                 <Table responsive hover>
-                  <thead className="table-light">
+                  <thead style={{
+                    background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)'
+                  }}>
                     <tr>
-                      <th>Branch</th>
-                      <th>Total Rooms</th>
-                      <th>Occupied Rooms</th>
-                      <th>Total Bookings</th>
-                      <th>Occupancy Rate</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Branch</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Total Rooms</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Occupied Rooms</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Total Bookings</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Occupancy Rate</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -353,21 +496,33 @@ const Reports = () => {
 
           {/* Service Usage Report */}
           {reportType === 'service' && serviceReport && (
-            <Card className="card-custom">
-              <Card.Header>
-                <h5 className="mb-0">Service Usage Report</h5>
-                <p className="mb-0 text-muted">Total Revenue: Rs {serviceReport.summary.totalRevenue} | Total Usages: {serviceReport.summary.totalUsages}</p>
+            <Card style={{
+              border: 'none',
+              borderRadius: '1rem',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+            }}>
+              <Card.Header style={{
+                background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                borderBottom: 'none',
+                borderRadius: '1rem 1rem 0 0',
+                padding: '1.5rem',
+                color: 'white'
+              }}>
+                <h5 className="mb-0" style={{ fontWeight: '700' }}>Service Usage Report</h5>
+                <p className="mb-0" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Total Revenue: Rs {serviceReport.summary.totalRevenue} | Total Usages: {serviceReport.summary.totalUsages}</p>
               </Card.Header>
               <Card.Body>
                 <Table responsive hover>
-                  <thead className="table-light">
+                  <thead style={{
+                    background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)'
+                  }}>
                     <tr>
-                      <th>Service</th>
-                      <th>Category</th>
-                      <th>Usage Count</th>
-                      <th>Total Quantity</th>
-                      <th>Total Revenue (Rs)</th>
-                      <th>Avg Unit Price (Rs)</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Service</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Category</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Usage Count</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Total Quantity</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Total Revenue (Rs)</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Avg Unit Price (Rs)</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -389,22 +544,34 @@ const Reports = () => {
 
           {/* Payment Methods Report */}
           {reportType === 'payment' && paymentMethodReport && (
-            <Card className="card-custom">
-              <Card.Header>
-                <h5 className="mb-0">Payment Methods Report</h5>
-                <p className="mb-0 text-muted">Total: Rs {paymentMethodReport.summary.totalAmount} | Transactions: {paymentMethodReport.summary.totalTransactions}</p>
+            <Card style={{
+              border: 'none',
+              borderRadius: '1rem',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
+            }}>
+              <Card.Header style={{
+                background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                borderBottom: 'none',
+                borderRadius: '1rem 1rem 0 0',
+                padding: '1.5rem',
+                color: 'white'
+              }}>
+                <h5 className="mb-0" style={{ fontWeight: '700' }}>Payment Methods Report</h5>
+                <p className="mb-0" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>Total: Rs {paymentMethodReport.summary.totalAmount} | Transactions: {paymentMethodReport.summary.totalTransactions}</p>
               </Card.Header>
               <Card.Body>
                 <Table responsive hover>
-                  <thead className="table-light">
+                  <thead style={{
+                    background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)'
+                  }}>
                     <tr>
-                      <th>Payment Method</th>
-                      <th>Transaction Count</th>
-                      <th>Total Amount (Rs)</th>
-                      <th>Percentage</th>
-                      <th>Avg Amount (Rs)</th>
-                      <th>Min Amount (Rs)</th>
-                      <th>Max Amount (Rs)</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Payment Method</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Transaction Count</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Total Amount (Rs)</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Percentage</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Avg Amount (Rs)</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Min Amount (Rs)</th>
+                      <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Max Amount (Rs)</th>
                     </tr>
                   </thead>
                   <tbody>
