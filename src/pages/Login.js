@@ -41,12 +41,6 @@ const Login = () => {
       setLoading(false);
     }
   };
-  const demoCredentials = [
-    { username: 'admin', password: 'password123', role: 'Admin' },
-    { username: 'manager_colombo', password: 'password123', role: 'Manager - Colombo' },
-    { username: 'recept_colombo', password: 'password123', role: 'Receptionist - Colombo' },
-    { username: 'accountant_colombo', password: 'password123', role: 'Accountant - Colombo' }
-  ];
 
   return (
     <div className="login-page" style={{ 
@@ -202,37 +196,6 @@ const Login = () => {
                         </Button>
                       </div>
                     </Form>
-
-                    {/* Demo Credentials */}
-                    <div className="mt-4 pt-4 border-top">
-                      <small className="d-block mb-2" style={{ color: '#495057', fontWeight: '600' }}>Demo Credentials:</small>
-                      {demoCredentials.map((cred, index) => (
-                        <div key={index} className="small mb-2 p-2 rounded" style={{
-                          background: 'rgba(26, 35, 126, 0.05)',
-                          border: '1px solid rgba(26, 35, 126, 0.1)'
-                        }}>
-                          <strong style={{ color: '#1a237e', fontSize: '0.9rem' }}>{cred.role}:</strong><br />
-                          <code style={{ color: '#1976d2', background: 'rgba(25, 118, 210, 0.1)', padding: '2px 6px', borderRadius: '3px', fontSize: '0.85rem' }}>{cred.username}</code><br />
-                          <code style={{ color: '#0d47a1', background: 'rgba(13, 71, 161, 0.1)', padding: '2px 6px', borderRadius: '3px', fontSize: '0.85rem' }}>{cred.password}</code>
-                          <Button
-                            size="sm"
-                            style={{
-                              background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
-                              border: 'none',
-                              color: 'white',
-                              marginLeft: '8px',
-                              fontWeight: '500'
-                            }}
-                            onClick={() => {
-                              setIdentifier(cred.username);
-                              setPassword(cred.password);
-                            }}
-                          >
-                            Use
-                          </Button>
-                        </div>
-                      ))}
-                    </div>
 
                     {/* Additional Links */}
                     <div className="mt-4 text-center">
