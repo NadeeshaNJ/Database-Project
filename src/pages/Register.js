@@ -51,46 +51,183 @@ const Register = () => {
   };
 
   return (
-    <div className="login-page" style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #48547C 0%, #749DD0 100%)', display: 'flex', alignItems: 'center', padding: '20px' }}>
+    <div className="login-page" style={{ 
+      minHeight: '100vh', 
+      background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)', 
+      display: 'flex', 
+      alignItems: 'center', 
+      padding: '20px' 
+    }}>
       <Container>
         <Row className="justify-content-center">
           <Col md={8} lg={6}>
-            <Card className="shadow-lg border-0" style={{ borderRadius: '12px' }}>
+            <Card className="shadow-lg border-0" style={{ 
+              borderRadius: '12px',
+              overflow: 'hidden'
+            }}>
+              <div style={{
+                background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                padding: '2rem',
+                textAlign: 'center'
+              }}>
+                <h3 className="mb-0" style={{ 
+                  color: 'white', 
+                  fontWeight: '700',
+                  fontSize: '1.75rem'
+                }}>Create an Account</h3>
+                <p style={{ color: 'rgba(255, 255, 255, 0.9)', marginBottom: 0, marginTop: '0.5rem' }}>
+                  Join SkyNest Hotels
+                </p>
+              </div>
               <Card.Body className="p-4">
-                <h3 className="mb-4 text-center">Create an account</h3>
                 {error && <Alert variant="danger">{error}</Alert>}
                 {success && <Alert variant="success">{success}</Alert>}
                 <Form onSubmit={handleSubmit}>
                   <Form.Group className="mb-3">
-                    <Form.Label>Full name</Form.Label>
-                    <Form.Control name="full_name" value={form.full_name} onChange={handleChange} required />
+                    <Form.Label style={{ fontWeight: '600', color: '#1a237e' }}>Full Name</Form.Label>
+                    <Form.Control 
+                      name="full_name" 
+                      value={form.full_name} 
+                      onChange={handleChange} 
+                      required 
+                      style={{
+                        padding: '0.75rem',
+                        borderRadius: '8px',
+                        border: '2px solid #e0e6ed',
+                        transition: 'all 0.3s ease'
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#1976d2';
+                        e.target.style.boxShadow = '0 0 0 0.2rem rgba(25, 118, 210, 0.25)';
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = '#e0e6ed';
+                        e.target.style.boxShadow = 'none';
+                      }}
+                    />
                   </Form.Group>
                   <Form.Group className="mb-3">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control name="username" value={form.username} onChange={handleChange} required />
+                    <Form.Label style={{ fontWeight: '600', color: '#1a237e' }}>Username</Form.Label>
+                    <Form.Control 
+                      name="username" 
+                      value={form.username} 
+                      onChange={handleChange} 
+                      required 
+                      style={{
+                        padding: '0.75rem',
+                        borderRadius: '8px',
+                        border: '2px solid #e0e6ed',
+                        transition: 'all 0.3s ease'
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#1976d2';
+                        e.target.style.boxShadow = '0 0 0 0.2rem rgba(25, 118, 210, 0.25)';
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = '#e0e6ed';
+                        e.target.style.boxShadow = 'none';
+                      }}
+                    />
                   </Form.Group>
                   <Form.Group className="mb-3">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control type="email" name="email" value={form.email} onChange={handleChange} required />
+                    <Form.Label style={{ fontWeight: '600', color: '#1a237e' }}>Email</Form.Label>
+                    <Form.Control 
+                      type="email" 
+                      name="email" 
+                      value={form.email} 
+                      onChange={handleChange} 
+                      required 
+                      style={{
+                        padding: '0.75rem',
+                        borderRadius: '8px',
+                        border: '2px solid #e0e6ed',
+                        transition: 'all 0.3s ease'
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#1976d2';
+                        e.target.style.boxShadow = '0 0 0 0.2rem rgba(25, 118, 210, 0.25)';
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = '#e0e6ed';
+                        e.target.style.boxShadow = 'none';
+                      }}
+                    />
                   </Form.Group>
                   <Form.Group className="mb-3">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" name="password" value={form.password} onChange={handleChange} required />
+                    <Form.Label style={{ fontWeight: '600', color: '#1a237e' }}>Password</Form.Label>
+                    <Form.Control 
+                      type="password" 
+                      name="password" 
+                      value={form.password} 
+                      onChange={handleChange} 
+                      required 
+                      style={{
+                        padding: '0.75rem',
+                        borderRadius: '8px',
+                        border: '2px solid #e0e6ed',
+                        transition: 'all 0.3s ease'
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#1976d2';
+                        e.target.style.boxShadow = '0 0 0 0.2rem rgba(25, 118, 210, 0.25)';
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = '#e0e6ed';
+                        e.target.style.boxShadow = 'none';
+                      }}
+                    />
                   </Form.Group>
 
-                  <div className="d-grid">
-                    <Button type="submit" disabled={loading} variant="primary">
+                  <div className="d-grid mt-4">
+                    <Button 
+                      type="submit" 
+                      disabled={loading}
+                      style={{
+                        background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                        border: 'none',
+                        padding: '0.75rem',
+                        fontSize: '1.1rem',
+                        fontWeight: '600',
+                        borderRadius: '8px',
+                        boxShadow: '0 4px 15px rgba(26, 35, 126, 0.4)',
+                        transition: 'all 0.3s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!loading) {
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                          e.currentTarget.style.boxShadow = '0 6px 20px rgba(25, 118, 210, 0.5)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 4px 15px rgba(26, 35, 126, 0.4)';
+                      }}
+                    >
                       {loading ? (
                         <>
                           <Spinner as="span" animation="border" size="sm" className="me-2" />
                           Creating...
                         </>
-                      ) : 'Create account'}
+                      ) : 'Create Account'}
                     </Button>
                   </div>
                 </Form>
                 <div className="mt-3 text-center">
-                  <small className="text-muted">Already have an account? <a href="/login">Sign in</a></small>
+                  <small className="text-muted">
+                    Already have an account? {' '}
+                    <a 
+                      href="/login" 
+                      style={{ 
+                        color: '#1976d2', 
+                        textDecoration: 'none',
+                        fontWeight: '600'
+                      }}
+                      onMouseEnter={(e) => e.target.style.textDecoration = 'underline'}
+                      onMouseLeave={(e) => e.target.style.textDecoration = 'none'}
+                    >
+                      Sign in
+                    </a>
+                  </small>
                 </div>
               </Card.Body>
             </Card>
