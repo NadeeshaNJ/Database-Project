@@ -125,10 +125,13 @@ const Hotels = () => {
               flex: 1,
               marginRight: '1rem'
             }}>
-              <h2 style={{ fontWeight: '700', marginBottom: '0.5rem', color: '#ffffff' }}>
-                <FaBuilding className="me-2" />
-                Hotel Branches
-              </h2>
+              
+              <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '8px' }}>
+                      <FaBuilding className="me-2" />
+                      Hotel Branches
+              </h1>
+                
+              
               <p style={{ marginBottom: 0, opacity: 0.9, color: '#ffffff' }}>Manage SkyNest Hotels locations across Sri Lanka</p>
             </div>
             <Button 
