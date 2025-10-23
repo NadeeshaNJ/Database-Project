@@ -1,11 +1,11 @@
 import React from 'react';
 import { Navbar as BootstrapNavbar, Nav, Container, NavDropdown, Badge, Form } from 'react-bootstrap';
-import { FaBed, FaUser, FaCog, FaSignOutAlt, FaBuilding, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaBed, FaUser, FaCog, FaSignOutAlt, FaBuilding, FaMapMarkerAlt, FaBars } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 import { useBranch } from '../../context/BranchContext';
 import { useNavigate } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({ onMenuToggle }) => {
   const { user, logout } = useAuth();
   const { selectedBranchId, setSelectedBranchId, branches, isLocked, selectedBranch } = useBranch();
   const navigate = useNavigate();

@@ -10,10 +10,11 @@ import {
   FaUserTie,
   FaConciergeBell, 
   FaReceipt,
-  FaChartBar 
+  FaChartBar,
+  FaTimes
 } from 'react-icons/fa';
 
-const Sidebar = () => {
+const Sidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
 
   const menuItems = [
@@ -29,62 +30,108 @@ const Sidebar = () => {
   ];
 
   return (
-    <div style={{
-      background: 'linear-gradient(180deg, #1a237e 0%, #0d47a1 100%)',
-      minHeight: '100vh',
-      width: '250px',
-      position: 'fixed',
-      left: 0,
-      top: '56px',
-      bottom: 0,
-      overflowY: 'auto',
-      boxShadow: '2px 0 10px rgba(0,0,0,0.1)',
-      zIndex: 1000
-    }}>
-      <Nav className="flex-column" style={{ padding: '20px 0' }}>
-        {menuItems.map((item, index) => {
-          const IconComponent = item.icon;
-          const isActive = location.pathname === item.path;
-          
-          return (
-            <Link
-              key={index}
-              to={item.path}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                padding: '14px 24px',
-                color: isActive ? 'white' : 'rgba(255, 255, 255, 0.8)',
-                textDecoration: 'none',
-                fontSize: '1rem',
-                fontWeight: isActive ? '600' : '500',
-                background: isActive ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                borderLeft: isActive ? '4px solid #1976d2' : '4px solid transparent',
-                transition: 'all 0.3s ease',
-                marginBottom: '4px'
-              }}
-              onMouseEnter={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
-                  e.currentTarget.style.color = 'white';
-                  e.currentTarget.style.paddingLeft = '28px';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isActive) {
-                  e.currentTarget.style.background = 'transparent';
-                  e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
-                  e.currentTarget.style.paddingLeft = '24px';
-                }
-              }}
-            >
-              <IconComponent style={{ marginRight: '12px', fontSize: '1.2rem' }} />
-              {item.label}
-            </Link>
-          );
-        })}
-      </Nav>
-    </div>
+    <>
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            zIndex: 999,
+            display: 'none'
+          }}
+          className="sidebar-overlay"
+          onClick={onClose}
+        />
+      )}
+      
+      <div 
+        className={`sidebar-menu ${isOpen ? 'show' : ''}`}
+        style={{
+          background: 'linear-gradient(180deg, #1a237e 0%, #0d47a1 100%)',
+          minHeight: '100vh',
+          width: '250px',
+          position: 'fixed',
+          left: 0,
+          top: '56px',
+          bottom: 0,
+          overflowY: 'auto',
+          boxShadow: '2px 0 10px rgba(0,0,0,0.1)',
+          zIndex: 1000,
+          transition: 'transform 0.3s ease'
+        }}
+      >
+        {/* Close button for mobile */}
+        <button
+          onClick={onClose}
+          className="sidebar-close-btn"
+          style={{
+            display: 'none',
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            background: 'transparent',
+            border: 'none',
+            color: 'white',
+            fontSize: '1.5rem',
+            cursor: 'pointer',
+            zIndex: 1001,
+            padding: '5px 10px'
+          }}
+        >
+          <FaTimes />
+        </button>
+        
+        <Nav className="flex-column" style={{ padding: '20px 0' }}>
+          {menuItems.map((item, index) => {
+            const IconComponent = item.icon;
+            const isActive = location.pathname === item.path;
+            
+            return (
+              <Link
+                key={index}
+                to={item.path}
+                onClick={onClose}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '14px 24px',
+                  color: isActive ? 'white' : 'rgba(255, 255, 255, 0.8)',
+                  textDecoration: 'none',
+                  fontSize: '1rem',
+                  fontWeight: isActive ? '600' : '500',
+                  background: isActive ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                  borderLeft: isActive ? '4px solid #1976d2' : '4px solid transparent',
+                  transition: 'all 0.3s ease',
+                  marginBottom: '4px'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)';
+                    e.currentTarget.style.color = 'white';
+                    e.currentTarget.style.paddingLeft = '28px';
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.background = 'transparent';
+                    e.currentTarget.style.color = 'rgba(255, 255, 255, 0.8)';
+                    e.currentTarget.style.paddingLeft = '24px';
+                  }
+                }}
+              >
+                <IconComponent style={{ marginRight: '12px', fontSize: '1.2rem' }} />
+                {item.label}
+              </Link>
+            );
+          })}
+        </Nav>
+      </div>
+    </>
   );
 };
 
