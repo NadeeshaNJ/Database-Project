@@ -47,7 +47,7 @@ export const BranchProvider = ({ children }) => {
   useEffect(() => {
     const fetchBranches = async () => {
       try {
-        const response = await fetch(`${apiUrl}/branches`);
+        const response = await fetch(apiUrl('/api/branches'));
         const data = await response.json();
         
         if (data.success && data.data && data.data.branches) {

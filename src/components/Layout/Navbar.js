@@ -60,6 +60,24 @@ const Navbar = ({ onMenuToggle }) => {
       }}
     >
       <Container fluid>
+        {/* Hamburger Menu Button for Mobile */}
+        <button
+          onClick={onMenuToggle}
+          className="sidebar-toggle-btn"
+          style={{
+            background: 'transparent',
+            border: 'none',
+            color: 'white',
+            fontSize: '1.5rem',
+            cursor: 'pointer',
+            marginRight: '15px',
+            padding: '5px 10px',
+            display: 'none'
+          }}
+        >
+          <FaBars />
+        </button>
+        
         <BootstrapNavbar.Brand 
           href="/admin" 
           style={{
@@ -79,14 +97,16 @@ const Navbar = ({ onMenuToggle }) => {
             {user && (
               <>
                 {/* Global Branch Selector - Disabled for non-admin users */}
-                <div className="me-3">
+                <div className="me-3 branch-selector-wrapper">
                   {shouldShowDropdown ? (
                     /* Admin or unlocked - show dropdown */
                     <Form.Select 
                       value={selectedBranchId} 
                       onChange={(e) => setSelectedBranchId(e.target.value)}
+                      className="branch-selector"
                       style={{ 
-                        width: '200px', 
+                        minWidth: '180px',
+                        maxWidth: '100%',
                         backgroundColor: 'rgba(255, 255, 255, 0.2)', 
                         color: 'white', 
                         border: '1px solid rgba(255, 255, 255, 0.3)',
