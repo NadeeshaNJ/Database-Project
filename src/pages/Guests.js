@@ -339,12 +339,36 @@ const Guests = () => {
     <div>
       <Row className="mb-4">
         <Col>
-        <div className="page-header">
-          <h2 >Guest Management</h2>
+        <div className="page-header" style={{
+          background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+          padding: '2rem',
+          borderRadius: '1rem',
+          boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+          color: 'white'
+        }}>
+          <h2 style={{ color: 'white', fontWeight: '700', marginBottom: 0 }}>Guest Management</h2>
           </div>
         </Col>
         <Col xs="auto">
-          <Button variant="primary" onClick={() => handleShowModal()}>
+          <Button 
+            onClick={() => handleShowModal()}
+            style={{
+              background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+              border: 'none',
+              fontWeight: '600',
+              padding: '0.75rem 1.5rem',
+              boxShadow: '0 4px 15px rgba(26, 35, 126, 0.4)',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 20px rgba(25, 118, 210, 0.5)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 15px rgba(26, 35, 126, 0.4)';
+            }}
+          >
             <FaPlus className="me-2" />
             Add New Guest
           </Button>
@@ -353,59 +377,75 @@ const Guests = () => {
 
       {error && <Alert variant="warning">{error}</Alert>}
 
-      <Card>
-        <Card.Header>
+      <Card style={{ border: 'none', borderRadius: '1rem', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
+        <Card.Header style={{
+          background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+          borderBottom: 'none',
+          borderRadius: '1rem 1rem 0 0',
+          padding: '1.5rem',
+          color: 'white'
+        }}>
           <Row className="align-items-center mb-3">
             <Col md={12}>
-              <Form.Label>Search</Form.Label>
+              <Form.Label style={{ color: 'white', fontWeight: '600' }}>Search</Form.Label>
               <InputGroup>
-                <InputGroup.Text><FaSearch /></InputGroup.Text>
+                <InputGroup.Text style={{ 
+                  background: 'white', 
+                  border: 'none',
+                  color: '#1976d2'
+                }}>
+                  <FaSearch />
+                </InputGroup.Text>
                 <Form.Control
                   type="text"
                   placeholder="Search guests..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
+                  style={{ border: 'none' }}
                 />
               </InputGroup>
             </Col>
           </Row>
           <Row className="align-items-center">
             <Col>
-              <h5 className="mb-0">Guest List</h5>
+              <h5 className="mb-0" style={{ color: 'white', fontWeight: '700' }}>Guest List</h5>
             </Col>
           </Row>
         </Card.Header>
         <Card.Body className="p-0">
           {loading ? (
             <div className="text-center py-5">
-              <Spinner animation="border" variant="primary" />
-              <p className="mt-2 text-muted">Loading guests...</p>
+              <Spinner animation="border" style={{ color: '#1976d2', width: '3rem', height: '3rem' }} />
+              <p className="mt-2" style={{ color: '#1976d2' }}>Loading guests...</p>
             </div>
           ) : (
             <Table responsive hover className="mb-0">
-              <thead className="table-light">
+              <thead style={{
+                background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                borderBottom: '2px solid #0d47a1'
+              }}>
                 <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Phone</th>
-                  <th>Nationality</th>
-                  <th>ID Number</th>
-                  <th>Check-in Date</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Name</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Email</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Phone</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Nationality</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>ID Number</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Check-in Date</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Status</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredGuests.map((guest) => (
-                  <tr key={guest.id}>
-                    <td>{`${guest.firstName} ${guest.lastName}`}</td>
-                    <td>{guest.email}</td>
-                    <td>{guest.phone}</td>
-                    <td>{guest.nationality}</td>
-                    <td>{guest.idNumber}</td>
-                    <td>{guest.checkInDate}</td>
-                    <td>{getStatusBadge(guest.status)}</td>
-                    <td>
+                  <tr key={guest.id} style={{ borderBottom: '1px solid #e0e6ed' }}>
+                    <td style={{ padding: '16px', color: '#2c3e50', fontWeight: '500' }}>{`${guest.firstName} ${guest.lastName}`}</td>
+                    <td style={{ padding: '16px', color: '#2c3e50', fontWeight: '500' }}>{guest.email}</td>
+                    <td style={{ padding: '16px', color: '#2c3e50', fontWeight: '500' }}>{guest.phone}</td>
+                    <td style={{ padding: '16px', color: '#2c3e50', fontWeight: '500' }}>{guest.nationality}</td>
+                    <td style={{ padding: '16px', color: '#2c3e50', fontWeight: '500' }}>{guest.idNumber}</td>
+                    <td style={{ padding: '16px', color: '#2c3e50', fontWeight: '500' }}>{guest.checkInDate}</td>
+                    <td style={{ padding: '16px' }}>{getStatusBadge(guest.status)}</td>
+                    <td style={{ padding: '16px' }}>
                       <Button 
                         variant="outline-danger" 
                         size="sm"
@@ -424,8 +464,12 @@ const Guests = () => {
 
       {/* Add/Edit Guest Modal */}
       <Modal show={showModal} onHide={handleCloseModal} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>Add New Guest</Modal.Title>
+        <Modal.Header closeButton style={{
+          background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+          color: 'white',
+          border: 'none'
+        }}>
+          <Modal.Title style={{ color: 'white', fontWeight: '600' }}>Add New Guest</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {formError && (
@@ -437,7 +481,14 @@ const Guests = () => {
             <Row>
               {/* Personal Information */}
               <Col xs={12}>
-                <h6 className="text-primary mb-3">Personal Information</h6>
+                <h6 className="mb-3" style={{ 
+                  color: '#1a237e', 
+                  fontWeight: '600',
+                  borderBottom: '2px solid #1976d2',
+                  paddingBottom: '0.5rem'
+                }}>
+                  Personal Information
+                </h6>
               </Col>
               
               <Col md={12}>
@@ -592,14 +643,39 @@ const Guests = () => {
             </Row>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal} disabled={formLoading}>
+        <Modal.Footer style={{ borderTop: '1px solid #e0e6ed', padding: '1.5rem' }}>
+          <Button 
+            variant="secondary" 
+            onClick={handleCloseModal} 
+            disabled={formLoading}
+            style={{
+              padding: '0.5rem 1.5rem',
+              fontWeight: '600'
+            }}
+          >
             Cancel
           </Button>
           <Button 
-            variant="primary" 
             onClick={handleSubmit}
             disabled={formLoading}
+            style={{
+              background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+              border: 'none',
+              padding: '0.5rem 1.5rem',
+              fontWeight: '600',
+              boxShadow: '0 4px 10px rgba(26, 35, 126, 0.3)',
+              transition: 'all 0.3s ease'
+            }}
+            onMouseEnter={(e) => {
+              if (!formLoading) {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 15px rgba(25, 118, 210, 0.4)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 10px rgba(26, 35, 126, 0.3)';
+            }}
           >
             {formLoading ? (
               <>
