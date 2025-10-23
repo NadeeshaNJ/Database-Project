@@ -188,15 +188,43 @@ const Employees = () => {
       {/* Page Header */}
       <Row className="mb-4">
         <Col>
-          <div className="page-header">
+          <div className="page-header" style={{
+            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+            padding: '2rem',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
+            color: 'white'
+          }}>
             <div className="d-flex justify-content-between align-items-center">
               <div>
-                <h2>Employee Management</h2>
-                <p style={{ marginBottom: 0 }}>
+                <h2 style={{ color: 'white', fontWeight: '700', marginBottom: '0.5rem' }}>
+                  <FaUserTie className="me-2" />
+                  Employee Management
+                </h2>
+                <p style={{ marginBottom: 0, color: 'rgba(255, 255, 255, 0.9)' }}>
                   Manage employees working at {selectedBranchId === 'All' ? 'all branches' : `Branch ${selectedBranchId}`}
                 </p>
               </div>
-              <Button variant="primary" onClick={() => handleShowModal()}>
+              <Button 
+                onClick={() => handleShowModal()}
+                style={{
+                  background: 'white',
+                  color: '#1a237e',
+                  border: 'none',
+                  fontWeight: '600',
+                  padding: '0.75rem 1.5rem',
+                  boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 6px 15px rgba(0,0,0,0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
+                }}
+              >
                 <FaPlus className="me-2" />
                 Add New Employee
               </Button>
@@ -211,7 +239,21 @@ const Employees = () => {
       {/* Employee Statistics */}
       <Row className="mb-4">
         <Col md={2}>
-          <Card className="stat-card text-center h-100">
+          <Card className="text-center h-100" style={{
+            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+            border: 'none',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 15px rgba(26, 35, 126, 0.3)',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 8px 25px rgba(26, 35, 126, 0.4)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 15px rgba(26, 35, 126, 0.3)';
+          }}>
             <Card.Body style={{ padding: '24px' }}>
               <FaUserTie style={{ color: 'white', marginBottom: '12px' }} size={32} />
               <h3 style={{ color: 'white', fontWeight: 'bold', fontSize: '2rem', marginBottom: '8px' }}>
@@ -222,7 +264,21 @@ const Employees = () => {
           </Card>
         </Col>
         <Col md={2}>
-          <Card className="stat-card text-center h-100">
+          <Card className="text-center h-100" style={{
+            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+            border: 'none',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 15px rgba(26, 35, 126, 0.3)',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 8px 25px rgba(26, 35, 126, 0.4)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 15px rgba(26, 35, 126, 0.3)';
+          }}>
             <Card.Body style={{ padding: '24px' }}>
               <h3 style={{ color: 'white', fontWeight: 'bold', fontSize: '2rem', marginBottom: '8px' }}>
                 {stats.managers}
@@ -232,7 +288,21 @@ const Employees = () => {
           </Card>
         </Col>
         <Col md={2}>
-          <Card className="stat-card text-center h-100">
+          <Card className="text-center h-100" style={{
+            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+            border: 'none',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 15px rgba(26, 35, 126, 0.3)',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 8px 25px rgba(26, 35, 126, 0.4)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 15px rgba(26, 35, 126, 0.3)';
+          }}>
             <Card.Body style={{ padding: '24px' }}>
               <h3 style={{ color: 'white', fontWeight: 'bold', fontSize: '2rem', marginBottom: '8px' }}>
                 {stats.receptionists}
@@ -242,7 +312,21 @@ const Employees = () => {
           </Card>
         </Col>
         <Col md={2}>
-          <Card className="stat-card text-center h-100">
+          <Card className="text-center h-100" style={{
+            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+            border: 'none',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 15px rgba(26, 35, 126, 0.3)',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 8px 25px rgba(26, 35, 126, 0.4)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 15px rgba(26, 35, 126, 0.3)';
+          }}>
             <Card.Body style={{ padding: '24px' }}>
               <h3 style={{ color: 'white', fontWeight: 'bold', fontSize: '2rem', marginBottom: '8px' }}>
                 {stats.accountants}
@@ -252,7 +336,21 @@ const Employees = () => {
           </Card>
         </Col>
         <Col md={2}>
-          <Card className="stat-card text-center h-100">
+          <Card className="text-center h-100" style={{
+            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+            border: 'none',
+            borderRadius: '1rem',
+            boxShadow: '0 4px 15px rgba(26, 35, 126, 0.3)',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 8px 25px rgba(26, 35, 126, 0.4)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 15px rgba(26, 35, 126, 0.3)';
+          }}>
             <Card.Body style={{ padding: '24px' }}>
               <h3 style={{ color: 'white', fontWeight: 'bold', fontSize: '2rem', marginBottom: '8px' }}>
                 {stats.housekeeping}
@@ -264,17 +362,22 @@ const Employees = () => {
       </Row>
 
       {/* Employee List */}
-      <Card>
-        <Card.Header style={{ background: '#f8f9fa', borderBottom: '1px solid #e0e6ed' }}>
-          <h5 className="mb-0" style={{ fontWeight: '700', color: '#2c3e50' }}>
+      <Card style={{ border: 'none', borderRadius: '1rem', boxShadow: '0 4px 15px rgba(0,0,0,0.1)' }}>
+        <Card.Header style={{ 
+          background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)', 
+          borderBottom: 'none',
+          borderRadius: '1rem 1rem 0 0',
+          padding: '1.5rem'
+        }}>
+          <h5 className="mb-0" style={{ fontWeight: '700', color: 'white' }}>
             Employee List ({employees.length})
           </h5>
         </Card.Header>
         <Card.Body className="p-0">
           {loading ? (
             <div className="text-center py-5">
-              <Spinner animation="border" variant="primary" />
-              <p className="mt-2 text-muted">Loading employees...</p>
+              <Spinner animation="border" style={{ color: '#1976d2', width: '3rem', height: '3rem' }} />
+              <p className="mt-2" style={{ color: '#1976d2' }}>Loading employees...</p>
             </div>
           ) : employees.length === 0 ? (
             <div className="text-center py-5">
@@ -282,15 +385,18 @@ const Employees = () => {
             </div>
           ) : (
             <Table responsive hover className="mb-0">
-              <thead style={{ backgroundColor: '#f8f9fa', borderBottom: '2px solid #e0e6ed' }}>
+              <thead style={{ 
+                background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                borderBottom: '2px solid #0d47a1' 
+              }}>
                 <tr>
-                  <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>ID</th>
-                  <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Name</th>
-                  <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Email</th>
-                  <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Phone</th>
-                  <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Branch</th>
-                  <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Role</th>
-                  <th style={{ padding: '16px', fontWeight: '600', color: '#5a6c7d', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Actions</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>ID</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Name</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Email</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Phone</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Branch</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Role</th>
+                  <th style={{ padding: '16px', fontWeight: '600', color: 'white', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -337,8 +443,14 @@ const Employees = () => {
 
       {/* Add/Edit Employee Modal */}
       <Modal show={showModal} onHide={handleCloseModal} size="lg">
-        <Modal.Header closeButton>
-          <Modal.Title>{selectedEmployee ? 'Edit Employee' : 'Add New Employee'}</Modal.Title>
+        <Modal.Header closeButton style={{
+          background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+          color: 'white',
+          border: 'none'
+        }}>
+          <Modal.Title style={{ color: 'white', fontWeight: '600' }}>
+            {selectedEmployee ? 'Edit Employee' : 'Add New Employee'}
+          </Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
@@ -425,11 +537,36 @@ const Employees = () => {
               </Row>
             )}
           </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseModal}>
+          <Modal.Footer style={{ borderTop: '1px solid #e0e6ed', padding: '1.5rem' }}>
+            <Button 
+              variant="secondary" 
+              onClick={handleCloseModal}
+              style={{
+                padding: '0.5rem 1.5rem',
+                fontWeight: '600'
+              }}
+            >
               Cancel
             </Button>
-            <Button variant="primary" type="submit">
+            <Button 
+              type="submit"
+              style={{
+                background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                border: 'none',
+                padding: '0.5rem 1.5rem',
+                fontWeight: '600',
+                boxShadow: '0 4px 10px rgba(26, 35, 126, 0.3)',
+                transition: 'all 0.3s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 15px rgba(25, 118, 210, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 10px rgba(26, 35, 126, 0.3)';
+              }}
+            >
               {selectedEmployee ? 'Update Employee' : 'Add Employee'}
             </Button>
           </Modal.Footer>
