@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/Database-Project/static/css/main.a7450755.css",
-    "main.js": "/Database-Project/static/js/main.c43c2872.js",
+    "main.js": "/Database-Project/static/js/main.fcce6004.js",
     "index.html": "/Database-Project/index.html",
     "main.a7450755.css.map": "/Database-Project/static/css/main.a7450755.css.map",
-    "main.c43c2872.js.map": "/Database-Project/static/js/main.c43c2872.js.map"
+    "main.fcce6004.js.map": "/Database-Project/static/js/main.fcce6004.js.map"
   },
   "entrypoints": [
     "static/css/main.a7450755.css",
-    "static/js/main.c43c2872.js"
+    "static/js/main.fcce6004.js"
   ]
 }
