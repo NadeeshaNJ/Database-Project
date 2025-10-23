@@ -55,6 +55,22 @@ body {
   color: #1a237e !important;
 }
 
+/* Override: Card headers with blue background need white text */
+.card-header[style*="linear-gradient"] h1,
+.card-header[style*="linear-gradient"] h2,
+.card-header[style*="linear-gradient"] h3,
+.card-header[style*="linear-gradient"] h4,
+.card-header[style*="linear-gradient"] h5,
+.card-header[style*="linear-gradient"] h6,
+.card-header[style*="background: linear-gradient"] h1,
+.card-header[style*="background: linear-gradient"] h2,
+.card-header[style*="background: linear-gradient"] h3,
+.card-header[style*="background: linear-gradient"] h4,
+.card-header[style*="background: linear-gradient"] h5,
+.card-header[style*="background: linear-gradient"] h6 {
+  color: white !important;
+}
+
 /* Make paragraph text visible on dark background */
 .content-wrapper > p,
 .content-wrapper > div > p {

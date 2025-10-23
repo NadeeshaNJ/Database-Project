@@ -43,6 +43,55 @@ h1, h2, h3, h4, h5, h6 {
   color: #1a237e !important;
 }
 
+/* Force White Text on Blue Gradient Backgrounds (All Pages) */
+.page-header h1,
+.page-header h2,
+.page-header h3,
+.page-header h4,
+.page-header h5,
+.page-header h6,
+.page-header p {
+  color: white !important;
+}
+
+.card-header h1,
+.card-header h2,
+.card-header h3,
+.card-header h4,
+.card-header h5,
+.card-header h6,
+.card-header p {
+  color: white !important;
+}
+
+/* Modal Headers with Blue Background */
+.modal-header h1,
+.modal-header h2,
+.modal-header h3,
+.modal-header h4,
+.modal-header h5,
+.modal-header h6,
+.modal-header .modal-title {
+  color: white !important;
+}
+
+/* Table Headers with Blue Gradient Background */
+thead[style*="linear-gradient"] th,
+thead[style*="background: linear-gradient"] th {
+  color: white !important;
+}
+
+/* Specific override for any element with inline style containing linear-gradient background */
+div[style*="linear-gradient"] h1,
+div[style*="linear-gradient"] h2,
+div[style*="linear-gradient"] h3,
+div[style*="linear-gradient"] h4,
+div[style*="linear-gradient"] h5,
+div[style*="linear-gradient"] h6,
+div[style*="linear-gradient"] p {
+  color: white !important;
+}
+
 /* Clean Sidebar */
 .sidebar {
   width: 250px;
