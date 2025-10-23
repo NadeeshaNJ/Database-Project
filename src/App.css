@@ -17,6 +17,32 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
+/* Login Page - Force White Text on Blue Background */
+.login-page h1,
+.login-page h2,
+.login-page h3,
+.login-page h4,
+.login-page h5,
+.login-page h6,
+.login-page p,
+.login-page li,
+.login-page .lead,
+.login-page .small {
+  color: white !important;
+}
+
+/* Exception: Keep right side form area with dark text */
+.login-page .card-body h1,
+.login-page .card-body h2,
+.login-page .card-body h3,
+.login-page .card-body h4,
+.login-page .card-body h5,
+.login-page .card-body h6,
+.login-page .card-body p,
+.login-page .card-body .small {
+  color: #1a237e !important;
+}
+
 /* Clean Sidebar */
 .sidebar {
   width: 250px;
