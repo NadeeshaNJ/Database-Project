@@ -14,7 +14,9 @@ const Employees = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [formData, setFormData] = useState({
-    user_id: '',
+    username: '',
+    password: '',
+    role: '',
     branch_id: '',
     name: '',
     email: '',
@@ -69,7 +71,9 @@ const Employees = () => {
     if (employee) {
       setSelectedEmployee(employee);
       setFormData({
-        user_id: employee.user_id || '',
+        username: '',
+        password: '',
+        role: employee.role || '',
         branch_id: employee.branch_id || '',
         name: employee.name || '',
         email: employee.email || '',
@@ -78,7 +82,9 @@ const Employees = () => {
     } else {
       setSelectedEmployee(null);
       setFormData({
-        user_id: '',
+        username: '',
+        password: '',
+        role: '',
         branch_id: '',
         name: '',
         email: '',
@@ -94,7 +100,9 @@ const Employees = () => {
     setShowModal(false);
     setSelectedEmployee(null);
     setFormData({
-      user_id: '',
+      username: '',
+      password: '',
+      role: '',
       branch_id: '',
       name: '',
       email: '',
@@ -417,14 +425,6 @@ const Employees = () => {
                       </Badge>
                     </td>
                     <td style={{ padding: '16px' }}>
-                      <Button
-                        variant="outline-primary"
-                        size="sm"
-                        onClick={() => handleShowModal(employee)}
-                        className="me-2"
-                      >
-                        <FaEdit />
-                      </Button>
                       <Button 
                         variant="outline-danger" 
                         size="sm"
@@ -457,6 +457,68 @@ const Employees = () => {
             {error && <Alert variant="danger">{error}</Alert>}
             {success && <Alert variant="success">{success}</Alert>}
             
+            {!selectedEmployee && (
+              <>
+                <h6 className="mb-3 text-primary">User Account Details</h6>
+                <Row>
+                  <Col md={6}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Username <span className="text-danger">*</span></Form.Label>
+                      <Form.Control 
+                        type="text" 
+                        name="username"
+                        placeholder="Enter username" 
+                        value={formData.username}
+                        onChange={handleInputChange}
+                        required
+                      />
+                      <Form.Text className="text-muted">
+                        Used for login
+                      </Form.Text>
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Password <span className="text-danger">*</span></Form.Label>
+                      <Form.Control 
+                        type="password" 
+                        name="password"
+                        placeholder="Enter password" 
+                        value={formData.password}
+                        onChange={handleInputChange}
+                        required
+                        minLength={6}
+                      />
+                      <Form.Text className="text-muted">
+                        Minimum 6 characters
+                      </Form.Text>
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col md={12}>
+                    <Form.Group className="mb-3">
+                      <Form.Label>Role <span className="text-danger">*</span></Form.Label>
+                      <Form.Select 
+                        name="role"
+                        value={formData.role}
+                        onChange={handleInputChange}
+                        required
+                      >
+                        <option value="">Select Role</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Manager">Manager</option>
+                        <option value="Receptionist">Receptionist</option>
+                        <option value="Accountant">Accountant</option>
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <hr className="my-4" />
+              </>
+            )}
+            
+            <h6 className="mb-3 text-primary">Employee Details</h6>
             <Row>
               <Col md={6}>
                 <Form.Group className="mb-3">
@@ -516,26 +578,6 @@ const Employees = () => {
                 </Form.Group>
               </Col>
             </Row>
-            {!selectedEmployee && (
-              <Row>
-                <Col md={12}>
-                  <Form.Group className="mb-3">
-                    <Form.Label>User ID <span className="text-danger">*</span></Form.Label>
-                    <Form.Control 
-                      type="number" 
-                      name="user_id"
-                      placeholder="Enter user account ID" 
-                      value={formData.user_id}
-                      onChange={handleInputChange}
-                      required
-                    />
-                    <Form.Text className="text-muted">
-                      The user account must be created first in the system
-                    </Form.Text>
-                  </Form.Group>
-                </Col>
-              </Row>
-            )}
           </Modal.Body>
           <Modal.Footer style={{ borderTop: '1px solid #e0e6ed', padding: '1.5rem' }}>
             <Button 
