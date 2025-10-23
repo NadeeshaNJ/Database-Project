@@ -1,388 +1,217 @@
-https://nadeeshanj.github.io/Database-Project/
+﻿# SkyNest Hotel Management System - Frontend
 
-# SkyNest Hotel Management System - Frontend# Hotel Management System - Frontend
+Database Lab Project in Semester 3 - Hotel Reservation and Guest Services Management System
 
+##  Live Production
 
+- **Website**: https://nadeeshanj.github.io/Database-Project/
+- **Status**: Production Ready 
+- **Backend API**: https://skynest-backend-api.onrender.com
 
-Modern React-based hotel management application for the SkyNest chain (Colombo, Kandy, Galle branches).Database Lab Project in Semester 3 - Hotel Reservation and Guest Services Management System
+## Overview
 
+This is a comprehensive React-based frontend application for managing hotel operations including guest management, reservations, room management, services, and reporting. Modern React application for the SkyNest chain (Colombo, Kandy, Galle branches). The application provides an intuitive and modern user interface for hotel staff to efficiently manage daily operations.
 
+##  Features
 
-## 🚀 Live Production## Overview
+###  Core Management Modules
+- **Dashboard**: Real-time statistics, revenue charts, and quick actions
+- **Guest Management**: Add, edit, view, and search guest information
+- **Reservation Management**: Handle bookings, check-ins, and check-outs
+- **Room Management**: Monitor room status, availability, and pricing
+- **Service Management**: Track and manage guest service requests
+- **Reports & Analytics**: Generate comprehensive reports and view performance metrics
+- **Branch Management**: Multi-location support (Colombo, Kandy, Galle)
+- **Billing**: Payment processing and adjustments
+- **Staff**: Employee management and role assignment
 
-
-
-- **Website**: https://nadeeshanj.github.io/Database-Project/This is a comprehensive React-based frontend application for managing hotel operations including guest management, reservations, room management, services, and reporting. The application provides an intuitive and modern user interface for hotel staff to efficiently manage daily operations.
-
-- **Status**: Production Ready ✅
-
-- **Backend API**: https://skynest-backend-api.onrender.com## Features
-
-
-
-## 🎯 Features### 🏨 Core Management Modules
-
-- **Dashboard**: Overview of hotel statistics and quick actions
-
-### Core Modules- **Guest Management**: Add, edit, view, and search guest information
-
-- **Dashboard**: Real-time statistics, revenue charts, and quick actions- **Reservation Management**: Handle bookings, check-ins, and check-outs
-
-- **Bookings**: Reservation management with check-in/check-out- **Room Management**: Monitor room status, availability, and pricing
-
-- **Guests**: Complete guest profile management- **Service Management**: Track and manage guest service requests
-
-- **Rooms**: Room availability, status tracking, and pricing- **Reports & Analytics**: Generate comprehensive reports and view performance metrics
-
-- **Hotels**: Branch management (Colombo, Kandy, Galle)
-
-- **Services**: Guest service requests and tracking### 🎨 UI/UX Features
-
-- **Billing**: Payment processing and adjustments- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
-
-- **Reports**: Analytics, revenue, and occupancy reports- **Modern Interface**: Clean and professional design with Bootstrap styling
-
-- **Staff**: Employee management and role assignment- **Interactive Components**: Dynamic forms, modals, and data tables
-
+###  UI/UX Features
+- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
+- **Modern Interface**: Clean and professional design with Bootstrap styling
+- **Interactive Components**: Dynamic forms, modals, and data tables
 - **Search & Filter**: Advanced search and filtering capabilities
+- **Real-time Updates**: Live status updates and notifications
+- **Modern Theme**: Sapphire Stream Whisper color scheme
 
-### UI/UX- **Real-time Updates**: Live status updates and notifications
+###  Technical Features
+- **Role-Based Access**: Different views for Admin, Manager, Receptionist, Accountant, Customer
+- **Branch Filtering**: Filter data by hotel branch
+- **React Router**: Client-side routing for single-page application
+- **Bootstrap Integration**: Professional styling and responsive components
+- **API Integration**: RESTful backend API connection
+- **State Management**: Efficient state handling with React hooks and Context API
+- **Error Handling**: Comprehensive error handling and user feedback
+- **JWT Authentication**: Secure token-based authentication
+- **Deployment**: GitHub Pages with GitHub Actions CI/CD
 
-- **Responsive Design**: Mobile, tablet, and desktop support
-
-- **Modern Theme**: Sapphire Stream Whisper color scheme### 🔧 Technical Features
-
-- **Role-Based Access**: Different views for Admin, Manager, Receptionist, Accountant, Customer- **React Router**: Client-side routing for single-page application
-
-- **Branch Filtering**: Filter data by hotel branch- **Bootstrap Integration**: Professional styling and responsive components
-
-- **Real-time Updates**: Live data from cloud database- **API Integration**: Ready for backend API connection
-
-- **State Management**: Efficient state handling with React hooks
-
-## 🛠️ Tech Stack- **Error Handling**: Comprehensive error handling and user feedback
-
-- **Utility Functions**: Helper functions for date formatting, validation, etc.
+##  Tech Stack
 
 - **Framework**: React 18
+- **Routing**: React Router DOM v6
+- **Styling**: Custom CSS with Bootstrap 5
+- **Icons**: React Icons (Font Awesome)
+- **HTTP Client**: Axios
+- **Authentication**: JWT-based auth with protected routes
+- **Deployment**: GitHub Pages
 
-- **Routing**: React Router DOM v6## Project Structure
+##  Project Structure
 
-- **Styling**: Custom CSS with modern design system
+```
+src/
+ components/           # Reusable UI components
+    Layout/          # Navigation and layout components
+       Navbar.js    # Top navigation bar
+       Sidebar.js   # Side navigation menu
+    Common/          # Shared utility components
+       LoadingSpinner.js
+       ErrorMessage.js
+       ConfirmDialog.js
+    ProtectedRoute.js       # Route authentication
+    BackendIntegrationTest.js
+ pages/               # Main application pages
+    Dashboard.js     # Main dashboard with statistics
+    Guests.js        # Guest management page
+    Reservations.js  # Reservation management page
+    Rooms.js         # Room management page
+    Services.js      # Service request management
+    Billing.js       # Payment processing
+    Reports.js       # Reports and analytics page
+    Staff.js         # Employee management
+    Login.js         # Authentication
+ context/             # React Context for state management
+    AuthContext.js   # Authentication state
+    BranchContext.js # Branch selection state
+ services/            # API integration layer
+    apiClient.js     # Axios configuration and interceptors
+    api.js           # API endpoint functions
+ utils/               # Utility functions
+    dateUtils.js     # Date formatting and calculations
+    helpers.js       # General helper functions
+ data/
+    mockData.js      # Sample data
+ App.js               # Main application component
+ App.css              # Application-specific styles
+ index.js             # Application entry point
+ index.css            # Global styles
+```
 
-- **Icons**: React Icons (Font Awesome)```
+##  Getting Started
 
-- **HTTP Client**: Axiossrc/
+### Prerequisites
+- Node.js (version 14 or higher)
+- npm or yarn package manager
 
-- **Authentication**: JWT-based auth with protected routes├── components/           # Reusable UI components
+### Installation
 
-- **Deployment**: GitHub Pages with GitHub Actions CI/CD│   ├── Layout/          # Navigation and layout components
-
-│   │   ├── Navbar.js    # Top navigation bar
-
-## 📁 Project Structure│   │   └── Sidebar.js   # Side navigation menu
-
-│   └── Common/          # Shared utility components
-
-```│       ├── LoadingSpinner.js
-
-src/│       ├── ErrorMessage.js
-
-├── components/│       └── ConfirmDialog.js
-
-│   ├── Layout/├── pages/               # Main application pages
-
-│   │   ├── Navbar.js           # Top navigation│   ├── Dashboard.js     # Main dashboard with statistics
-
-│   │   └── Sidebar.js          # Side menu│   ├── Guests.js        # Guest management page
-
-│   ├── Common/│   ├── Reservations.js  # Reservation management page
-
-│   │   ├── LoadingSpinner.js│   ├── Rooms.js         # Room management page
-
-│   │   └── ErrorMessage.js│   ├── Services.js      # Service request management
-
-│   ├── ProtectedRoute.js       # Route authentication│   └── Reports.js       # Reports and analytics page
-
-│   └── BackendIntegrationTest.js├── services/            # API integration layer
-
-├── pages/│   ├── apiClient.js     # Axios configuration and interceptors
-
-│   ├── Dashboard.js            # Main dashboard│   └── api.js           # API endpoint functions
-
-│   ├── Bookings.js            # Reservation management├── utils/               # Utility functions
-
-│   ├── Guests.js              # Guest management│   ├── dateUtils.js     # Date formatting and calculations
-
-│   ├── Rooms.js               # Room management│   └── helpers.js       # General helper functions
-
-│   ├── Hotels.js              # Branch management├── App.js               # Main application component
-
-│   ├── Services.js            # Service requests├── App.css              # Application-specific styles
-
-│   ├── Billing.js             # Payment processing├── index.js             # Application entry point
-
-│   ├── Reports.js             # Analytics└── index.css            # Global styles
-
-│   ├── Staff.js               # Employee management```
-
-│   └── Login.js               # Authentication
-
-├── context/## Getting Started
-
-│   └── AuthContext.js          # Authentication state
-
-├── services/### Prerequisites
-
-│   └── api.js                  # API integration- Node.js (version 14 or higher)
-
-├── utils/- npm or yarn package manager
-
-│   └── helpers.js              # Utility functions
-
-└── data/### Installation
-
-    └── mockData.js             # Sample data
-
-```1. **Clone the repository**
-
+1. **Clone the repository**
    ```bash
-
-## 🚀 Getting Started   git clone <repository-url>
-
+   git clone https://github.com/NadeeshaNJ/Database-Project.git
    cd Database-Project
-
-### Prerequisites   ```
-
-- Node.js 14+
-
-- npm or yarn2. **Install dependencies**
-
-   ```bash
-
-### Installation   npm install
-
    ```
 
-```bash
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-# Install dependencies3. **Configure environment variables**
+3. **Configure environment variables**
+   
+   Create `.env.development` for local development:
+   ```env
+   REACT_APP_API_BASE=http://localhost:5000
+   REACT_APP_API_URL=http://localhost:5000/api
+   REACT_APP_APP_NAME=Hotel Management System
+   REACT_APP_VERSION=1.0.0
+   REACT_APP_ENV=development
+   REACT_APP_DEBUG=true
+   ```
+   
+   Production (`.env.production`):
+   ```env
+   REACT_APP_API_BASE=https://skynest-backend-api.onrender.com
+   ```
 
-npm install   - Copy `.env` file and update API endpoints as needed
-
-   - Set `REACT_APP_API_URL` to your backend API URL
-
-# Start development server
-
-npm start4. **Start the development server**
-
-```   ```bash
-
+4. **Start the development server**
+   ```bash
    npm start
+   ```
 
-### Environment Variables   ```
+5. **Open the application**
+   - Navigate to `http://localhost:3000` in your browser
 
+### Available Scripts
 
+- `npm start`: Start development server
+- `npm build`: Build production bundle
+- `npm test`: Run test suite
+- `npm run deploy`: Deploy to GitHub Pages
 
-Create `.env.development` for local development:5. **Open the application**
+##  Default Credentials
 
-```env   - Navigate to `http://localhost:3000` in your browser
-
-REACT_APP_API_BASE=http://localhost:5000
-
-```### Available Scripts
-
-
-
-Production (`.env.production`):- `npm start`: Start development server
-
-```env- `npm build`: Build production bundle
-
-REACT_APP_API_BASE=https://skynest-backend-api.onrender.com- `npm test`: Run test suite
-
-```- `npm run eject`: Eject from Create React App (irreversible)
-
-
-
-## 🔐 Default Credentials## Usage Guide
-
-
-
-**Admin Account**:### Dashboard
-
-- Username: `admin`- View key performance indicators and statistics
-
-- Password: `password123`- Quick access to common actions
-
-- Recent reservations and activities overview
+**Admin Account**:
+- Username: `admin`
+- Password: `password123`
 
 **Branch Managers**:
+- `manager_colombo` / `password123`
+- `manager_kandy` / `password123`
+- `manager_galle` / `password123`
 
-- `manager_colombo` / `password123`### Guest Management
-
-- `manager_kandy` / `password123`- Add new guests with complete information
-
-- `manager_galle` / `password123`- Search and filter guest records
-
-- Edit existing guest details
-
-**Receptionists**:- View guest history and status
-
+**Receptionists**:
 - `recept_colombo` / `password123`
+- `recept_kandy` / `password123`
+- `recept_galle` / `password123`
 
-- `recept_kandy` / `password123`### Reservation Management
-
-- `recept_galle` / `password123`- Create new reservations
-
-- Manage check-ins and check-outs
-
-## 📦 Deployment- Update reservation status
-
-- View reservation analytics
+##  Deployment
 
 Automatically deployed to GitHub Pages on push to `main` branch.
 
-### Room Management
-
-```bash- Monitor room availability and status
-
-# Build and deploy manually- Update room information and pricing
-
-npm run deploy- Manage room amenities
-
-```- Track maintenance and cleaning status
-
-
-
-## 🎨 Theme### Service Management
-
-- Handle guest service requests
-
-**Sapphire Stream Whisper**:- Assign services to staff members
-
-- Primary: Deep Ocean Blue (#1a2332)- Track service completion status
-
-- Secondary: Coral Whisper (#ff6b6b)- Manage service priorities
-
-- Accent: Soft Sage (#a8dadc)
-
-- Warm: Champagne Gold (#f4a261)### Reports & Analytics
-
-- Generate occupancy reports
-
-## 📝 API Endpoints- View revenue analytics
-
-- Export data in various formats
-
-See backend README for complete API documentation.- Track performance metrics
-
-
-
-Key endpoints:## API Integration
-
-- `POST /api/auth/login` - Authentication
-
-- `GET /api/bookings` - Bookings listThe application is designed to work with a RESTful backend API. Key API endpoints include:
-
-- `GET /api/guests/all` - Guests list
-
-- `GET /api/rooms` - Rooms list- `GET /api/guests` - Retrieve guest list
-
-- `GET /api/reports/dashboard-summary` - Dashboard data- `POST /api/guests` - Create new guest
-
-- `GET /api/reservations` - Retrieve reservations
-
-## 🧪 Testing- `POST /api/reservations` - Create new reservation
-
-- `GET /api/rooms` - Retrieve room information
-
-```bash- `GET /api/services` - Retrieve service requests
-
-npm test- `GET /api/reports/dashboard` - Get dashboard statistics
-
+```bash
+# Build and deploy manually
+npm run deploy
 ```
 
-Update the `REACT_APP_API_URL` in your `.env` file to connect to your backend.
+##  Theme
 
-## 📄 License
+**Sapphire Stream Whisper**:
+- Primary: Deep Ocean Blue (#1a2332)
+- Secondary: Coral Whisper (#ff6b6b)
+- Accent: Soft Sage (#a8dadc)
+- Warm: Champagne Gold (#f4a261)
 
-## Customization
+##  API Integration
+
+The application is designed to work with a RESTful backend API. Key API endpoints include:
+
+- `POST /api/auth/login` - Authentication
+- `GET /api/guests` - Retrieve guest list
+- `POST /api/guests` - Create new guest
+- `GET /api/bookings` - Bookings list
+- `POST /api/reservations` - Create new reservation
+- `GET /api/rooms` - Rooms list
+- `GET /api/services` - Service requests
+- `GET /api/reports/dashboard-summary` - Dashboard data
+
+See backend README for complete API documentation.
+
+Update the `REACT_APP_API_BASE` in your `.env` file to connect to your backend.
+
+##  Testing
+
+```bash
+npm test
+```
+
+##  License
 
 Proprietary - Database Project
 
-### Styling
+##  Authors
 
-## 👥 Authors- Modify `src/index.css` for global styles
-
-- Update `src/App.css` for application-specific styles
-
-Database Project Team- Bootstrap variables can be customized for theming
-
-
-### Components
-- Add new pages in the `src/pages` directory
-- Create reusable components in `src/components`
-- Update routing in `src/App.js`
-
-### API Integration
-- Modify `src/services/api.js` to add new endpoints
-- Update `src/services/apiClient.js` for authentication logic
-
-## Technologies Used
-
-- **React 18**: Latest React features and hooks
-- **React Router DOM**: Client-side routing
-- **Bootstrap 5**: UI framework and styling
-- **React Bootstrap**: Bootstrap components for React
-- **React Icons**: Icon library
-- **Axios**: HTTP client for API requests
-- **React DatePicker**: Date selection components
-
-## Development Roadmap
-
-### Phase 1 (Current)
-- ✅ Basic project structure
-- ✅ Core UI components
-- ✅ Page layouts and navigation
-- ✅ Sample data and interactions
-
-### Phase 2 (Next)
-- 🔄 Backend API integration
-- 🔄 Authentication and authorization
-- 🔄 Real-time notifications
-- 🔄 Advanced reporting features
-
-### Phase 3 (Future)
-- ⏳ Mobile application
-- ⏳ Advanced analytics dashboard
-- ⏳ Integration with external services
-- ⏳ Multi-language support
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-For support and questions:
-- Create an issue in the repository
-- Contact the development team
-- Check the documentation for common solutions
+Database Project Team
 
 ## Acknowledgments
 
 - React community for excellent documentation
 - Bootstrap team for the UI framework
 - All contributors and supporters of this project
-#   T e s t   p i p e l i n e   t r i g g e r 
- 
-
- 
