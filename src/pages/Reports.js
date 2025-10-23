@@ -126,10 +126,9 @@ const Reports = () => {
             boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
             color: 'white'
           }}>
-            <h2 style={{ color: 'white', fontWeight: '700', marginBottom: '0.5rem' }}>
-              <FaChartBar className="me-2" />
+            <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '8px' }}><FaChartBar className="me-2" />
               Reports & Analytics
-            </h2>
+            </h1>
             <p style={{ marginBottom: 0, color: 'rgba(255, 255, 255, 0.9)' }}>Comprehensive business insights and performance metrics</p>
           </div>
         </Col>

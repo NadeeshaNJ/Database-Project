@@ -197,10 +197,10 @@ const Employees = () => {
           }}>
             <div className="d-flex justify-content-between align-items-center">
               <div>
-                <h2 style={{ color: 'white', fontWeight: '700', marginBottom: '0.5rem' }}>
+                <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '8px' }}>
                   <FaUserTie className="me-2" />
                   Employee Management
-                </h2>
+                </h1>
                 <p style={{ marginBottom: 0, color: 'rgba(255, 255, 255, 0.9)' }}>
                   Manage employees working at {selectedBranchId === 'All' ? 'all branches' : `Branch ${selectedBranchId}`}
                 </p>
