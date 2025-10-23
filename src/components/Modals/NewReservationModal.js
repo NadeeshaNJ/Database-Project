@@ -9,10 +9,7 @@ const NewReservationModal = ({ show, onHide, onSuccess }) => {
     guest_id: '',
     room_id: '',
     check_in_date: '',
-    check_out_date: '',
-    num_adults: 1,
-    num_children: 0,
-    special_requests: ''
+    check_out_date: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -115,10 +112,7 @@ const NewReservationModal = ({ show, onHide, onSuccess }) => {
           guest_id: '',
           room_id: '',
           check_in_date: '',
-          check_out_date: '',
-          num_adults: 1,
-          num_children: 0,
-          special_requests: ''
+          check_out_date: ''
         });
         if (onSuccess) onSuccess();
         onHide();
@@ -224,48 +218,6 @@ const NewReservationModal = ({ show, onHide, onSuccess }) => {
               </Form.Group>
             </Col>
           </Row>
-
-          <Row>
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Number of Adults *</Form.Label>
-                <Form.Control
-                  type="number"
-                  name="num_adults"
-                  value={formData.num_adults}
-                  onChange={handleChange}
-                  min="1"
-                  max="10"
-                  required
-                />
-              </Form.Group>
-            </Col>
-            <Col md={6}>
-              <Form.Group className="mb-3">
-                <Form.Label>Number of Children</Form.Label>
-                <Form.Control
-                  type="number"
-                  name="num_children"
-                  value={formData.num_children}
-                  onChange={handleChange}
-                  min="0"
-                  max="10"
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Special Requests</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={3}
-              name="special_requests"
-              value={formData.special_requests}
-              onChange={handleChange}
-              placeholder="Any special requests or notes..."
-            />
-          </Form.Group>
 
           <div className="d-flex justify-content-end gap-2 mt-4">
             <Button variant="secondary" onClick={onHide} disabled={loading}>

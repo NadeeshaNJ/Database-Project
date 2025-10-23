@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Table, Badge, Modal, Form, Alert, Spinner } from 'react-bootstrap';
-import { FaCalendarCheck, FaPlus, FaEdit, FaEye, FaSearch, FaFilter } from 'react-icons/fa';
+import { Container, Row, Col, Card, Button, Table, Badge, Alert, Spinner } from 'react-bootstrap';
+import { FaCalendarCheck, FaSearch, FaFilter } from 'react-icons/fa';
 import { apiUrl } from '../utils/api';
 import { useBranch } from '../context/BranchContext';
 
 const Bookings = () => {
   const { selectedBranchId } = useBranch();
   const [bookings, setBookings] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedBooking, setSelectedBooking] = useState(null);
-  const [modalType, setModalType] = useState('add');
   const [filterStatus, setFilterStatus] = useState('All');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -76,39 +73,6 @@ const Bookings = () => {
     }
   };
 
-  const handleCreateBooking = async (newBookingData) => {
-  try {
-    const res = await fetch(`${API_URL}/confirmed`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        // If you use auth token later:
-        // 'Authorization': `Bearer ${localStorage.getItem('token')}`
-      },
-      body: JSON.stringify(newBookingData)
-    });
-
-    if (!res.ok) throw new Error('Failed to create booking');
-    const data = await res.json();
-
-    setBookings(prev => [...prev, data.booking]); // add to UI
-    alert('✅ Booking created successfully!');
-  } catch (err) {
-    alert('❌ ' + err.message);
-  }
-};
-
-  const handleShowModal = (type, booking = null) => {
-    setModalType(type);
-    setSelectedBooking(booking);
-    setShowModal(true);
-  };
-
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setSelectedBooking(null);
-  };
-
   const getStatusColor = (status) => {
     switch (status) {
       case 'Confirmed': return 'primary';
@@ -161,34 +125,11 @@ const Bookings = () => {
         marginBottom: '30px',
         boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
       }}>
-        <div className="d-flex justify-content-between align-items-center">
-          <div>
-            <h2 style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold', marginBottom: '8px' }}>Bookings Management</h2>
-            <p style={{ marginBottom: 0, fontSize: '1.1rem', opacity: 0.9 }}>
-              Manage hotel room bookings across all SkyNest branches
-            </p>
-          </div>
-          <Button 
-            style={{
-              background: 'rgba(255, 255, 255, 0.2)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              color: 'white',
-              fontWeight: '600',
-              padding: '10px 24px',
-              borderRadius: '8px',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.background = 'rgba(255, 255, 255, 0.3)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.background = 'rgba(255, 255, 255, 0.2)';
-            }}
-            onClick={() => handleShowModal('add')}
-          >
-            <FaPlus className="me-2" />
-            New Booking
-          </Button>
+        <div>
+          <h2 style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold', marginBottom: '8px' }}>Bookings Management</h2>
+          <p style={{ marginBottom: 0, fontSize: '1.1rem', opacity: 0.9 }}>
+            Manage hotel room bookings across all SkyNest branches
+          </p>
         </div>
       </div>
 
@@ -275,11 +216,12 @@ const Bookings = () => {
       {/* Filters */}
       <Row className="mb-3">
         <Col md={6}>
-          <Form.Group>
-            <Form.Label style={{ color: '#1a237e', fontWeight: '600', marginBottom: '8px' }}>
+          <div>
+            <label style={{ color: '#1a237e', fontWeight: '600', marginBottom: '8px', display: 'block' }}>
               Filter by Status
-            </Form.Label>
-            <Form.Select 
+            </label>
+            <select 
+              className="form-select"
               value={filterStatus} 
               onChange={(e) => setFilterStatus(e.target.value)}
               style={{
@@ -294,8 +236,8 @@ const Bookings = () => {
               <option value="Checked-Out">Checked-Out</option>
               <option value="Pending Payment">Pending Payment</option>
               <option value="Cancelled">Cancelled</option>
-            </Form.Select>
-          </Form.Group>
+            </select>
+          </div>
         </Col>
       </Row>
 
@@ -332,7 +274,6 @@ const Bookings = () => {
                       <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Amount</th>
                       <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Payment</th>
                       <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Status</th>
-                      <th style={{ padding: '16px', fontWeight: '600', color: '#1a237e', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -375,40 +316,6 @@ const Bookings = () => {
                           {booking.status}
                         </Badge>
                       </td>
-                      <td>
-                        <div className="d-flex gap-1">
-                          <Button
-                            style={{
-                              background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
-                              color: 'white',
-                              border: 'none',
-                              borderRadius: '6px',
-                              padding: '6px 12px',
-                              fontSize: '0.875rem',
-                              transition: 'all 0.3s ease'
-                            }}
-                            size="sm"
-                            onClick={() => handleShowModal('view', booking)}
-                          >
-                            <FaEye />
-                          </Button>
-                          <Button
-                            style={{
-                              background: '#6c757d',
-                              color: 'white',
-                              border: 'none',
-                              borderRadius: '6px',
-                              padding: '6px 12px',
-                              fontSize: '0.875rem',
-                              transition: 'all 0.3s ease'
-                            }}
-                            size="sm"
-                            onClick={() => handleShowModal('edit', booking)}
-                          >
-                            <FaEdit />
-                          </Button>
-                        </div>
-                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -418,205 +325,6 @@ const Bookings = () => {
           </Card>
         </Col>
       </Row>
-
-      {/* Modal for Add/Edit/View Booking */}
-      <Modal show={showModal} onHide={handleCloseModal} size="lg">
-        <Modal.Header 
-          closeButton
-          style={{
-            background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
-            color: 'white',
-            borderBottom: '2px solid #1976d2'
-          }}
-        >
-          <Modal.Title style={{ color: 'white', fontWeight: 'bold' }}>
-            {modalType === 'add' && 'New Booking'}
-            {modalType === 'edit' && 'Edit Booking'}
-            {modalType === 'view' && 'Booking Details'}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedBooking && modalType === 'view' ? (
-            <Row>
-              <Col md={6}>
-                <h6>Guest Information</h6>
-                <p><strong>Name:</strong> {selectedBooking.guestName}</p>
-                <p><strong>Email:</strong> {selectedBooking.guestEmail}</p>
-                <p><strong>Phone:</strong> {selectedBooking.guestPhone}</p>
-                
-                <h6 className="mt-4">Booking Details</h6>
-                <p><strong>Booking ID:</strong> {selectedBooking.id}</p>
-                <p><strong>Booking Date:</strong> {new Date(selectedBooking.bookingDate).toLocaleDateString()}</p>
-                <p><strong>Status:</strong> 
-                  <Badge bg={getStatusColor(selectedBooking.status)} className="ms-2">
-                    {selectedBooking.status}
-                  </Badge>
-                </p>
-              </Col>
-              <Col md={6}>
-                <h6>Stay Information</h6>
-                <p><strong>Hotel:</strong> {selectedBooking.hotelBranch}</p>
-                <p><strong>Room:</strong> {selectedBooking.roomNumber} ({selectedBooking.roomType})</p>
-                <p><strong>Check-in:</strong> {new Date(selectedBooking.checkInDate).toLocaleDateString()}</p>
-                <p><strong>Check-out:</strong> {new Date(selectedBooking.checkOutDate).toLocaleDateString()}</p>
-                <p><strong>Nights:</strong> {selectedBooking.nights}</p>
-                <p><strong>Guests:</strong> {selectedBooking.adults} Adults, {selectedBooking.children} Children</p>
-                
-                <h6 className="mt-4">Payment Information</h6>
-                <p><strong>Total Amount:</strong> {formatCurrency(selectedBooking.totalAmount)}</p>
-                <p><strong>Paid Amount:</strong> {formatCurrency(selectedBooking.paidAmount)}</p>
-                <p><strong>Balance:</strong> {formatCurrency(selectedBooking.totalAmount - selectedBooking.paidAmount)}</p>
-                <p><strong>Payment Method:</strong> {selectedBooking.paymentMethod}</p>
-                
-                {selectedBooking.specialRequests && (
-                  <>
-                    <h6 className="mt-4">Special Requests</h6>
-                    <p>{selectedBooking.specialRequests}</p>
-                  </>
-                )}
-              </Col>
-            </Row>
-          ) : (
-            <Form>
-              <Row>
-                <Col md={6}>
-                  <h6>Guest Information</h6>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Guest Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      defaultValue={selectedBooking?.guestName || ''}
-                      placeholder="Enter guest name"
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Email</Form.Label>
-                    <Form.Control
-                      type="email"
-                      defaultValue={selectedBooking?.guestEmail || ''}
-                      placeholder="Enter email address"
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Phone</Form.Label>
-                    <Form.Control
-                      type="tel"
-                      defaultValue={selectedBooking?.guestPhone || ''}
-                      placeholder="Enter phone number"
-                    />
-                  </Form.Group>
-                  
-                  <h6 className="mt-4">Stay Details</h6>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Hotel Branch</Form.Label>
-                    <Form.Select defaultValue={selectedBooking?.hotelBranch || ''}>
-                      <option value="">Select hotel branch</option>
-                      <option value="SkyNest Colombo">SkyNest Colombo</option>
-                      <option value="SkyNest Kandy">SkyNest Kandy</option>
-                      <option value="SkyNest Galle">SkyNest Galle</option>
-                    </Form.Select>
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Room Type</Form.Label>
-                    <Form.Select defaultValue={selectedBooking?.roomType || ''}>
-                      <option value="">Select room type</option>
-                      <option value="Single">Single</option>
-                      <option value="Double">Double</option>
-                      <option value="Suite">Suite</option>
-                    </Form.Select>
-                  </Form.Group>
-                </Col>
-                <Col md={6}>
-                  <h6>Booking Information</h6>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Check-in Date</Form.Label>
-                    <Form.Control
-                      type="date"
-                      defaultValue={selectedBooking?.checkInDate || ''}
-                    />
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Check-out Date</Form.Label>
-                    <Form.Control
-                      type="date"
-                      defaultValue={selectedBooking?.checkOutDate || ''}
-                    />
-                  </Form.Group>
-                  <Row>
-                    <Col md={6}>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Adults</Form.Label>
-                        <Form.Control
-                          type="number"
-                          min="1"
-                          defaultValue={selectedBooking?.adults || 1}
-                        />
-                      </Form.Group>
-                    </Col>
-                    <Col md={6}>
-                      <Form.Group className="mb-3">
-                        <Form.Label>Children</Form.Label>
-                        <Form.Control
-                          type="number"
-                          min="0"
-                          defaultValue={selectedBooking?.children || 0}
-                        />
-                      </Form.Group>
-                    </Col>
-                  </Row>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Payment Method</Form.Label>
-                    <Form.Select defaultValue={selectedBooking?.paymentMethod || ''}>
-                      <option value="">Select payment method</option>
-                      <option value="Credit Card">Credit Card</option>
-                      <option value="Cash">Cash</option>
-                      <option value="Bank Transfer">Bank Transfer</option>
-                    </Form.Select>
-                  </Form.Group>
-                  <Form.Group className="mb-3">
-                    <Form.Label>Special Requests</Form.Label>
-                    <Form.Control
-                      as="textarea"
-                      rows={3}
-                      defaultValue={selectedBooking?.specialRequests || ''}
-                      placeholder="Enter any special requests"
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-            </Form>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button 
-            variant="secondary" 
-            onClick={handleCloseModal}
-            style={{
-              background: '#6c757d',
-              border: 'none',
-              padding: '10px 24px',
-              borderRadius: '6px',
-              fontWeight: '500'
-            }}
-          >
-            Close
-          </Button>
-          {modalType !== 'view' && (
-            <Button 
-              style={{
-                background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
-                border: 'none',
-                padding: '10px 24px',
-                borderRadius: '6px',
-                fontWeight: '500',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              {modalType === 'add' ? 'Create Booking' : 'Save Changes'}
-            </Button>
-          )}
-        </Modal.Footer>
-      </Modal>
     </Container>
   );
 };
