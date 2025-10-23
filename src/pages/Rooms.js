@@ -144,10 +144,10 @@ const Rooms = () => {
       <Container fluid className="py-4">
         {loading && (
           <div className="text-center loading-container" style={{ padding: '60px', margin: '2rem auto', maxWidth: '500px' }}>
-            <Spinner animation="border" role="status">
+            <Spinner animation="border" role="status" style={{ color: '#1a237e' }}>
               <span className="visually-hidden">Loading rooms...</span>
             </Spinner>
-            <p className="mt-3" style={{ color: '#2c3e50' }}>Loading rooms...</p>
+            <p className="mt-3" style={{ color: '#1a237e', fontWeight: '600' }}>Loading rooms...</p>
           </div>
         )}
 

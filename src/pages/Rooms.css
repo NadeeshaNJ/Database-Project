@@ -1,6 +1,6 @@
 /* Rooms Page Styles */
 .rooms-container {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
   min-height: 100vh;
   padding: 2rem 0;
   transition: all 0.5s ease;
@@ -9,10 +9,10 @@
 
 @keyframes backgroundPulse {
   0% {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
   }
   100% {
-    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    background: linear-gradient(135deg, #0d47a1 0%, #1a237e 100%);
   }
 }
 
@@ -48,7 +48,7 @@
 }
 
 .page-header h2 {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -61,10 +61,10 @@
 
 @keyframes textGlow {
   0% {
-    text-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+    text-shadow: 0 0 10px rgba(26, 35, 126, 0.3);
   }
   100% {
-    text-shadow: 0 0 20px rgba(118, 75, 162, 0.5);
+    text-shadow: 0 0 20px rgba(13, 71, 161, 0.5);
   }
 }
 
@@ -83,10 +83,10 @@
 
 /* Statistics Cards */
 .stat-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
   border: none;
   border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 15px 35px rgba(26, 35, 126, 0.3);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   overflow: hidden;
   position: relative;
@@ -124,8 +124,8 @@
 
 .stat-card:hover {
   transform: translateY(-15px) scale(1.05) rotateY(5deg);
-  box-shadow: 0 30px 60px rgba(102, 126, 234, 0.5);
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  box-shadow: 0 30px 60px rgba(26, 35, 126, 0.5);
+  background: linear-gradient(135deg, #0d47a1 0%, #1a237e 100%);
 }
 
 .stat-card:hover h3 {
@@ -196,7 +196,7 @@
   height: 2px;
   bottom: -3px;
   left: 0;
-  background: linear-gradient(90deg, #667eea, #764ba2);
+  background: linear-gradient(90deg, #1a237e, #0d47a1);
   transition: width 0.3s ease;
 }
 
@@ -222,13 +222,13 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(26, 35, 126, 0.1), transparent);
   transition: left 0.5s ease;
 }
 
 .filter-section .form-select:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  border-color: #1a237e;
+  box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.25);
   transform: translateY(-3px) scale(1.02);
 }
 
@@ -256,7 +256,7 @@
   left: 0;
   right: 0;
   height: 4px;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(90deg, #1a237e 0%, #0d47a1 100%);
 }
 
 .room-card:hover {
@@ -266,7 +266,7 @@
 }
 
 .room-card:hover .card-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
   color: white;
 }
 
@@ -314,7 +314,7 @@
 }
 
 .room-card:hover .card-body strong {
-  color: #667eea;
+  color: #1a237e;
 }
 
 .room-card .card-body strong {
@@ -366,7 +366,7 @@
 
 /* Amenity Badges */
 .amenity-badge {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
   color: white;
   font-size: 0.7rem;
   padding: 0.4rem 0.6rem;
@@ -395,8 +395,8 @@
 
 .amenity-badge:hover {
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+  box-shadow: 0 5px 15px rgba(26, 35, 126, 0.4);
+  background: linear-gradient(135deg, #0d47a1 0%, #1a237e 100%);
 }
 
 .amenity-badge:hover::before {
@@ -405,8 +405,8 @@
 
 /* Buttons */
 .btn-outline-primary {
-  border: 2px solid #667eea;
-  color: #667eea;
+  border: 2px solid #1a237e;
+  color: #1a237e;
   font-weight: 600;
   border-radius: 25px;
   padding: 0.5rem 1.25rem;
@@ -424,7 +424,7 @@
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
   transition: left 0.3s ease;
   z-index: -1;
 }
@@ -435,14 +435,14 @@
 
 .btn-outline-primary:hover {
   color: white;
-  border-color: #667eea;
+  border-color: #1a237e;
   transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 10px 30px rgba(26, 35, 126, 0.4);
 }
 
 .btn-outline-primary:active {
   transform: translateY(-1px) scale(1.02);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 5px 15px rgba(26, 35, 126, 0.3);
 }
 
 /* Table Styles */
@@ -490,7 +490,7 @@
 }
 
 .rooms-table .table th {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
   color: white;
   font-weight: 600;
   font-size: 0.9rem;
@@ -512,9 +512,9 @@
 }
 
 .rooms-table .table tbody tr:hover {
-  background: linear-gradient(90deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+  background: linear-gradient(90deg, rgba(26, 35, 126, 0.05), rgba(13, 71, 161, 0.05));
   transform: scale(1.02) translateX(5px);
-  box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 5px 15px rgba(26, 35, 126, 0.1);
 }
 
 /* Modal Styles */
@@ -538,7 +538,7 @@
 }
 
 .modal-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
   color: white;
   border-bottom: none;
   padding: 1.5rem 2rem;
@@ -588,7 +588,7 @@
   font-size: 1.1rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+  border-bottom: 2px solid rgba(26, 35, 126, 0.2);
 }
 
 .modal-body p {
@@ -622,13 +622,13 @@
     transform: scale(1);
   }
   100% {
-    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+    box-shadow: 0 20px 40px rgba(26, 35, 126, 0.2);
     transform: scale(1.02);
   }
 }
 
 .spinner-border {
-  color: #667eea;
+  color: #1a237e;
   width: 3rem;
   height: 3rem;
   animation: spinnerGlow 1.5s ease-in-out infinite alternate;
@@ -636,10 +636,10 @@
 
 @keyframes spinnerGlow {
   0% {
-    filter: drop-shadow(0 0 5px rgba(102, 126, 234, 0.5));
+    filter: drop-shadow(0 0 5px rgba(26, 35, 126, 0.5));
   }
   100% {
-    filter: drop-shadow(0 0 15px rgba(118, 75, 162, 0.8));
+    filter: drop-shadow(0 0 15px rgba(13, 71, 161, 0.8));
   }
 }
 
