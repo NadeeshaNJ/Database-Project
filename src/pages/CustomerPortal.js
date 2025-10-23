@@ -196,8 +196,8 @@ const CustomerPortal = () => {
     return (
       <Container className="customer-portal-loading">
         <div className="text-center">
-          <Spinner animation="border" variant="primary" />
-          <p className="mt-3">Loading booking portal...</p>
+          <Spinner animation="border" style={{ color: '#1976d2', width: '3rem', height: '3rem' }} />
+          <p className="mt-3" style={{ color: '#1976d2', fontSize: '1.1rem' }}>Loading booking portal...</p>
         </div>
       </Container>
     );
@@ -206,15 +206,27 @@ const CustomerPortal = () => {
   return (
     <div className="customer-portal">
       {/* Hero Section */}
-      <div className="hero-section">
+      <div className="hero-section" style={{
+        background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+        padding: '4rem 0',
+        marginBottom: '3rem',
+        borderRadius: '0 0 2rem 2rem',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
+      }}>
         <Container>
           <Row className="justify-content-center">
             <Col lg={10} xl={8}>
-              <div className="hero-content text-center">
-                <h1 className="display-4 mb-3">
+              <div className="hero-content text-center" style={{ color: 'white' }}>
+                <h1 className="display-4 mb-3" style={{ 
+                  fontWeight: '700',
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+                }}>
                   Welcome to SkyNest Hotels, {user?.full_name || user?.username}!
                 </h1>
-                <p className="lead mb-4">
+                <p className="lead mb-4" style={{
+                  fontSize: '1.3rem',
+                  textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
+                }}>
                   Book your perfect stay with us. Choose your preferred room type and we'll automatically reserve the best available room for you.
                 </p>
               </div>
@@ -236,12 +248,22 @@ const CustomerPortal = () => {
               </Alert>
             )}
 
-            <Card className="booking-card shadow">
-              <Card.Body className="p-4 p-md-5">
-                <h2 className="mb-4 text-center">
+            <Card className="booking-card shadow" style={{
+              border: 'none',
+              borderRadius: '1rem',
+              overflow: 'hidden'
+            }}>
+              <div style={{
+                background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                padding: '2rem',
+                color: 'white'
+              }}>
+                <h2 className="mb-0 text-center" style={{ fontWeight: '600' }}>
                   <FaCalendarAlt className="me-2" />
                   Book Your Stay
                 </h2>
+              </div>
+              <Card.Body className="p-4 p-md-5">
 
                 <Form onSubmit={handleSubmit}>
                   <Row>
@@ -395,11 +417,25 @@ const CustomerPortal = () => {
                     {/* Submit Button */}
                     <Col xs={12} className="text-center">
                       <Button 
-                        variant="primary" 
                         size="lg" 
                         type="submit" 
                         disabled={submitting}
                         className="px-5"
+                        style={{
+                          background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
+                          border: 'none',
+                          boxShadow: '0 4px 15px rgba(26, 35, 126, 0.4)',
+                          transition: 'all 0.3s ease',
+                          fontWeight: '600'
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                          e.currentTarget.style.boxShadow = '0 6px 20px rgba(25, 118, 210, 0.5)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.transform = 'translateY(0)';
+                          e.currentTarget.style.boxShadow = '0 4px 15px rgba(26, 35, 126, 0.4)';
+                        }}
                       >
                         {submitting ? (
                           <>
@@ -422,24 +458,54 @@ const CustomerPortal = () => {
             {/* Features Section */}
             <Row className="mt-5 features-section">
               <Col md={4} className="text-center mb-4 mb-md-0">
-                <div className="feature-icon mb-3">
-                  <FaCheckCircle size={40} className="text-success" />
+                <div className="feature-icon mb-3" style={{
+                  width: '80px',
+                  height: '80px',
+                  margin: '0 auto',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'linear-gradient(135deg, rgba(26, 35, 126, 0.1) 0%, rgba(13, 71, 161, 0.1) 100%)',
+                  borderRadius: '50%',
+                  border: '2px solid #1976d2'
+                }}>
+                  <FaCheckCircle size={40} style={{ color: '#1976d2' }} />
                 </div>
-                <h5>Instant Confirmation</h5>
+                <h5 style={{ color: '#1a237e', fontWeight: '600' }}>Instant Confirmation</h5>
                 <p className="text-muted">Automatic room assignment and confirmation</p>
               </Col>
               <Col md={4} className="text-center mb-4 mb-md-0">
-                <div className="feature-icon mb-3">
-                  <FaBed size={40} className="text-primary" />
+                <div className="feature-icon mb-3" style={{
+                  width: '80px',
+                  height: '80px',
+                  margin: '0 auto',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'linear-gradient(135deg, rgba(26, 35, 126, 0.1) 0%, rgba(13, 71, 161, 0.1) 100%)',
+                  borderRadius: '50%',
+                  border: '2px solid #1976d2'
+                }}>
+                  <FaBed size={40} style={{ color: '#1976d2' }} />
                 </div>
-                <h5>Best Available Room</h5>
+                <h5 style={{ color: '#1a237e', fontWeight: '600' }}>Best Available Room</h5>
                 <p className="text-muted">We select the perfect room for you</p>
               </Col>
               <Col md={4} className="text-center">
-                <div className="feature-icon mb-3">
-                  <FaMapMarkerAlt size={40} className="text-info" />
+                <div className="feature-icon mb-3" style={{
+                  width: '80px',
+                  height: '80px',
+                  margin: '0 auto',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'linear-gradient(135deg, rgba(26, 35, 126, 0.1) 0%, rgba(13, 71, 161, 0.1) 100%)',
+                  borderRadius: '50%',
+                  border: '2px solid #1976d2'
+                }}>
+                  <FaMapMarkerAlt size={40} style={{ color: '#1976d2' }} />
                 </div>
-                <h5>Prime Locations</h5>
+                <h5 style={{ color: '#1a237e', fontWeight: '600' }}>Prime Locations</h5>
                 <p className="text-muted">Three beautiful branches to choose from</p>
               </Col>
             </Row>
