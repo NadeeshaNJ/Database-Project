@@ -40,13 +40,16 @@ const Navbar = () => {
   };
 
   // Extra safety: Admin should NEVER be locked, regardless of isLocked value
-  const shouldShowDropdown = user?.role === 'Admin' || !isLocked;
+  // CRITICAL FIX: Force dropdown for Admin role, even if isLocked is incorrectly true
+  const isAdmin = user?.role === 'Admin';
+  const shouldShowDropdown = isAdmin || !isLocked;
 
   console.log('🎨 Navbar Render Decision:', {
     userRole: user?.role,
-    isAdmin: user?.role === 'Admin',
+    isAdmin: isAdmin,
     isLocked: isLocked,
-    shouldShowDropdown: shouldShowDropdown
+    shouldShowDropdown: shouldShowDropdown,
+    forceAdminDropdown: isAdmin ? 'YES - Admin always gets dropdown' : 'NO'
   });
 
   return (
