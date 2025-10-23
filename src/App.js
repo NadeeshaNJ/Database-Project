@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
+import './App.css';
 import ProtectedRoute from './components/ProtectedRoute';
 import CustomerRoute from './components/CustomerRoute';
 import AdminRoute from './components/AdminRoute';

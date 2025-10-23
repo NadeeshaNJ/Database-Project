@@ -3,6 +3,17 @@ import { Container, Row, Col, Card, Button, Table, Badge, Modal, Form, Spinner, 
 import { FaBuilding, FaMapMarkerAlt, FaPhone, FaPlus, FaEdit, FaEye } from 'react-icons/fa';
 import { apiUrl } from '../utils/api';
 
+// Add inline CSS to force white text
+const forceWhiteTextStyles = `
+  .hotels-page .page-header h2,
+  .hotels-page .page-header p,
+  .hotels-page .card-header h5,
+  .hotels-page thead th,
+  .hotels-page .modal-title {
+    color: #ffffff !important;
+  }
+`;
+
 const Hotels = () => {
   const [hotels, setHotels] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,6 +21,11 @@ const Hotels = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedHotel, setSelectedHotel] = useState(null);
   const [modalType, setModalType] = useState('add'); // 'add', 'edit', 'view'
+
+  // Add inline styles for white text on blue backgrounds
+  const whiteTextStyle = {
+    color: '#ffffff'
+  };
 
   // Fetch branches from backend
   useEffect(() => {
@@ -77,7 +93,9 @@ const Hotels = () => {
   };
 
   return (
-    <Container fluid className="py-4">
+    <>
+      <style>{forceWhiteTextStyles}</style>
+      <Container fluid className="py-4 hotels-page">
       {loading && (
         <div className="text-center py-5">
           <Spinner animation="border" role="status" style={{ color: '#1976d2', width: '3rem', height: '3rem' }}>
@@ -104,15 +122,14 @@ const Hotels = () => {
               padding: '2rem',
               borderRadius: '1rem',
               boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
-              color: 'white',
               flex: 1,
               marginRight: '1rem'
             }}>
-              <h2 style={{ color: 'white !important', fontWeight: '700', marginBottom: '0.5rem' }}>
+              <h2 style={{ fontWeight: '700', marginBottom: '0.5rem', color: '#ffffff' }}>
                 <FaBuilding className="me-2" />
                 Hotel Branches
               </h2>
-              <p style={{ marginBottom: 0, color: 'rgba(255, 255, 255, 0.9) !important' }}>Manage SkyNest Hotels locations across Sri Lanka</p>
+              <p style={{ marginBottom: 0, opacity: 0.9, color: '#ffffff' }}>Manage SkyNest Hotels locations across Sri Lanka</p>
             </div>
             <Button 
               onClick={() => handleShowModal('add')}
@@ -162,13 +179,12 @@ const Hotels = () => {
             }}>
               <Card.Header style={{
                 background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
-                color: 'white',
                 border: 'none',
                 borderRadius: '1rem 1rem 0 0',
                 padding: '1.5rem'
               }}>
                 <div className="d-flex justify-content-between align-items-center">
-                  <h5 className="mb-0" style={{ color: 'white !important', fontWeight: '600' }}>
+                  <h5 className="mb-0" style={{ fontWeight: '600', color: '#ffffff' }}>
                     <FaBuilding className="me-2" />
                     {hotel.name}
                   </h5>
@@ -279,7 +295,7 @@ const Hotels = () => {
               borderRadius: '1rem 1rem 0 0',
               padding: '1.5rem'
             }}>
-              <h5 className="mb-0" style={{ color: 'white !important', fontWeight: '700' }}>Hotel Branches Summary</h5>
+              <h5 className="mb-0" style={{ fontWeight: '700', color: '#ffffff' }}>Hotel Branches Summary</h5>
             </Card.Header>
             <Card.Body>
               <Table responsive striped hover>
@@ -288,14 +304,14 @@ const Hotels = () => {
                   borderBottom: '2px solid #0d47a1'
                 }}>
                   <tr>
-                    <th style={{ padding: '16px', fontWeight: '600', color: 'white !important', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Hotel Name</th>
-                    <th style={{ padding: '16px', fontWeight: '600', color: 'white !important', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Location</th>
-                    <th style={{ padding: '16px', fontWeight: '600', color: 'white !important', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Manager</th>
-                    <th style={{ padding: '16px', fontWeight: '600', color: 'white !important', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Total Rooms</th>
-                    <th style={{ padding: '16px', fontWeight: '600', color: 'white !important', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Available</th>
-                    <th style={{ padding: '16px', fontWeight: '600', color: 'white !important', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Occupancy</th>
-                    <th style={{ padding: '16px', fontWeight: '600', color: 'white !important', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Status</th>
-                    <th style={{ padding: '16px', fontWeight: '600', color: 'white !important', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none' }}>Actions</th>
+                    <th style={{ padding: '16px', fontWeight: '600', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none', color: '#ffffff' }}>Hotel Name</th>
+                    <th style={{ padding: '16px', fontWeight: '600', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none', color: '#ffffff' }}>Location</th>
+                    <th style={{ padding: '16px', fontWeight: '600', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none', color: '#ffffff' }}>Manager</th>
+                    <th style={{ padding: '16px', fontWeight: '600', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none', color: '#ffffff' }}>Total Rooms</th>
+                    <th style={{ padding: '16px', fontWeight: '600', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none', color: '#ffffff' }}>Available</th>
+                    <th style={{ padding: '16px', fontWeight: '600', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none', color: '#ffffff' }}>Occupancy</th>
+                    <th style={{ padding: '16px', fontWeight: '600', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none', color: '#ffffff' }}>Status</th>
+                    <th style={{ padding: '16px', fontWeight: '600', fontSize: '0.85rem', letterSpacing: '0.5px', textTransform: 'uppercase', border: 'none', color: '#ffffff' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -349,10 +365,9 @@ const Hotels = () => {
       <Modal show={showModal} onHide={handleCloseModal} size="lg">
         <Modal.Header closeButton style={{
           background: 'linear-gradient(135deg, #1a237e 0%, #0d47a1 100%)',
-          color: 'white',
           border: 'none'
         }}>
-          <Modal.Title style={{ color: 'white !important', fontWeight: '600' }}>
+          <Modal.Title style={{ fontWeight: '600', color: '#ffffff' }}>
             {modalType === 'add' && 'Add New Hotel Branch'}
             {modalType === 'edit' && 'Edit Hotel Branch'}
             {modalType === 'view' && 'Hotel Branch Details'}
@@ -542,6 +557,7 @@ const Hotels = () => {
         </>
       )}
     </Container>
+    </>
   );
 };
 

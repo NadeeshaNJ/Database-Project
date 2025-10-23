@@ -17,6 +17,41 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
+/* CRITICAL: Override global headings for blue backgrounds - Must come AFTER global rule */
+.page-header h1,
+.page-header h2,
+.page-header h3,
+.page-header h4,
+.page-header h5,
+.page-header h6,
+.page-header p {
+  color: white !important;
+}
+
+.card-header h1,
+.card-header h2,
+.card-header h3,
+.card-header h4,
+.card-header h5,
+.card-header h6,
+.card-header p {
+  color: white !important;
+}
+
+.modal-header h1,
+.modal-header h2,
+.modal-header h3,
+.modal-header h4,
+.modal-header h5,
+.modal-header h6,
+.modal-title {
+  color: white !important;
+}
+
+thead th {
+  color: white !important;
+}
+
 /* Login Page - Force White Text on Blue Background */
 .login-page h1,
 .login-page h2,
