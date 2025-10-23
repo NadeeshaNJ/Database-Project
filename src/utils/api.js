@@ -1,4 +1,5 @@
-const API_BASE = process.env.REACT_APP_API_BASE || 'https://skynest-backend-api.onrender.com';
+// Use local backend by default for development
+const API_BASE = process.env.REACT_APP_API_BASE || 'http://localhost:5000';
 
 export const apiUrl = (path) => `${API_BASE}${path}`;
 
