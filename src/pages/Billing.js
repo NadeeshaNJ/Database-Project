@@ -336,7 +336,7 @@ const Billing = () => {
                   fontWeight: 'bold',
                   borderBottom: '2px solid #1976d2'
                 }}>
-                  <strong>Charges Breakdown</strong>
+                  <strong style={{ color: 'white' }}>Charges Breakdown</strong>
                 </Card.Header>
                 <ListGroup variant="flush">
                   <ListGroup.Item className="d-flex justify-content-between">
@@ -393,7 +393,7 @@ const Billing = () => {
                     fontWeight: 'bold',
                     borderBottom: '2px solid #1976d2'
                   }}>
-                    <strong>Payment History</strong>
+                    <strong style={{ color: 'white' }}>Payment History</strong>
                   </Card.Header>
                   <Card.Body>
                     <Table size="sm" responsive>
@@ -427,7 +427,7 @@ const Billing = () => {
                     fontWeight: 'bold',
                     borderBottom: '2px solid #1976d2'
                   }}>
-                    <strong>Services Used</strong>
+                    <strong style={{ color: 'white' }}>Services Used</strong>
                   </Card.Header>
                   <Card.Body>
                     <Table size="sm" responsive>
